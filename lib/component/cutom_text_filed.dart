@@ -15,12 +15,14 @@ class CustomTextField extends StatefulWidget {
   final Function? onTap;
   final int? length;
   final int? lines;
+  final double? padding;
   final double? maxHeight;
   final double? minHeight;
   final double? maxWidth;
   final double? minWidth;
   final Function? validator;
   final bool? secure;
+  bool isTabbed=false;
   bool isBig = false;
   bool isEnabled = true;
 
@@ -31,7 +33,9 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.secure,
     this.prefixIcon,
+    this.padding,
     this.isBig = false,
+    this.isTabbed=false,
     this.isEnabled = true,
     this.keyboardType,
     this.suffixIcon,
@@ -53,7 +57,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 14.h),
+      padding: EdgeInsets.only(bottom:widget.padding??0.h),
       child: TextFormField(
 
         controller: widget.controller,
@@ -80,7 +84,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             labelStyle:cairoSemiBold.copyWith(fontSize: 14,color: greyColor) ,
             hintText: widget.hintText,
             errorStyle:cairoSemiBold.copyWith(fontSize: 14,color: Colors.red),
-            hintStyle: cairoMedium.copyWith(fontSize: 14,color: greyColor),
+            hintStyle: cairoMedium.copyWith(fontSize: 10,color: greyColor),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(20.sp))),
         validator: (val) {

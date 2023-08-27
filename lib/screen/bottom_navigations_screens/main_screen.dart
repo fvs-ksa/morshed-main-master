@@ -10,7 +10,8 @@ import 'package:morshed/constant/text_theme.dart';
 import '../../tranlations/locale_keys.g.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  int i;
+   MainScreen({Key? key,required this.i}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

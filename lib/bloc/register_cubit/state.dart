@@ -30,6 +30,7 @@ class RegisterErrorState extends RegisterState{
  final String error;
   RegisterErrorState({required this.error});
 }
+class ChangeSexDropDownState extends RegisterState{}
 class SendFcmTokenLoadingState extends RegisterState{}
 class SendFcmTokenSuccessState extends RegisterState{}
 class SendFcmTokenErrorState extends RegisterState{

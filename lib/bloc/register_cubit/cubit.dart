@@ -4,6 +4,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
@@ -24,6 +25,7 @@ import '../../component/animation_component.dart';
 import '../../constant/const_color.dart';
 import '../../models/nationality_model.dart';
 import '../../tranlations/locale_keys.g.dart';
+import '../general_cubit/general_cubit.dart';
 import '../login_cubit/login_cubit.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
@@ -49,6 +51,16 @@ class RegisterCubit extends Cubit<RegisterState> {
       }
       emit(ChangeKeyboardState());
     };
+  }
+  String? chooseSex;
+  var sexList = [
+    LocaleKeys.male.tr(),
+    LocaleKeys.female.tr(),
+  ];
+
+  onChangeSex(onChange) {
+    chooseSex = onChange;
+    emit(ChangeSexDropDownState());
   }
   late CompanyModel companyModel;
   bool isGetCompany = false;
@@ -142,70 +154,160 @@ getAllNationality(){
 
   //chooseDateTime
  // String? convertedDateDepurat;
-  var dateDep;
+ // var dateDep;
 
   chooseDateTimeDepuration({required BuildContext context,required TextEditingController controller}) async {
-    final date = await showDatePicker(
-        context: context,
-        firstDate: DateTime.now(),
-        initialDate: DateTime.now(),
-        lastDate: DateTime(3100));
+    var date;
+     showModalBottomSheet(context: context, builder: (context){
+      return  Container(
+        height: 300,
+        child: Column(
+          children: [
+            Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text('حفظ'),),
+            ),
+            Expanded(
+              child: CupertinoDatePicker(
+                initialDateTime: DateTime(1900,1,1),
+                onDateTimeChanged: (DateTime value) {
+                  print(value);
+                  date=value;
+                  controller.text= "${value.year.toString()}-${value.month.toString().padLeft(2, '0')}-${value
+                     .day.toString().padLeft(2, '0')}";
+                },
+              mode: CupertinoDatePickerMode.date,
 
-    if (date != null) {
-      print(date);
-      dateDep = date;
-    }
-    controller.text =
-    "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
-        ?.day.toString().padLeft(2, '0')}";
-    print(controller.text);
-  //  controller.text=convertedDateDepurat!;
-  //   DateTime string = DateTime.parse(convertedDateDepurat!);
-  //   print("DateTime $string");
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  print(date);
+  print(controller.text);
     emit(ChooseDateOfBirthState());
+  //   final date = await showDatePicker(
+  //       context: context,
+  //       firstDate: DateTime.now(),
+  //       initialDate: DateTime.now(),
+  //       lastDate: DateTime(3100));
+  //
+  //   if (date != null) {
+  //     print(date);
+  //     dateDep = date;
+  //   }
+  //   controller.text =
+  //   "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
+  //       ?.day.toString().padLeft(2, '0')}";
+  //   print(controller.text);
+  // //  controller.text=convertedDateDepurat!;
+  // //   DateTime string = DateTime.parse(convertedDateDepurat!);
+  // //   print("DateTime $string");
+  //   emit(ChooseDateOfBirthState());
   }
 
   //String? convertedDateTimeBirth;
-  var dateBirth;
+//  var dateBirth;
 
   Future chooseDateTimeForBirth({required BuildContext context,required TextEditingController controller}) async {
-    final date = await showDatePicker(
-        context: context,
-        firstDate: DateTime(1900),
-        initialDate: DateTime(1900),
-        lastDate: DateTime(3100));
-    if (date != null) {
-      print(date);
-      dateBirth = date;
-    }
-    controller.text =
-    "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
-        ?.day.toString().padLeft(2, '0')}";
+    var date;
+    showModalBottomSheet(context: context, builder: (context){
+      return  Container(
+        height: 300,
+        child: Column(
+          children: [
+            Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text('حفظ'),),
+            ),
+            Expanded(
+              child: CupertinoDatePicker(
+                initialDateTime: DateTime(1900,1,1),
+                onDateTimeChanged: (DateTime value) {
+                  print(value);
+                  date=value;
+                  controller.text= "${value.year.toString()}-${value.month.toString().padLeft(2, '0')}-${value
+                      .day.toString().padLeft(2, '0')}";
+                },
+                mode: CupertinoDatePickerMode.date,
+
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+    print(date);
     print(controller.text);
-    //controller.text=convertedDateTimeBirth!;
-    print('controller ${controller.text}');
     emit(ChooseDateOfBirthState());
+    // final date = await showDatePicker(
+    //     context: context,
+    //     firstDate: DateTime(1900),
+    //     initialDate: DateTime(1900),
+    //     lastDate: DateTime(3100));
+    // if (date != null) {
+    //   print(date);
+    //   dateBirth = date;
+    // }
+    // controller.text =
+    // "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
+    //     ?.day.toString().padLeft(2, '0')}";
+    // print(controller.text);
+    // //controller.text=convertedDateTimeBirth!;
+    // print('controller ${controller.text}');
+    // emit(ChooseDateOfBirthState());
   }
 
   //String? convertedDateTimeArrival;
-  var dateArrival;
+  //var dateArrival;
 
   chooseDateTimeForArrival({required BuildContext context,required TextEditingController controller}) async {
-    final date = await showDatePicker(
-        context: context,
-        firstDate: DateTime(2023),
-        initialDate: DateTime.now(),
-        lastDate: DateTime(3100));
-    if (date != null) {
-      print(date);
-      dateArrival = date;
-    }
-    controller.text =
-    "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
-        ?.day.toString().padLeft(2, '0')}";
+    var date;
+    showModalBottomSheet(context: context, builder: (context){
+      return  Container(
+        height: 300,
+        child: Column(
+          children: [
+            Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text('حفظ'),),
+            ),
+            Expanded(
+              child: CupertinoDatePicker(
+                initialDateTime: DateTime(1900,1,1),
+                onDateTimeChanged: (DateTime value) {
+                  print(value);
+                  date=value;
+                  controller.text= "${value.year.toString()}-${value.month.toString().padLeft(2, '0')}-${value
+                      .day.toString().padLeft(2, '0')}";
+                },
+                mode: CupertinoDatePickerMode.date,
+
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+    print(date);
     print(controller.text);
-  //  controller.text=convertedDateTimeArrival!;
     emit(ChooseDateOfBirthState());
+  //   final date = await showDatePicker(
+  //       context: context,
+  //       firstDate: DateTime(2023),
+  //       initialDate: DateTime.now(),
+  //       lastDate: DateTime(3100));
+  //   if (date != null) {
+  //     print(date);
+  //     dateArrival = date;
+  //   }
+  //   controller.text =
+  //   "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
+  //       ?.day.toString().padLeft(2, '0')}";
+  //   print(controller.text);
+  // //  controller.text=convertedDateTimeArrival!;
+  //   emit(ChooseDateOfBirthState());
   }
 
 
@@ -419,6 +521,7 @@ getAllNationality(){
   late LoginModel loginModel;
 
   hajjiRegister({
+    required BuildContext context,
     required String nameAr,
     required String nameEn,
     required String phoneNumber,
@@ -493,7 +596,11 @@ getAllNationality(){
       print('object $token');
       print('FIRE $fcmToken');
       registerLoading = true;
-      navigateForwardReplace(MainScreen());
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) =>
+              MainScreen(i: GeneralCubit
+                  .get(context)
+                  .currentIndex = 0)), (route) => false);
       sendFcmToken();
     } on DioError catch (e) {
       if (e.response != null) {
@@ -533,6 +640,7 @@ getAllNationality(){
     required String nameAr,
     required String nameEn,
     required String phoneNumber,
+    required BuildContext context,
     // required String birthDate,
     //  required String nationality,
     required String email,
@@ -608,7 +716,11 @@ getAllNationality(){
       print('<<<<<<<<<<<<<<<<<<<$accountTypeName>>>>>>>>>>>>>>>>>>>');
       print('FIRE $fcmToken');
       registerLoading = true;
-      navigateForwardReplace(MainScreen());
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) =>
+              MainScreen(i: GeneralCubit
+                  .get(context)
+                  .currentIndex = 0)), (route) => false);
       sendFcmTokenMoetamer();
     } on DioError catch (e) {
       if (e.response != null) {

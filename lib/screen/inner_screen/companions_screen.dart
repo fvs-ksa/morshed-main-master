@@ -29,7 +29,9 @@ class EscortsScreen extends StatelessWidget {
           return GestureDetector(
             onTap: (){FocusManager.instance.primaryFocus!.unfocus();},
             child: RefreshIndicator(
-              onRefresh: (){return addCompanions.getMyCompanions();},
+              onRefresh: ()async{
+                await Future.delayed(Duration(seconds: 1));
+                return addCompanions.getMyCompanions();},
               child: Scaffold(
                 appBar: AppBar(
                   leading: backButtonWidget(context: context),
@@ -93,9 +95,25 @@ class EscortsScreen extends StatelessWidget {
                           padding: EdgeInsetsDirectional.only(
                               top: 10.h, start: 8.w, end: 8.w),
                           child: addCompanions.getCompanions.companions == null
-                              ?  Center(
-                                  child: Text(LocaleKeys.companions_not_fount.tr(),style: cairoMedium.copyWith(fontSize: 20),),
-                                )
+                              ?
+
+                          ListView(
+                            shrinkWrap: true,
+                            children: [
+                              Container(
+                                alignment: AlignmentDirectional.center,
+                                height:
+                                MediaQuery.of(context).size.height / 1.5,
+                                child: Text(
+                                  LocaleKeys.companions_not_fount.tr(),
+                                  style: cairoMedium.copyWith(fontSize: 20),
+                                ),
+                              )
+                            ],
+                          )
+                          // Center(
+                          //         child: Text(LocaleKeys.companions_not_fount.tr(),style: cairoMedium.copyWith(fontSize: 20),),
+                          //       )
                               : ListView.builder(
                                   itemCount: addCompanions
                                       .getCompanions.companions!.length,

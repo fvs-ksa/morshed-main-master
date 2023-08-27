@@ -7,6 +7,8 @@ import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 import 'package:morshed/models/account_type_model.dart';
 
+import '../bloc/account_type_cubit/cubit.dart';
+
 Widget floatingButton({
   required Function fct,
   Color? backgroundColor,
@@ -33,36 +35,43 @@ Widget accountType(
     {required BuildContext context,
     required AccountTypeModel model,
     required Function fct,
+      required int i,
+      required Function fct23,
     required bool checkBoxValue}) {
   return Padding(
     padding: EdgeInsetsDirectional.only(start: 45.w),
     child: Column(
       children: [
-        Container(
-          height: 192.h,
-          width: 141.w,
-          padding: EdgeInsetsDirectional.only(
-              start: 20.w, end: 20.w, top: 20.h, bottom: 20.h),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.sp),
-              color: lightMainColor),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Image.asset(
-                model.image,
-                height: 208.h,
-                width: 73.2.w,
-                fit: BoxFit.contain,
-              )),
-              FittedBox(
-                child: Text(
-                  model.name,
-                  style: cairoBold.copyWith(fontSize: 24,color: whiteColor),
-                ),
-              )
-            ],
+        GestureDetector(
+          onTap:(){
+            fct23();
+          } ,
+          child: Container(
+            height: 192.h,
+            width: 141.w,
+            padding: EdgeInsetsDirectional.only(
+                start: 20.w, end: 20.w, top: 20.h, bottom: 20.h),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.sp),
+                color: lightMainColor),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Image.asset(
+                  model.image,
+                  height: 208.h,
+                  width: 73.2.w,
+                  fit: BoxFit.contain,
+                )),
+                FittedBox(
+                  child: Text(
+                    model.name,
+                    style: cairoBold.copyWith(fontSize: 24,color: whiteColor),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         Checkbox(
@@ -70,6 +79,7 @@ Widget accountType(
           onChanged: (onChanged) {
             fct(onChanged);
           },
+
           activeColor: whiteColor,
           side: BorderSide(color: whiteColor),
           shape: RoundedRectangleBorder(

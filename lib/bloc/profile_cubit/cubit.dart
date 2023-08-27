@@ -63,20 +63,54 @@ class ProfileCubit extends Cubit<ProfileState> {
   DateTime? dateTime;
 
   chooseDateTime({required BuildContext context}) async {
-    final date = await showDatePicker(
-        context: context,
-        firstDate: DateTime(1900),
-        initialDate: DateTime(1900),
-        lastDate: DateTime(3100));
-    if (date != null) {
-      print(date);
-      dateTime=date;
-    }
-    convertedDateTime =
-    "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
-        ?.day.toString().padLeft(2, '0')}";
-    print(convertedDateTime);
+    var date;
+    showModalBottomSheet(context: context, builder: (context){
+      return  Container(
+        height: 300,
+        child: Column(
+          children: [
+            Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: TextButton(onPressed: (){
+                Navigator.of(context).pop();
+              emit(ChooseDateOfBirthProfileState());
+                },child: Text('حفظ'),),
+            ),
+            Expanded(
+              child: CupertinoDatePicker(
+                initialDateTime: DateTime(1900,1,1),
+                onDateTimeChanged: (DateTime value) {
+                  print(value);
+                  date=value;
+                  convertedDateTime= "${value.year.toString()}-${value.month.toString().padLeft(2, '0')}-${value
+                      .day.toString().padLeft(2, '0')}";
+                },
+                mode: CupertinoDatePickerMode.date,
+
+              ),
+            ),
+          ],
+        ),
+      );
+    });
     emit(ChooseDateOfBirthProfileState());
+    print(date);
+    print(convertedDateTime);
+
+    // final date = await showDatePicker(
+    //     context: context,
+    //     firstDate: DateTime(1900),
+    //     initialDate: DateTime(1900),
+    //     lastDate: DateTime(3100));
+    // if (date != null) {
+    //   print(date);
+    //   dateTime=date;
+    // }
+    // convertedDateTime =
+    // "${date?.year.toString()}-${date?.month.toString().padLeft(2, '0')}-${date
+    //     ?.day.toString().padLeft(2, '0')}";
+    // print(convertedDateTime);
+    // emit(ChooseDateOfBirthProfileState());
   }
 
   late ProfileModel profileModel;
@@ -158,7 +192,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       print(error.toString());
     });
   }
-  logOut() {
+  logOut(BuildContext context) {
     emit(LogOutLoadingState());
     DioHelper.postData(
         url: 'https://murshidguide.com/api/pilgrims/logout', token: CacheHelper.getData(key: 'token'))
@@ -166,7 +200,10 @@ class ProfileCubit extends Cubit<ProfileState> {
           print(value.data);
           CacheHelper.removeData();
           emit(LogOutSuccessState());
-          navigateForwardReplace(BoardingScreen());
+         // logoutNavigation();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>BoardingScreen()), (route) => false);
+
+         //navigateForwardReplace(BoardingScreen());
           print('REMOVE TOKEN IS ${CacheHelper.getData(key: 'token')}');
     }
 

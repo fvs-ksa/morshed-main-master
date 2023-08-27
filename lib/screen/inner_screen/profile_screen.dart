@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:morshed/bloc/profile_cubit/cubit.dart';
 import 'package:morshed/bloc/profile_cubit/state.dart';
 import 'package:morshed/component/component.dart';
+import 'package:morshed/component/custom_drop_down.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 import '../../component/cutom_text_filed.dart';
@@ -87,33 +88,42 @@ class ProfileScreen extends StatelessWidget {
                         CustomTextField(
                           controller: arNameController,
                           labelText: LocaleKeys.arabicNamePassport.tr(),
+                          padding: 10,
 
                         ),
                         CustomTextField(
                             controller: enNameController,
                             labelText: LocaleKeys.englishNamePassport.tr(),
+                          padding: 10,
                            ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                child: CustomTextField(
-                                    controller: phoneController,
-                                    labelText: LocaleKeys.phoneNumber.tr(),
-                                    keyboardType: TextInputType.number)),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            decorationContainerWidget(
-                                radius: 35.sp,
-                                context: context,
-                                child: Text(
-                                  '+966',
-                                  style: cairoBold.copyWith(fontSize: 14,color: darkMainColor,),
-                                  textAlign: TextAlign.center,
-                                )),
-                          ],
-                        ),
+                        CustomTextField(
+                            controller: phoneController,
+                            labelText: LocaleKeys.phoneNumber.tr(),
+                            padding: 10,
+                            keyboardType: TextInputType.number),
+                        // Row(
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   children: [
+                        //     Expanded(
+                        //         child: CustomTextField(
+                        //             controller: phoneController,
+                        //             labelText: LocaleKeys.phoneNumber.tr(),
+                        //             padding: 10,
+                        //             keyboardType: TextInputType.number)),
+                        //     SizedBox(
+                        //       width: 10.w,
+                        //     ),
+                        //     decorationContainerWidget(
+                        //         radius: 35.sp,
+                        //         context: context,
+                        //         child: Text(
+                        //           '+966',
+                        //           style: cairoBold.copyWith(fontSize: 14,color: darkMainColor,),
+                        //           textAlign: TextAlign.center,
+                        //         )),
+                        //   ],
+                        // ),
+
                         Theme(
                           data: ThemeData(
                               fontFamily: 'Cairo-regular',
@@ -207,11 +217,17 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 1,
-                              child: CustomTextField(
-                                isEnabled: false,
-                                controller: birthDateController,
-                                labelText:
-                                LocaleKeys.dateOfBirth.tr(),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  profileCubit.chooseDateTime(context: context);
+                                },
+                                child: CustomTextField(
+                                  isEnabled: false,
+                                  controller: birthDateController,
+                                  labelText:
+                                  LocaleKeys.dateOfBirth.tr(),
+                                  padding: 10,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -230,20 +246,24 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         CustomTextField(
                             labelText: LocaleKeys.email.tr(),
+                            padding: 10,
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress),
                         CustomTextField(
                             labelText: LocaleKeys.passportNo.tr(),
+                          padding: 10,
                             controller: passportNoController,
 
                         ),
                         CustomTextField(
                             labelText: LocaleKeys.visaNo.tr(),
                             controller: visaNoController,
+                          padding: 10,
 
                         ),
                         CustomTextField(
                             labelText: LocaleKeys.boardNo.tr(),
+                          padding: 10,
                             controller: borderController,
                         ),
                         profileCubit.profileModel.data!.disability!
@@ -263,11 +283,13 @@ class ProfileScreen extends StatelessWidget {
                         CustomTextField(
                             labelText: LocaleKeys.officialMissionName.tr(),
                             controller: groupNoController,
+                          padding: 10,
                             isEnabled: false,
                         ),
                         CustomTextField(
                             controller: agentController,
                             isEnabled: false,
+                          padding: 10,
                             labelText: LocaleKeys.agentName.tr(),
                         ),
                         Padding(

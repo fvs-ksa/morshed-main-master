@@ -847,6 +847,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                   .validate()) {
                                                 // else {
                                                 registerCubit.moetamerRegister(
+                                                    context: context,
                                                     dateOfArrival:
                                                         dateOfArrivalController
                                                             .text,

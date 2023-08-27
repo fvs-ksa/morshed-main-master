@@ -73,6 +73,10 @@ dependencies:
   flutter_html: any
   web_socket_channel: ^2.4.0
   photo_view: ^0.14.0
+  intl_phone_number_input: ^0.7.3+1
+  country_pickers: ^2.0.0
+  country_code_picker: ^3.0.0
+  country_provider2: ^1.0.2+4
   #AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is
 
 dev_dependencies:

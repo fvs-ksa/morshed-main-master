@@ -41,7 +41,11 @@ Widget richText(
     required String text,
     required String tappedText,
     required BuildContext context}) {
-  return Text.rich(TextSpan(
+  return Text.rich(
+      maxLines: 1,
+
+      TextSpan(
+
       text: text,
       style: cairoRegular.copyWith(fontSize: 17),
       children: [

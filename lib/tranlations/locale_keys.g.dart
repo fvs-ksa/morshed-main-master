@@ -210,5 +210,4 @@ abstract class  LocaleKeys {
   static const no_company_found = 'no_company_found';
   static const male = 'male';
   static const female = 'female';
-
 }

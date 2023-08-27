@@ -53,13 +53,21 @@ class AccountTypeScreen extends StatelessWidget {
                         height: 48.h,
                       ),
                       SizedBox(
-                        height: 290.h,
+                   height: 290.h,
                         child: ListView.separated(
                           padding: EdgeInsets.zero,
-                          scrollDirection: Axis.horizontal,
+                         scrollDirection: Axis.horizontal,
                           itemCount: typeModel.length,
                           itemBuilder: (context, index) {
                             return accountType(
+                              fct23: (){
+                                if (index == 0) {
+                                  accountTypeCubit.changeMotamer(value: !typeModel[index].isTabbed);
+                                } else {
+                                  accountTypeCubit.changeHajji(value: !typeModel[index].isTabbed);
+                                }
+                              },
+                              i: index,
                                 fct: (onChange) {
                                   if (index == 0) {
                                     accountTypeCubit.changeMotamer(

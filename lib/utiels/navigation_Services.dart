@@ -40,5 +40,7 @@ class NavigationService {
   /// This is useful when you need to log out a user,
   /// and also remove all the screens on the navigation stack.
   /// I find this very useful
-  void popToFirst() => navigationKey.currentState?.popUntil((route) => route.isFirst);
+  void popToFirst(Widget page) => navigationKey.currentState?.popUntil((route) => route.isFirst);
+
+  //void popToFirst1(Widget page) => navigationKey.currentState?.removeRoute((route) => route.isFirst);
 }

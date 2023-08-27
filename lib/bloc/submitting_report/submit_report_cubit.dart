@@ -133,7 +133,7 @@ class SubmitReportCubit extends Cubit<SubmitReportState> {
       showToast(
           text:LocaleKeys.report_upload_successfully.tr() ,
           state: ToastState.SUCCESS);
-      navigateForwardReplace(MainScreen());
+      navigateForwardReplace(MainScreen(i: 0,));
     }).catchError((error) {
       print(error.toString());
       emit(SelfReportErrorState(error: error.toString()));
@@ -306,7 +306,7 @@ class SubmitReportCubit extends Cubit<SubmitReportState> {
           text:LocaleKeys.report_upload_successfully.tr(),
           state: ToastState.SUCCESS);
 
-      navigateForwardReplace(MainScreen());
+      navigateForwardReplace(MainScreen(i: 0,));
     }).catchError((error) {
       print(error.toString());
       emit(SelfReportErrorState(error: error.toString()));

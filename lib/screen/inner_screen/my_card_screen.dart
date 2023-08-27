@@ -5,6 +5,7 @@ import 'package:morshed/bloc/profile_cubit/cubit.dart';
 import 'package:morshed/bloc/profile_cubit/state.dart';
 import '../../component/animation_component.dart';
 import '../../component/guide_escorts_component.dart';
+import '../../constant/const_color.dart';
 import '../../tranlations/locale_keys.g.dart';
 
 class MyCardScreen extends StatelessWidget {
@@ -19,11 +20,17 @@ class MyCardScreen extends StatelessWidget {
         return Scaffold(
           appBar: headerOfTechnicalSupport(
               context: context, title: LocaleKeys.myCard.tr()),
-          body:state is GetProfileLoadingState?Center(child: CircularProgressIndicator(),): Column(
+          body:profileCubit.isLoading? Column(
             children: [
               cardIdWidget(model: profileCubit.profileModel, context: context),
             ],
-          ),
+          ):Center(
+              child: CircularProgressIndicator.adaptive(
+                backgroundColor: orangeColor,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  darkMainColor, //<-- SEE HERE
+                ),
+              )),
         );
       }
     );

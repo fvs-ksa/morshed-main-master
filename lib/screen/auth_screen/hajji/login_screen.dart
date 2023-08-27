@@ -57,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                               maxHeight: 80.h,
                               labelText: LocaleKeys.userName.tr(),
                               keyboardType: TextInputType.emailAddress,
+                              hintText: 'الإيميل المسجل',
                               validator: (String val) {
                                 if (val.isEmpty) {
                                   return LocaleKeys.enter_user_name.tr();
@@ -68,6 +69,7 @@ class LoginScreen extends StatelessWidget {
                               maxHeight: 80.h,
                               keyboardType: TextInputType.emailAddress,
                               labelText: LocaleKeys.password.tr(),
+
                               validator: (String val) {
                                 if (val.isEmpty) {
                                   return LocaleKeys.enter_password.tr();
@@ -84,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                                     : const Icon(Icons.visibility),
                               )),
                           SizedBox(
-                            height: 70.h,
+                            height: 20.h,
                           ),
                           state is LoginLoadingState ||state is LoginMoetamerLoadingState
                               ? CircularProgressIndicator.adaptive(
@@ -102,8 +104,9 @@ class LoginScreen extends StatelessWidget {
                                       index == 0
                                           ? loginCubit.moetamerLogin(
                                               email: userNameController.text,
-                                              password: passwordController.text)
+                                              password: passwordController.text, context: context)
                                           : loginCubit.HajjiLogin(
+                                          context: context,
                                               email: userNameController.text,
                                               password: passwordController.text);
                                     }
@@ -133,79 +136,86 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              bottomNavigationBar: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/pattern2.png',
-                    fit: BoxFit.contain,
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        showDialog(
-                            useSafeArea: false,
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  LocaleKeys.FastCommunication.tr(),
-                                  style: cairoBold.copyWith(color: darkMainColor,fontSize: 17),
-                                  textAlign: TextAlign.center,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.sp)),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      LocaleKeys.unifiedCommunications.tr(),
-                                      style: cairoSemiBold,
+              bottomNavigationBar: Padding(
+                padding:  EdgeInsetsDirectional.only(bottom: 30.0),
+                child: Stack(
+
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/pattern2.png',
+                      fit: BoxFit.contain,
+                    ),
+                    Padding(
+                      padding:  EdgeInsetsDirectional.only(bottom: 30.0),
+                      child: TextButton(
+                          onPressed: () {
+                            showDialog(
+                                useSafeArea: false,
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      LocaleKeys.FastCommunication.tr(),
+                                      style: cairoBold.copyWith(color: darkMainColor,fontSize: 17),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    InkWell(
-                                        onTap: () {
-                                          launchCall(
-                                              context: context,
-                                              phoneNumber: '+966501342728');
-                                        },
-                                        child: CustomTextField(
-                                            labelText: '+966501342728',
-                                            isEnabled: false)),
-                                    InkWell(
-                                      onTap: () {
-                                        launchWhatsapp(context);
-                                      },
-                                      child: FittedBox(
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svg/Icon ionic-logo-whatsapp.svg'),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              LocaleKeys.communicationWhatsApp
-                                                  .tr(),
-                                              style:cairoSemiBold,
-                                            ),
-                                          ],
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.sp)),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          LocaleKeys.unifiedCommunications.tr(),
+                                          style: cairoSemiBold,
                                         ),
-                                      ),
+                                        InkWell(
+                                            onTap: () {
+                                              launchCall(
+                                                  context: context,
+                                                  phoneNumber: '+966501342728');
+                                            },
+                                            child: CustomTextField(
+                                                labelText: '+966501342728',
+                                                isEnabled: false)),
+                                        InkWell(
+                                          onTap: () {
+                                            launchWhatsapp(context);
+                                          },
+                                          child: FittedBox(
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svg/Icon ionic-logo-whatsapp.svg'),
+                                                SizedBox(
+                                                  width: 8.w,
+                                                ),
+                                                Text(
+                                                  LocaleKeys.communicationWhatsApp
+                                                      .tr(),
+                                                  style:cairoSemiBold,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8.w,
+                                        )
+                                      ],
                                     ),
-                                    SizedBox(
-                                      height: 8.w,
-                                    )
-                                  ],
-                                ),
-                              );
-                            });
-                      },
-                      child: Text(
-                        LocaleKeys.FastCommunication.tr(),
-                        style: cairoBold.copyWith(color: orangeColor,fontSize: 17,decoration: TextDecoration.underline),
-                        textAlign: TextAlign.center,
-                      )),
-                ],
+                                  );
+                                });
+                          },
+                          child: Text(
+                            LocaleKeys.FastCommunication.tr(),
+                            style: cairoBold.copyWith(color: orangeColor,fontSize: 17,decoration: TextDecoration.underline),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

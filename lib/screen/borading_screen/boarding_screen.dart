@@ -146,7 +146,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                   ),
                 ],
               ),
-            ):NoInternetScreen(child: CacheHelper.getData(key: 'token')==null?BoardingScreen():MainScreen()),
+            ):NoInternetScreen(child: CacheHelper.getData(key: 'token')==null?BoardingScreen():MainScreen(i: 0,)),
           );
         });
   }

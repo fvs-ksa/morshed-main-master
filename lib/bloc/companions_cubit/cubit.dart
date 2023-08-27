@@ -66,7 +66,7 @@ var dateBirth;
         .then((value) {
       print(value.data);
       emit(AddCompanionSuccessState());
-      navigateForwardPop(MainScreen());
+      navigateForwardPop(MainScreen(i: 4,));
       showToast(text:LocaleKeys.companions_Added_Successfully.tr(), state: ToastState.SUCCESS);
     }).catchError((e) {
       emit(AddCompanionErrorState(error: e.toString()));

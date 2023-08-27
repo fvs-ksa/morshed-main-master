@@ -97,7 +97,7 @@ class SubscriptionScreen extends StatelessWidget {
                 color: whiteColor,
                 context: context,
                 fct: () {
-                  navigateForward(MainScreen());
+                  navigateForward(MainScreen(i: 4,));
                 }),
             SizedBox(
               height: 30.h,

@@ -34,7 +34,7 @@ class QrScreen extends StatelessWidget {
                       fit: BoxFit.fitWidth)),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.only(top: 80.h),
+              padding: EdgeInsetsDirectional.only(top: 80.h,start: 20,end: 20),
               child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

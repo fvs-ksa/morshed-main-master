@@ -87,6 +87,7 @@ void main() async {
     print('<<<<<<<<<<<<<<<<$token>>>>>>>>>>>>>>>>');
     print('<<<<<<<<<<<<<<<<$accountTypeName>>>>>>>>>>>>>>>>');
     widget = MainScreen(
+      i: 0,
       // userIndex: userType,
     );
     // final providerLocationService = ProviderLocationService();

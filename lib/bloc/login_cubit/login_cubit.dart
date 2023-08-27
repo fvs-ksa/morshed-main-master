@@ -1,6 +1,8 @@
-
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:morshed/bloc/general_cubit/general_cubit.dart';
 import 'package:morshed/bloc/login_cubit/login_state.dart';
 import 'package:morshed/component/animation_component.dart';
 import 'package:morshed/constant/const_color.dart';
@@ -17,12 +19,15 @@ class LoginCubit extends Cubit<LoginState> {
   static LoginCubit get(context) => BlocProvider.of(context);
 
   late LoginModel loginModel;
-  bool isVisable=true;
+  bool isVisable = true;
+
   void changeVisabilityState() {
     isVisable = !isVisable;
     emit(ChangeVisabilityState());
   }
-  HajjiLogin({required String email, required String password}) async{
+
+  HajjiLogin(
+      {required String email, required String password, required BuildContext context}) async {
     emit(LoginLoadingState());
     try {
       Response userData = await DioHelper.postData(
@@ -33,12 +38,21 @@ class LoginCubit extends Cubit<LoginState> {
           });
       loginModel = LoginModel.fromJson(userData.data);
       token = CacheHelper.saveData(key: 'token', value: loginModel.token!);
-      accountTypeName=CacheHelper.saveData(key: 'accountTypeName', value: loginModel.data!.accountType);
+      accountTypeName = CacheHelper.saveData(
+          key: 'accountTypeName', value: loginModel.data!.accountType);
       // fcmToken=CacheHelper.saveData(key: 'fcmToken', value: loginModel.user.to)
       emit(LoginSuccessState());
-      navigateForwardReplace(MainScreen());
-      token=CacheHelper.getData(key: 'token');
-      accountTypeName=CacheHelper.getData(key: 'accountTypeName');
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) =>
+              MainScreen(i: GeneralCubit
+                  .get(context)
+                  .currentIndex = 0)), (route) => false);
+      // navigateForwardReplace(MainScreen());
+      // navigateForwardReplace(MainScreen(i: GeneralCubit
+      //     .get(context)
+      //     .currentIndex = 0));
+      token = CacheHelper.getData(key: 'token');
+      accountTypeName = CacheHelper.getData(key: 'accountTypeName');
       print('<<<<<<<<<<<<<<<<$token>>>>>>>>>>>>>>>>');
       print('<<<<<<<<<<<<<<<<$accountTypeName>>>>>>>>>>>>>>>>');
       sendFcmToken();
@@ -82,20 +96,25 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   late ProfileModel profileModel;
-getProfileDate(){
+
+  getProfileDate() {
     emit(GetProfileLoadingState());
-    DioHelper.getData(url: 'https://murshidguide.com/api/pilgrims/show',token: token).then((value) {
+    DioHelper.getData(
+        url: 'https://murshidguide.com/api/pilgrims/show', token: token).then((
+        value) {
       print(value.data);
-      profileModel=ProfileModel.fromJson(value.data);
+      profileModel = ProfileModel.fromJson(value.data);
       emit(GetProfileSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       print(error.toString());
       emit(GetProfileErrorState(error: error.toString()));
     });
   }
+
   sendFcmToken() {
     emit(SendFcmTokenLoadingState());
-    DioHelper.postData(url: 'https://murshidguide.com/api/pilgrims/fcm-token', data: {
+    DioHelper.postData(
+        url: 'https://murshidguide.com/api/pilgrims/fcm-token', data: {
       'fcm_token': fcmToken,
     },
         token: CacheHelper.getData(key: 'token')
@@ -103,7 +122,7 @@ getProfileDate(){
       print(value.data);
 
       emit(SendFcmTokenSuccessState());
-    //  getProfileDate();
+      //  getProfileDate();
     }).catchError((error) {
       print(error.toString());
       emit(SendFcmTokenErrorState(error: error.toString()));
@@ -112,7 +131,8 @@ getProfileDate(){
 
 
   ///moetamer
-  moetamerLogin({required String email, required String password})async {
+  moetamerLogin(
+      {required String email, required String password, required BuildContext context}) async {
     emit(LoginMoetamerLoadingState());
     try {
       Response userData = await DioHelper.postData(
@@ -124,11 +144,16 @@ getProfileDate(){
       loginModel = LoginModel.fromJson(userData.data);
 
       token = CacheHelper.saveData(key: 'token', value: loginModel.token!);
-      accountTypeName=CacheHelper.saveData(key: 'accountTypeName', value: loginModel.data!.accountType);
-      emit(LoginMoetamerSuccessState());
-      navigateForwardReplace(MainScreen());
-      token=CacheHelper.getData(key: 'token');
-      accountTypeName=CacheHelper.getData(key: 'accountTypeName');
+      accountTypeName = CacheHelper.saveData(
+          key: 'accountTypeName', value: loginModel.data!.accountType);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) =>
+              MainScreen(i: GeneralCubit
+                  .get(context)
+                  .currentIndex = 0)), (route) => false);
+
+      token = CacheHelper.getData(key: 'token');
+      accountTypeName = CacheHelper.getData(key: 'accountTypeName');
       print('<<<<<<<<<<<<<<<<$token>>>>>>>>>>>>>>>>');
       print('<<<<<<<<<<<<<<<<$accountTypeName>>>>>>>>>>>>>>>>');
       sendFcmTokenMoetamer();
@@ -173,7 +198,8 @@ getProfileDate(){
 
   sendFcmTokenMoetamer() {
     emit(SendFcmTokenLoadingState());
-    DioHelper.postData(url: 'https://murshidguide.com/api/pilgrimsumrah/fcm-token', data: {
+    DioHelper.postData(
+        url: 'https://murshidguide.com/api/pilgrimsumrah/fcm-token', data: {
       'fcm_token': fcmToken,
     },
         token: CacheHelper.getData(key: 'token')

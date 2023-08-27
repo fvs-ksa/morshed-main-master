@@ -32,8 +32,8 @@ class MyResidenceAndTravels extends StatelessWidget {
         TextEditingController mennaLocationConroller=TextEditingController(text: generalCubit.profileModel.data!.locationMina??'');
         TextEditingController arafaLocationController=TextEditingController(text: generalCubit.profileModel.data!.locationArfat??'');
         TextEditingController visaNumberController=TextEditingController(text: generalCubit.profileModel.data!.visaNumber!);
-        TextEditingController maccaHotelLocationController=TextEditingController(text: generalCubit.profileModel.data!.locationMakkahHotel!);
-        TextEditingController madinahHotelNumberController=TextEditingController(text: generalCubit.profileModel.data!.locationMadinahHotel!);
+        TextEditingController maccaHotelLocationController=TextEditingController(text: generalCubit.profileModel.data!.hotelMakkah);
+        TextEditingController madinahHotelNumberController=TextEditingController(text: generalCubit.profileModel.data!.hotelMadinah);
         return Column(
           children: [
             PreferredSize(
@@ -56,7 +56,9 @@ class MyResidenceAndTravels extends StatelessWidget {
                       padding: EdgeInsetsDirectional.only(start: 14.w, top: 140.h),
                       child: CircleAvatar(
                         backgroundColor: darkMainColor,
-                        child: Image.asset('assets/images/profile.png'),
+                      backgroundImage: NetworkImage(generalCubit.profileModel.data!.image??''),
+                      //  child: Image.asset('assets/images/profile.png'),
+                     //   child: Image.network(generalCubit.profileModel.data!.image??''),
                         radius: 45.sp,
                       ),
                     )
@@ -157,7 +159,7 @@ class MyResidenceAndTravels extends StatelessWidget {
                             }
 
                           },
-                          context: context, labelText: LocaleKeys.macca_hotel_loc.tr()),
+                          context: context, labelText: LocaleKeys.maccaHotelName.tr()),
 
 
                       clikedLocationWidget(controller: madinahHotelNumberController,
@@ -179,7 +181,7 @@ class MyResidenceAndTravels extends StatelessWidget {
                             }
 
                           },
-                          context: context, labelText:  LocaleKeys.madina_hotel_loc.tr()),
+                          context: context, labelText:  LocaleKeys.madina_hotels_name.tr()),
                       CustomTextField(
                           isEnabled: false,
                         controller: visaNumberController,

@@ -15,6 +15,9 @@ navigateForwardReplace(Widget page, {arguments}) {
 navigateForwardPop(Widget page, {arguments}) {
   NavigationService.navigate().goBack(page);
 }
+logoutNavigation(Widget page){
+  NavigationService.navigate().popToFirst(page);
+}
 
 launchWhatsapp(context) async {
   var whatsapp = "+966501342728";

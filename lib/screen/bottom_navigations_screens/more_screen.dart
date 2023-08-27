@@ -133,7 +133,7 @@ class MoreScreen extends StatelessWidget {
                     )
                   : TextButton(
                       onPressed: () {
-                        profileCubit.logOut();
+                        profileCubit.logOut(context);
                       },
                       child: Padding(
                         padding: EdgeInsetsDirectional.only(top: 8.h),
