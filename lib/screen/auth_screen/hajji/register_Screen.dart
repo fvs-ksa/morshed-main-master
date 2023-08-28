@@ -26,6 +26,7 @@ import '../../../component/info_profile_component.dart';
 import '../../../component/navigation_functions.dart';
 import '../../../tranlations/locale_keys.g.dart';
 import '../../inner_screen/privacy_policy.dart';
+import '../widget/country_picker_key.dart';
 import 'login_screen.dart';
 import 'dart:ui' as intel;
 
@@ -50,6 +51,17 @@ class RegisterScreen extends StatelessWidget {
   TextEditingController madinaHotelLocController = TextEditingController();
   TextEditingController maccaHotelNameController = TextEditingController();
   TextEditingController madinaHotelNameController = TextEditingController();
+  final FocusNode _nameArFocus = FocusNode();
+  final FocusNode _nameEnFocus = FocusNode();
+  final FocusNode _phoneFocus = FocusNode();
+  final FocusNode _passportFocus = FocusNode();
+  final FocusNode _visaFocus = FocusNode();
+  final FocusNode _idFocus = FocusNode();
+  final FocusNode _maccaHotelFocus = FocusNode();
+  final FocusNode _madinaHotelFocus = FocusNode();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _confirmPasswordFocus = FocusNode();
   PhoneNumber number = PhoneNumber(isoCode: 'SA');
   String? numberSave;
   final _formKey = GlobalKey<FormState>();
@@ -94,6 +106,8 @@ class RegisterScreen extends StatelessWidget {
                                         maxHeight: 80.h,
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
+                                        focusNode: _nameArFocus,
+                                        nextFocus: _nameEnFocus,
                                         labelText:
                                             LocaleKeys.arabicNamePassport.tr(),
                                         validator: (val) {
@@ -110,6 +124,8 @@ class RegisterScreen extends StatelessWidget {
                                         maxHeight: 80.h,
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
+                                        focusNode: _nameEnFocus,
+                                       // nextFocus: _phoneFocus,
                                         validator: (String val) {
                                           if (val.isEmpty) {
                                             return LocaleKeys
@@ -167,6 +183,7 @@ class RegisterScreen extends StatelessWidget {
                                             child: CustomTextField(
                                                 minHeight: 80.h,
                                                 maxHeight: 80.h,
+                                                focusNode: _phoneFocus,
                                                 validator: (String val) {
                                                   if (val.isEmpty) {
                                                     return LocaleKeys
@@ -193,30 +210,32 @@ class RegisterScreen extends StatelessWidget {
                                               radius: 35.sp,
                                               context: context,
                                               width: 100,
-                                              child: CountryCodePicker(
-                                                onChanged: (prints) {
-                                                  print('${prints.name}');
-                                                  print('${prints.dialCode}');
-                                                  numberSave = prints.name;
-                                                },
-                                                // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                                initialSelection: 'SA',
-                                                alignLeft: true,
-                                                favorite: const ['SA', 'EG'],
-                                                //  countryFilter: const ['IT', 'FR'],
-                                                showFlagDialog: true,
-                                                showFlag: true,
-                                                flagWidth: 20,
-                                                textStyle: TextStyle(
-                                                    locale: Locale('ar'),
-                                                    fontSize: 10,
-                                                    color: darkMainColor),
-                                                comparator: (a, b) => b.name!
-                                                    .compareTo(a.name ?? ''),
-                                                //Get the country information relevant to the initial selection
-                                                onInit: (code) => debugPrint(
-                                                    "on init ${code?.name} ${code?.dialCode} ${code?.name}"),
-                                              )),
+                                              child: CountryPickedCodeCode(countryKey: numberSave??'+966',),
+                                              // CountryCodePicker(
+                                              //   onChanged: (prints) {
+                                              //     print('${prints.name}');
+                                              //     print('${prints.dialCode}');
+                                              //     numberSave = prints.name;
+                                              //   },
+                                              //   // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                              //   initialSelection: 'SA',
+                                              //   alignLeft: true,
+                                              //   favorite: const ['SA', 'EG'],
+                                              //   //  countryFilter: const ['IT', 'FR'],
+                                              //   showFlagDialog: true,
+                                              //   showFlag: true,
+                                              //   flagWidth: 20,
+                                              //   textStyle: TextStyle(
+                                              //       locale: Locale('ar'),
+                                              //       fontSize: 10,
+                                              //       color: darkMainColor),
+                                              //   comparator: (a, b) => b.name!
+                                              //       .compareTo(a.name ?? ''),
+                                              //   //Get the country information relevant to the initial selection
+                                              //   onInit: (code) => debugPrint(
+                                              //       "on init ${code?.name} ${code?.dialCode} ${code?.name}"),
+                                              // )
+                                          ),
                                           // decorationContainerWidget(
                                           //     radius: 35.sp,
                                           //     context: context,
@@ -415,6 +434,7 @@ class RegisterScreen extends StatelessWidget {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: GestureDetector(
                                               onTap: () async {
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 await registerCubit
                                                     .chooseDateTimeForBirth(
                                                     context: context,
@@ -463,6 +483,7 @@ class RegisterScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                               onTap: () async {
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 await registerCubit
                                                     .chooseDateTimeForBirth(
                                                         context: context,
@@ -499,6 +520,8 @@ class RegisterScreen extends StatelessWidget {
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
                                         labelText: LocaleKeys.passportNo.tr(),
+                                        focusNode: _passportFocus,
+                                        nextFocus: _visaFocus,
                                         // hintText: 'رقم الجواز',
                                         controller: passportController),
                                     CustomTextField(
@@ -513,6 +536,8 @@ class RegisterScreen extends StatelessWidget {
                                         maxHeight: 80.h,
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
+                                        focusNode: _visaFocus,
+                                        nextFocus: _idFocus,
                                         labelText: LocaleKeys.visaNo.tr(),
                                         controller: visaNumberController),
                                     CustomTextField(
@@ -543,8 +568,9 @@ class RegisterScreen extends StatelessWidget {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: GestureDetector(
                                               onTap: () async {
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 await registerCubit
-                                                    .chooseDateTimeForBirth(
+                                                    .chooseDateTimeForArrival(
                                                     context: context,
                                                     controller:
                                                     dateOfArrivalController);
@@ -600,6 +626,7 @@ class RegisterScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () async {
+                                              FocusManager.instance.primaryFocus!.unfocus();
                                               registerCubit
                                                   .chooseDateTimeForArrival(
                                                       controller:
@@ -627,6 +654,7 @@ class RegisterScreen extends StatelessWidget {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: GestureDetector(
                                               onTap: () async {
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 await registerCubit
                                                     .chooseDateTimeDepuration(
                                                     context: context,
@@ -675,6 +703,7 @@ class RegisterScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () async {
+                                              FocusManager.instance.primaryFocus!.unfocus();
                                               registerCubit
                                                   .chooseDateTimeDepuration(
                                                       controller:
@@ -720,6 +749,7 @@ class RegisterScreen extends StatelessWidget {
                                         },
                                         minHeight: 80.h,
                                         maxHeight: 80.h,
+                                        focusNode: _maccaHotelFocus,
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
                                         labelText:
@@ -736,6 +766,7 @@ class RegisterScreen extends StatelessWidget {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: GestureDetector(
                                               onTap: (){
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 navigateForward(
                                                     MapScreenForSetLocation(
                                                         locationName:
@@ -772,6 +803,7 @@ class RegisterScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
+                                              FocusManager.instance.primaryFocus!.unfocus();
                                               navigateForward(
                                                   MapScreenForSetLocation(
                                                       locationName:
@@ -799,6 +831,7 @@ class RegisterScreen extends StatelessWidget {
                                         minHeight: 80.h,
                                         maxHeight: 80.h,
                                         maxWidth: 400.w,
+                                        focusNode: _madinaHotelFocus,
                                         minWidth: 400.w,
                                         labelText:
                                             LocaleKeys.madinaHotelName.tr(),
@@ -815,6 +848,7 @@ class RegisterScreen extends StatelessWidget {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: GestureDetector(
                                               onTap: (){
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 navigateForward(
                                                     MapScreenForSetLocation(
                                                         locationName:
@@ -851,6 +885,7 @@ class RegisterScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
+                                              FocusManager.instance.primaryFocus!.unfocus();
                                               navigateForward(
                                                   MapScreenForSetLocation(
                                                       locationName:
@@ -869,6 +904,7 @@ class RegisterScreen extends StatelessWidget {
                                     ),
                                     GestureDetector(
                                       onTap: () {
+                                        FocusManager.instance.primaryFocus!.unfocus();
                                         navigateForward(MapScreenForSetLocation(
                                             locationName: mennaLocController,
                                             i: 0));
@@ -893,6 +929,7 @@ class RegisterScreen extends StatelessWidget {
                                     ),
                                     GestureDetector(
                                       onTap: () {
+                                        FocusManager.instance.primaryFocus!.unfocus();
                                         navigateForward(MapScreenForSetLocation(
                                             locationName: arafaLocController,
                                             i: 1));
@@ -916,6 +953,7 @@ class RegisterScreen extends StatelessWidget {
                                     ),
                                     GestureDetector(
                                         onTap: () {
+                                          FocusManager.instance.primaryFocus!.unfocus();
                                           navigateForward(
                                               MapScreenForSetLocation(
                                                   locationName:
@@ -1027,7 +1065,8 @@ class RegisterScreen extends StatelessWidget {
                                         maxHeight: 80.h,
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
-
+                                         focusNode: _emailFocus,
+                                        nextFocus: _passwordFocus,
                                         keyboardType:
                                             TextInputType.emailAddress,
                                         labelText: LocaleKeys.email.tr(),
@@ -1051,6 +1090,7 @@ class RegisterScreen extends StatelessWidget {
                                         },
                                         minHeight: 80.h,
                                         maxHeight: 80.h,
+
                                         suffixIcon: IconButton(
                                           onPressed: () {
                                             registerCubit
@@ -1061,6 +1101,8 @@ class RegisterScreen extends StatelessWidget {
                                               : Icon(Icons.visibility),
                                         ),
                                         labelText: LocaleKeys.password.tr(),
+                                        focusNode: _passwordFocus,
+                                        nextFocus: _confirmPasswordFocus,
                                         maxWidth: 400.w,
                                         minWidth: 400.w,
                                         secure: registerCubit.isVisable,
@@ -1076,6 +1118,7 @@ class RegisterScreen extends StatelessWidget {
                                         },
                                         minHeight: 80.h,
                                         maxHeight: 80.h,
+                                        focusNode: _confirmPasswordFocus,
                                         secure: registerCubit.isVisable,
                                         suffixIcon: IconButton(
                                           onPressed: () {
@@ -1102,19 +1145,20 @@ class RegisterScreen extends StatelessWidget {
                                     SizedBox(
                                       height: 15.w,
                                     ),
-                                    state is RegisterLoadingState
-                                        ? CircularProgressIndicator.adaptive(
-                                            backgroundColor: orangeColor,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              darkMainColor,
-                                            ),
-                                          )
+                                   state is RegisterLoadingState && registerCubit.registerLoading==false
+                                        ?CircularProgressIndicator.adaptive(
+                                     backgroundColor: orangeColor,
+                                     valueColor:
+                                     AlwaysStoppedAnimation<Color>(
+                                       darkMainColor,
+                                     ),
+                                   )
                                         : mainButton(
                                             text: LocaleKeys.registerNow.tr(),
                                             color: darkMainColor,
                                             context: context,
                                             fct: () {
+                                              FocusManager.instance.primaryFocus!.unfocus();
                                               //   if (registerCubit.file == null) {
                                               //   showToast(
                                               //       text:

@@ -18,7 +18,8 @@ class LocationCubit extends Cubit<LocationState>{
     LocationPermission permission;
     serviceEnable = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnable) {
-      AppSettings.openLocationSettings();
+      AppSettings.openAppSettings(type: AppSettingsType.location);
+     // AppSettings.openLocationSettings();
 
       return Future.error(
           'Location Service are denied/////////////////////////');

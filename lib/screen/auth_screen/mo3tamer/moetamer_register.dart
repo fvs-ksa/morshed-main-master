@@ -21,6 +21,7 @@ import '../../../constant/text_theme.dart';
 import '../../../tranlations/locale_keys.g.dart';
 import '../../inner_screen/privacy_policy.dart';
 import '../hajji/login_screen.dart';
+import '../widget/country_picker_key.dart';
 
 class RegisterMoetamerScreen extends StatelessWidget {
   //ignore: must_be_immutable
@@ -42,7 +43,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
   TextEditingController maccaHotelNameController = TextEditingController();
   TextEditingController madinaHotelNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  String? numberSave;
   @override
   Widget build(BuildContext context) {
     var registerCubit = RegisterCubit.get(context);
@@ -179,15 +180,18 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           padding:
                                               const EdgeInsets.only(top: 8.0),
                                           child: decorationContainerWidget(
-                                              radius: 35.sp,
-                                              context: context,
-                                              child: Text(
-                                                '+966',
-                                                style: cairoBold.copyWith(
-                                                    fontSize: 14,
-                                                    color: darkMainColor),
-                                                textAlign: TextAlign.center,
-                                              )),
+                                            radius: 35.sp,
+                                            context: context,
+                                            width: 100,
+                                              child: CountryPickedCodeCode(countryKey: numberSave??'+966',),
+                                              // child: Text(
+                                              //   '+966',
+                                              //   style: cairoBold.copyWith(
+                                              //       fontSize: 14,
+                                              //       color: darkMainColor),
+                                              //   textAlign: TextAlign.center,
+                                              // )
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -224,28 +228,38 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           child: Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 8.0),
-                                            child: CustomTextField(
-                                              validator: (String val) {
-                                                if (val.isEmpty) {
-                                                  return LocaleKeys
-                                                      .enter_date_of_birth
-                                                      .tr();
-                                                }
-                                                return null;
+                                            child: GestureDetector(
+                                              onTap: ()async{
+                                                FocusManager.instance.primaryFocus!.unfocus();
+                                                await registerCubit
+                                                    .chooseDateTimeForBirth(
+                                                    context: context,
+                                                    controller:
+                                                    dateOfBirthController);
                                               },
-                                              minHeight: 80.h,
-                                              maxHeight: 80.h,
-                                              maxWidth: 400.w,
-                                              minWidth: 400.w,
-                                              isEnabled: false,
-                                              labelText:
-                                                  LocaleKeys.dateOfBirth.tr(),
-                                              controller: dateOfBirthController,
+                                              child: CustomTextField(
+                                                validator: (String val) {
+                                                  if (val.isEmpty) {
+                                                    return LocaleKeys
+                                                        .enter_date_of_birth
+                                                        .tr();
+                                                  }
+                                                  return null;
+                                                },
+                                                minHeight: 80.h,
+                                                maxHeight: 80.h,
+                                                maxWidth: 400.w,
+                                                minWidth: 400.w,
+                                                isEnabled: false,
+                                                labelText:
+                                                    LocaleKeys.dateOfBirth.tr(),
+                                                controller: dateOfBirthController,
 
-                                              // labelText: registerCubit
-                                              //     .convertedDateTimeBirth ??
-                                              //     LocaleKeys.dateOfBirth
-                                              //         .tr(),
+                                                // labelText: registerCubit
+                                                //     .convertedDateTimeBirth ??
+                                                //     LocaleKeys.dateOfBirth
+                                                //         .tr(),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -257,6 +271,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                               onTap: () async {
+                                                FocusManager.instance.primaryFocus!.unfocus();
                                                 await registerCubit
                                                     .chooseDateTimeForBirth(
                                                         context: context,
@@ -354,23 +369,32 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           child: Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 8.0),
-                                            child: CustomTextField(
-                                              validator: (String val) {
-                                                if (val.isEmpty) {
-                                                  return LocaleKeys
-                                                      .enter_arrival_date
-                                                      .tr();
-                                                }
-                                                return null;
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                await  registerCubit
+                                                    .chooseDateTimeForArrival(
+                                                    controller:
+                                                    dateOfArrivalController,
+                                                    context: context);
                                               },
-                                              minHeight: 80.h,
-                                              maxHeight: 80.h,
-                                              isEnabled: false,
-                                              labelText:
-                                                  LocaleKeys.arriveDate.tr(),
-                                              controller:
-                                                  dateOfArrivalController,
-                                              // hintText:registerCubit.convertedDateTime?? 'تاريخ الوصول',
+                                              child: CustomTextField(
+                                                validator: (String val) {
+                                                  if (val.isEmpty) {
+                                                    return LocaleKeys
+                                                        .enter_arrival_date
+                                                        .tr();
+                                                  }
+                                                  return null;
+                                                },
+                                                minHeight: 80.h,
+                                                maxHeight: 80.h,
+                                                isEnabled: false,
+                                                labelText:
+                                                    LocaleKeys.arriveDate.tr(),
+                                                controller:
+                                                    dateOfArrivalController,
+                                                // hintText:registerCubit.convertedDateTime?? 'تاريخ الوصول',
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -382,7 +406,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () async {
-                                              registerCubit
+                                            await  registerCubit
                                                   .chooseDateTimeForArrival(
                                                       controller:
                                                           dateOfArrivalController,
@@ -407,28 +431,38 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           child: Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 8.0),
-                                            child: CustomTextField(
-                                              validator: (String val) {
-                                                if (val.isEmpty) {
-                                                  return LocaleKeys
-                                                      .enter_depurate_date
-                                                      .tr();
-                                                }
-                                                return null;
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                FocusManager.instance.primaryFocus!.unfocus();
+                                               await registerCubit
+                                                    .chooseDateTimeDepuration(
+                                                    controller:
+                                                    dateOfDepartureController,
+                                                    context: context);
                                               },
-                                              minHeight: 80.h,
-                                              maxHeight: 80.h,
-                                              // validator: (String val){
-                                              //   if(val.isEmpty){
-                                              //     return 'رجاء ادخال البيانات المطلوبه';
-                                              //   }
-                                              // },
-                                              isEnabled: false,
-                                              labelText:
-                                                  LocaleKeys.leaveDate.tr(),
-                                              controller:
-                                                  dateOfDepartureController,
-                                              // hintText:registerCubit.convertedDateTime?? 'تاريخ المغادره',
+                                              child: CustomTextField(
+                                                validator: (String val) {
+                                                  if (val.isEmpty) {
+                                                    return LocaleKeys
+                                                        .enter_depurate_date
+                                                        .tr();
+                                                  }
+                                                  return null;
+                                                },
+                                                minHeight: 80.h,
+                                                maxHeight: 80.h,
+                                                // validator: (String val){
+                                                //   if(val.isEmpty){
+                                                //     return 'رجاء ادخال البيانات المطلوبه';
+                                                //   }
+                                                // },
+                                                isEnabled: false,
+                                                labelText:
+                                                    LocaleKeys.leaveDate.tr(),
+                                                controller:
+                                                    dateOfDepartureController,
+                                                // hintText:registerCubit.convertedDateTime?? 'تاريخ المغادره',
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -440,7 +474,8 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () async {
-                                              registerCubit
+                                              FocusManager.instance.primaryFocus!.unfocus();
+                                            await  registerCubit
                                                   .chooseDateTimeDepuration(
                                                       controller:
                                                           dateOfDepartureController,
@@ -499,25 +534,35 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           child: Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 8.0),
-                                            child: CustomTextField(
-                                                validator: (String val) {
-                                                  if (val.isEmpty) {
-                                                    return LocaleKeys
-                                                        .macca_hotel_loc
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                                minHeight: 80.h,
-                                                maxHeight: 80.h,
-                                                isEnabled: false,
-                                                keyboardType:
-                                                    TextInputType.phone,
-                                                labelText: LocaleKeys
-                                                    .macca_hotel_loc
-                                                    .tr(),
-                                                controller:
-                                                    maccaHotelLocController),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                FocusManager.instance.primaryFocus!.unfocus();
+                                                navigateForward(
+                                                    MapScreenForSetLocation(
+                                                        locationName:
+                                                        maccaHotelLocController,
+                                                        i: 4));
+                                              },
+                                              child: CustomTextField(
+                                                  validator: (String val) {
+                                                    if (val.isEmpty) {
+                                                      return LocaleKeys
+                                                          .macca_hotel_loc
+                                                          .tr();
+                                                    }
+                                                    return null;
+                                                  },
+                                                  minHeight: 80.h,
+                                                  maxHeight: 80.h,
+                                                  isEnabled: false,
+                                                  keyboardType:
+                                                      TextInputType.phone,
+                                                  labelText: LocaleKeys
+                                                      .macca_hotel_loc
+                                                      .tr(),
+                                                  controller:
+                                                      maccaHotelLocController),
+                                            ),
                                           ),
                                         ),
                                         SizedBox(
@@ -528,6 +573,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                               const EdgeInsets.only(top: 8.0),
                                           child: GestureDetector(
                                             onTap: () {
+                                              FocusManager.instance.primaryFocus!.unfocus();
                                               navigateForward(
                                                   MapScreenForSetLocation(
                                                       locationName:
@@ -569,25 +615,34 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           child: Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 8.0),
-                                            child: CustomTextField(
-                                                validator: (String val) {
-                                                  if (val.isEmpty) {
-                                                    return LocaleKeys
-                                                        .madina_hotel_loc
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                                minHeight: 80.h,
-                                                maxHeight: 80.h,
-                                                isEnabled: false,
-                                                // keyboardType: TextInputType.phone,
-                                                labelText: LocaleKeys
-                                                    .madina_hotel_loc
-                                                    .tr(),
-                                                // hintText: 'رقم الجوال',
-                                                controller:
-                                                    madinaHotelLocController),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                navigateForward(
+                                                    MapScreenForSetLocation(
+                                                        locationName:
+                                                        madinaHotelLocController,
+                                                        i: 5));
+                                              },
+                                              child: CustomTextField(
+                                                  validator: (String val) {
+                                                    if (val.isEmpty) {
+                                                      return LocaleKeys
+                                                          .madina_hotel_loc
+                                                          .tr();
+                                                    }
+                                                    return null;
+                                                  },
+                                                  minHeight: 80.h,
+                                                  maxHeight: 80.h,
+                                                  isEnabled: false,
+                                                  // keyboardType: TextInputType.phone,
+                                                  labelText: LocaleKeys
+                                                      .madina_hotel_loc
+                                                      .tr(),
+                                                  // hintText: 'رقم الجوال',
+                                                  controller:
+                                                      madinaHotelLocController),
+                                            ),
                                           ),
                                         ),
                                         SizedBox(

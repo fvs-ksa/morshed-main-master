@@ -110,7 +110,7 @@ Widget dropDownButton(
         padding: EdgeInsetsDirectional.only(bottom: 5.h, top: 10.h),
         child: Container(
             padding:
-                EdgeInsetsDirectional.only(start: isFlag ? 0 : 10.w, end: 10.w),
+                EdgeInsetsDirectional.only(start: isFlag ? 0 : 0.w, end: 10.w),
             height: 54.h,
             width: double.infinity,
             decoration: BoxDecoration(
@@ -129,7 +129,7 @@ Widget dropDownButton(
                         border: InputBorder.none,
                       ),
                       hint: FittedBox(child: Text(hint)),
-                      style: cairoRegular.copyWith(fontSize: 14,color: greyColor),
+                      style: cairoRegular.copyWith(fontSize: 14,color: blackColor),
                       iconSize: 0.0,
                       borderRadius: BorderRadius.circular(12.sp),
                       value: value,

@@ -62,7 +62,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   String? convertedDateTime;
   DateTime? dateTime;
 
-  chooseDateTime({required BuildContext context}) async {
+  chooseDateTime({required BuildContext context,required DateTime initialDate}) async {
     var date;
     showModalBottomSheet(context: context, builder: (context){
       return  Container(
@@ -78,7 +78,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             ),
             Expanded(
               child: CupertinoDatePicker(
-                initialDateTime: DateTime(1900,1,1),
+                initialDateTime: initialDate,
                 onDateTimeChanged: (DateTime value) {
                   print(value);
                   date=value;

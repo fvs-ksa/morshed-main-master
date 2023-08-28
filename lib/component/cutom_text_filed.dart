@@ -14,6 +14,8 @@ class CustomTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final Function? onTap;
   final int? length;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocus;
   final int? lines;
   final double? padding;
   final double? maxHeight;
@@ -25,7 +27,8 @@ class CustomTextField extends StatefulWidget {
   bool isTabbed=false;
   bool isBig = false;
   bool isEnabled = true;
-
+  final TextInputAction inputAction;
+  final double? startPadding;
   CustomTextField({
     super.key,
     required this.labelText,
@@ -43,10 +46,14 @@ class CustomTextField extends StatefulWidget {
     this.length,
     this.lines,
     this.validator,
+    this.inputAction = TextInputAction.next,
     this.maxHeight,
     this.minHeight,
     this.maxWidth,
     this.minWidth,
+    this.startPadding,
+     this.focusNode,
+     this.nextFocus,
   });
 
   @override
@@ -57,9 +64,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom:widget.padding??0.h),
+      padding:widget.padding==null?EdgeInsets.zero: EdgeInsetsDirectional.only(bottom:widget.padding??0.h,start:widget.startPadding??0 ),
       child: TextFormField(
-
+          focusNode: widget.focusNode,
+        textInputAction: widget.nextFocus == null ? TextInputAction.done : widget.inputAction,
         controller: widget.controller,
         style: cairoSemiBold.copyWith(fontSize: 14),
         onTap: () {

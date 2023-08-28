@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:morshed/bloc/general_cubit/general_cubit.dart';
+import 'package:morshed/bloc/general_cubit/general_state.dart';
 import 'package:morshed/bloc/profile_cubit/cubit.dart';
 import 'package:morshed/bloc/profile_cubit/state.dart';
 import 'package:morshed/component/component.dart';
@@ -20,11 +22,16 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var profileCubit = ProfileCubit.get(context);
+    var generalCubit = GeneralCubit.get(context);
 
     return BlocConsumer<ProfileCubit, ProfileState>(
-        listener: (context, state) {},
+
+        listener: (context, state) {
+          profileCubit.getProfileDate();
+        },
      //   bloc: profileCubit.getProfileDate(),
         builder: (context, state) {
+
           TextEditingController arNameController = TextEditingController(
               text: profileCubit.isLoading ?
               profileCubit.profileModel.data!.nameAr : '');
@@ -77,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                         profileCubit.isLoading&&profileCubit.isGetNationality ? profileCubit.profileModel.data!
                             .image!
                             : 'https://firebasestorage.googleapis.com/v0/b/murshid-5cf3e.appspot.com/o/profile.png?alt=media&token=9e46dec9-ea36-4118-b7d3-c7d298b302d7'),)),
-              body: profileCubit.isLoading?  RefreshIndicator(
+              body: profileCubit.isLoading&profileCubit.isGetNationality?  RefreshIndicator(
                 onRefresh: () {return profileCubit.getProfileDate(); },
                 child: SingleChildScrollView(
                   child: Padding(
@@ -128,7 +135,7 @@ class ProfileScreen extends StatelessWidget {
                           data: ThemeData(
                               fontFamily: 'Cairo-regular',
 
-                              textTheme:  TextTheme(subtitle1: cairoRegular.copyWith(fontSize: 12.sp,color: greyColor,))
+                              textTheme:  TextTheme(subtitle1: cairoSemiBold.copyWith(fontSize: 14.sp,color: blackColor,))
                           ),
                           child: Container(
                             padding: EdgeInsets.zero,
@@ -148,7 +155,7 @@ class ProfileScreen extends StatelessWidget {
                                         borderSide: BorderSide(color: darkMainColor),
                                       ),
                                     ),
-                                    style: cairoRegular.copyWith(color: greyColor,),
+                                    style: cairoRegular.copyWith(color: greyColor,fontSize: 15) ,
                                   ),
                                   showSearchBox: true
                               ),
@@ -172,7 +179,7 @@ class ProfileScreen extends StatelessWidget {
                                     fillColor: Colors.deepOrangeAccent,
                                     labelText: LocaleKeys.nationality.tr(),
                                     hintText: "",
-                                    labelStyle: cairoRegular.copyWith(color: greyColor,)
+                                    labelStyle: cairoRegular.copyWith(color: greyColor,fontSize: 15)
                                 ),
                               ),
 
@@ -219,7 +226,8 @@ class ProfileScreen extends StatelessWidget {
                               flex: 1,
                               child: GestureDetector(
                                 onTap: () async {
-                                  profileCubit.chooseDateTime(context: context);
+                                  profileCubit.chooseDateTime(context: context,
+                                      initialDate:DateTime.parse(birthDateController.text) );
                                 },
                                 child: CustomTextField(
                                   isEnabled: false,
@@ -235,7 +243,8 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             GestureDetector(
                                 onTap: () async {
-                                  profileCubit.chooseDateTime(context: context);
+                                  profileCubit.chooseDateTime(context: context,
+                                      initialDate:DateTime.parse(birthDateController.text));
                                 },
                                 child: decorationContainerWidget(
                                     radius: 35.sp,

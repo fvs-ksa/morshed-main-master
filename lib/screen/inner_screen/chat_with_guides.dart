@@ -65,7 +65,10 @@ class _ChatWithGuidesScreenState extends State<ChatWithGuidesScreen> {
                         circleAvtarWidget(
                             svgImage: 'assets/svg/end call.svg', fct: () {}),
                         circleAvtarWidget(
-                            svgImage: 'assets/svg/video (1).svg', fct: () {navigateForward(VideoCallScreen(channelName:widget.channelName,));}),
+                            svgImage: 'assets/svg/video (1).svg', fct: () {
+                             // navigateForward(VideoCallScreen(channelName:widget.channelName,));
+                            }
+                        ),
                       ],
                     )
                   ]),

@@ -23,6 +23,7 @@ class CustomAlertDialog extends StatelessWidget {
       builder: (context,state) {
         return GestureDetector(
           onTap: () {
+            FocusManager.instance.primaryFocus!.unfocus();
             QuickAlert.show(
 
               context: context,

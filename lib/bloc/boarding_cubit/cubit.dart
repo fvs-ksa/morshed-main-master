@@ -47,7 +47,8 @@ class BoardingCubit extends Cubit<BoardingState> {
     LocationPermission permission;
     serviceEnable = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnable) {
-      AppSettings.openLocationSettings();
+      AppSettings.openAppSettings(type: AppSettingsType.location);
+     // AppSettings.openLocationSettings();
 
       return Future.error(
           'Location Service are denied/////////////////////////');

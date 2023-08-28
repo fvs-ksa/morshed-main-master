@@ -25,9 +25,10 @@ class LoginCubit extends Cubit<LoginState> {
     isVisable = !isVisable;
     emit(ChangeVisabilityState());
   }
-
+  bool loginHajji=false;
   HajjiLogin(
       {required String email, required String password, required BuildContext context}) async {
+    loginHajji=false;
     emit(LoginLoadingState());
     try {
       Response userData = await DioHelper.postData(
@@ -42,6 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
           key: 'accountTypeName', value: loginModel.data!.accountType);
       // fcmToken=CacheHelper.saveData(key: 'fcmToken', value: loginModel.user.to)
       emit(LoginSuccessState());
+      loginHajji=true;
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) =>
               MainScreen(i: GeneralCubit
@@ -131,8 +133,10 @@ class LoginCubit extends Cubit<LoginState> {
 
 
   ///moetamer
+  bool loginMoetamer=false;
   moetamerLogin(
       {required String email, required String password, required BuildContext context}) async {
+    loginMoetamer=false;
     emit(LoginMoetamerLoadingState());
     try {
       Response userData = await DioHelper.postData(
@@ -151,6 +155,7 @@ class LoginCubit extends Cubit<LoginState> {
               MainScreen(i: GeneralCubit
                   .get(context)
                   .currentIndex = 0)), (route) => false);
+      loginMoetamer=true;
 
       token = CacheHelper.getData(key: 'token');
       accountTypeName = CacheHelper.getData(key: 'accountTypeName');

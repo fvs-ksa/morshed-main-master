@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         whiteMorshedLogo(
                             image: 'assets/images/whiteMorshed.png',
-                            width: 163.w,
+                            width: 120.w,
                             height: 100.h),
                         // Image.asset(
                         //   'assets/images/whiteMorshed.png',

@@ -27,6 +27,8 @@ class LoginScreen extends StatelessWidget {
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final FocusNode _userNameFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -55,6 +57,8 @@ class LoginScreen extends StatelessWidget {
                           CustomTextField(
                               minHeight: 80.h,
                               maxHeight: 80.h,
+                              focusNode: _userNameFocus,
+                              nextFocus: _passwordFocus,
                               labelText: LocaleKeys.userName.tr(),
                               keyboardType: TextInputType.emailAddress,
                               hintText: 'الإيميل المسجل',
@@ -77,6 +81,7 @@ class LoginScreen extends StatelessWidget {
                               },
                               secure: loginCubit.isVisable,
                               controller: passwordController,
+                              focusNode: _passwordFocus,
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   loginCubit.changeVisabilityState();
@@ -88,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                           SizedBox(
                             height: 20.h,
                           ),
-                          state is LoginLoadingState ||state is LoginMoetamerLoadingState
+                          state is LoginLoadingState&&loginCubit.loginHajji==false ||state is LoginMoetamerLoadingState&&loginCubit.loginMoetamer==false
                               ? CircularProgressIndicator.adaptive(
                                   backgroundColor: orangeColor,
                                   valueColor: AlwaysStoppedAnimation<Color>(

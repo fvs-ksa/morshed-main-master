@@ -161,7 +161,8 @@ class MyApp extends StatelessWidget {
           BlocProvider<ProfileCubit>(
               create: (context) =>
               ProfileCubit()
-                ..getProfileDate()),
+                ..getProfileDate()
+                ..getAllNationality()),
           BlocProvider<SettingCubit>(create: (context) => SettingCubit()),
           BlocProvider<SubmitReportCubit>(
               create: (context) =>

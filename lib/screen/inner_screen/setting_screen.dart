@@ -2,12 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:morshed/bloc/setting_cubit/cubit.dart';
 import 'package:morshed/bloc/setting_cubit/state.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/component/guide_escorts_component.dart';
 import 'package:morshed/constant/text_theme.dart';
+import 'package:morshed/screen/borading_screen/boarding_screen.dart';
 
+import '../../component/component.dart';
 import '../../tranlations/locale_keys.g.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -52,7 +55,8 @@ class _SettingScreenState extends State<SettingScreen> {
                             children: [
                               Text(
                                 'Ar',
-                                style: cairoSemiBold.copyWith(fontSize: 17,color: darkMainColor),
+                                style: cairoSemiBold.copyWith(
+                                    fontSize: 17, color: darkMainColor),
                               ),
                               Switch.adaptive(
                                   inactiveThumbColor: darkMainColor,
@@ -65,11 +69,11 @@ class _SettingScreenState extends State<SettingScreen> {
                                       settingCubit.changeLanguage(context);
                                       myLocale = context.locale.languageCode;
                                     });
-
                                   }),
                               Text(
                                 'En',
-                                style: cairoSemiBold.copyWith(fontSize: 17,color: orangeColor),
+                                style: cairoSemiBold.copyWith(
+                                    fontSize: 17, color: orangeColor),
                               )
                             ],
                           )
@@ -79,13 +83,85 @@ class _SettingScreenState extends State<SettingScreen> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    TextButton(
-                      onPressed: () {},
+                  state is DeleteUserLoadingState&&settingCubit.isDeleteUser==false? CircularProgressIndicator.adaptive(
+                    backgroundColor: orangeColor,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      darkMainColor, //<-- SEE HERE
+                    ),
+                  ):TextButton(
+                      onPressed: () async {
+                        showAdaptiveDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog.adaptive(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                alignment: AlignmentDirectional.center,
+                                content: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/svg/delete_dialog.svg'),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'هل تريد حذف الحساب ؟',
+                                      style: cairoBold.copyWith(
+                                          color: orangeColor),
+                                    ),
+                                  ],
+                                ),
+                                actionsAlignment: MainAxisAlignment.center,
+                                actions: [
+                                  mainButton(
+                                      height: 40,
+                                      textStyle: cairoBold.copyWith(
+                                          color: blackColor, fontSize: 17),
+                                      text: LocaleKeys.yes.tr(),
+                                      color: whiteGreyColor,
+                                      context: context,
+                                      fct: () {
+                                        settingCubit.deleteUser(context);
+                                        //     .then((value) {
+                                        //   if (state is DeleteUserSuccessState) {
+                                        //
+                                        //   }
+                                        // });
+                                        Navigator.pop(context);
+
+                                      },
+                                      width: 80),
+                                  mainButton(
+                                      text: LocaleKeys.no.tr(),
+                                      height: 40,
+                                      textStyle: cairoBold.copyWith(
+                                          color: darkMainColor, fontSize: 17),
+                                      color: whiteColor,
+                                      borderColor: whiteGreyColor,
+                                      context: context,
+                                      fct: () {
+                                        Navigator.pop(context);
+                                      },
+                                      width: 80),
+                                  // TextButton(
+                                  //     onPressed: (){}, child: Text('نعم')),
+                                  // TextButton(
+                                  //     onPressed: (){}, child:  Text('لا')),
+                                ],
+                              );
+                            });
+                      },
                       child: Text(
                         LocaleKeys.deleteAccount.tr(),
-                        style: cairoBold.copyWith(color: orangeColor,fontSize: 17,decoration: TextDecoration.underline),
+                        style: cairoBold.copyWith(
+                            color: orangeColor,
+                            fontSize: 17,
+                            decoration: TextDecoration.underline),
                       ),
                     )
+
                   ],
                 ),
               ),

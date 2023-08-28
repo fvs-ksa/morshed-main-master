@@ -72,10 +72,6 @@ class MyResidenceAndTravels extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                   child: Column(
                     children: [
-                      // CustomTextField(
-                      //   labelText: LocaleKeys.residentialAddress.tr(),
-                      //   context: context,
-                      // ),
                     accountTypeName=='pilgrimUmrah'?SizedBox():  clikedLocationWidget(controller: mennaLocationConroller,
                         fct: () async {
                       if(generalCubit.profileModel.data!.latitudeMina==null){
@@ -117,7 +113,6 @@ class MyResidenceAndTravels extends StatelessWidget {
 
                           },
                           context: context, labelText: LocaleKeys.arafa_loc.tr()),
-
                       accountTypeName=='pilgrimUmrah'?SizedBox():  clikedLocationWidget(controller: mozdalifaLocationController,
                           fct: () async {
                             if(generalCubit.profileModel.data!.latitudeMozdalifa==null){
@@ -138,8 +133,6 @@ class MyResidenceAndTravels extends StatelessWidget {
 
                           },
                           context: context, labelText: LocaleKeys.mozdalifa_loc.tr()),
-
-
                       clikedLocationWidget(controller: maccaHotelLocationController,
                           fct: () async {
                             if(generalCubit.profileModel.data!.latitudeMakkah==null){
@@ -182,12 +175,13 @@ class MyResidenceAndTravels extends StatelessWidget {
 
                           },
                           context: context, labelText:  LocaleKeys.madina_hotels_name.tr()),
-                      CustomTextField(
-                          isEnabled: false,
-                        controller: visaNumberController,
-                          labelText: LocaleKeys.visaNo.tr(), ),
+                      // CustomTextField(
+                      //     isEnabled: false,
+                      //   controller: visaNumberController,
+                      //     labelText: LocaleKeys.visaNo.tr(), ),
+                      SizedBox(height: 8,),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -207,16 +201,21 @@ class MyResidenceAndTravels extends StatelessWidget {
                                 onTap: () async {
                                   //  profileCubit.chooseDateTime(context: context);
                                 },
-                                child: decorationContainerWidget(
-                                    radius: 35.sp,
-                                    context: context,
-                                    child: SvgPicture.asset(
-                                        'assets/svg/Calendar.svg'))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: decorationContainerWidget(
+                                      context: context,
+                                      radius: 50.sp,
+                                      width: 70.w,
+                                      height: 54.h,
+                                      child: SvgPicture.asset(
+                                          'assets/svg/Calendar.svg')),
+                                )),
                           ],
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -236,11 +235,15 @@ class MyResidenceAndTravels extends StatelessWidget {
                                 onTap: () async {
                                   //  profileCubit.chooseDateTime(context: context);
                                 },
-                                child: decorationContainerWidget(
-                                    radius: 35.sp,
-                                    context: context,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: decorationContainerWidget(
+                                        context: context,
+                                        radius: 50.sp,
+                                        width: 70.w,
+                                        height: 54.h,
                                     child: SvgPicture.asset(
-                                        'assets/svg/Calendar.svg'))),
+                                        'assets/svg/Calendar.svg'))),)
                           ],
                         ),
                       ),

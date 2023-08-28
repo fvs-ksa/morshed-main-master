@@ -148,15 +148,15 @@ cardIdWidgetSmallSize({required ProfileModel model,required BuildContext context
         padding: EdgeInsetsDirectional.symmetric(vertical: 5.h,horizontal: 5.w),
 
         child: Container(
-          height: 140,
-          width:178.86.w,
+          height: 130,
+          width:220.w,
           decoration: BoxDecoration(
             color: darkMainColor,
             borderRadius: BorderRadius.circular(25),
 
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
             child: Column(
               children: [
                 Row(
@@ -174,23 +174,23 @@ cardIdWidgetSmallSize({required ProfileModel model,required BuildContext context
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AutoSizeText(model.data!.nameAr!,style: style,softWrap: true),
-                    AutoSizeText(model.data!.id!.toString(),style: style,softWrap: true)
+                    AutoSizeText(model.data!.nameAr!,style: style,softWrap: true,presetFontSizes: [10,8,9]),
+                    AutoSizeText(model.data!.id!.toString(),style: style,softWrap: true,presetFontSizes: [10,8,9])
                   ],
                 ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(model.data!.nationality??'',style: style,),
-                    Text(model.data!.arrivalDate??'',style: style,)
+                    AutoSizeText(model.data!.nationality??'',softWrap: true,style: style,presetFontSizes: [10,8,9]),
+                    AutoSizeText(model.data!.arrivalDate??'',softWrap: true,style: style,presetFontSizes: [10,8,9])
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(model.data!.companyName??'',style: style,),
-                    Text(model.data!.departureDate??"",style: style,)
+                    AutoSizeText(model.data!.companyName??'',softWrap: true,style: style,presetFontSizes: [10,8,9]),
+                    AutoSizeText(model.data!.departureDate??"",softWrap: true,style: style,presetFontSizes: [10,8,9])
                   ],
                 )
 

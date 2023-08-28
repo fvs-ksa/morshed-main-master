@@ -169,7 +169,7 @@ getAllNationality(){
             ),
             Expanded(
               child: CupertinoDatePicker(
-                initialDateTime: DateTime(1900,1,1),
+                initialDateTime: DateTime.now(),
                 onDateTimeChanged: (DateTime value) {
                   print(value);
                   date=value;
@@ -223,7 +223,7 @@ getAllNationality(){
             ),
             Expanded(
               child: CupertinoDatePicker(
-                initialDateTime: DateTime(1900,1,1),
+                initialDateTime: DateTime(1990,1,1),
                 onDateTimeChanged: (DateTime value) {
                   print(value);
                   date=value;
@@ -275,7 +275,7 @@ getAllNationality(){
             ),
             Expanded(
               child: CupertinoDatePicker(
-                initialDateTime: DateTime(1900,1,1),
+                initialDateTime: DateTime.now(),
                 onDateTimeChanged: (DateTime value) {
                   print(value);
                   date=value;
@@ -317,7 +317,8 @@ getAllNationality(){
     LocationPermission permission;
     serviceEnable = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnable) {
-      AppSettings.openLocationSettings();
+      AppSettings.openAppSettings(type: AppSettingsType.location);
+     // AppSettings.openLocationSettings();
 
       return Future.error(
           'Location Service are denied/////////////////////////');
@@ -539,8 +540,9 @@ getAllNationality(){
     required var password,
     required var confirmPassword,
     required File imageFile}) async {
-    emit(RegisterLoadingState());
     registerLoading = false;
+    emit(RegisterLoadingState());
+
     try {
       Dio dio = Dio();
       String apiUrl = 'https://murshidguide.com/api/pilgrims/register';
@@ -570,10 +572,7 @@ getAllNationality(){
         'password': password,
         'disability':isDisability?1:0,
         'password_confirmation': confirmPassword,
-        'image': isPickImage
-            ? await MultipartFile.fromFile(imageFile.path,
-            filename: 'image.jpg')
-            : null,
+        'image': isPickImage ? await MultipartFile.fromFile(imageFile.path, filename: 'image.jpg') : null,
         'company_id': chooseCompany,
         'location_makkah_hotel':maccaHotelLocation,
         'location_madinah_hotel':madinaHotelLocation,
@@ -615,7 +614,7 @@ getAllNationality(){
       }
       emit(RegisterErrorState(error: e.toString()));
     }
-    return loginModel;
+   // return loginModel;
   }
   sendFcmToken() {
     emit(SendFcmTokenLoadingState());
