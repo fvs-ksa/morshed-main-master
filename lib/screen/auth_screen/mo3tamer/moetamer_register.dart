@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:morshed/bloc/account_type_cubit/cubit.dart';
 import 'package:morshed/bloc/account_type_cubit/state.dart';
+import 'package:morshed/bloc/location_cubit/cubit.dart';
+import 'package:morshed/bloc/location_cubit/state.dart';
 import 'package:morshed/bloc/register_cubit/cubit.dart';
 import 'package:morshed/bloc/register_cubit/state.dart';
 import 'package:morshed/component/animation_component.dart';
@@ -42,936 +44,959 @@ class RegisterMoetamerScreen extends StatelessWidget {
   TextEditingController madinaHotelLocController = TextEditingController();
   TextEditingController maccaHotelNameController = TextEditingController();
   TextEditingController madinaHotelNameController = TextEditingController();
+  final FocusNode _nameArFocus = FocusNode();
+  final FocusNode _nameEnFocus = FocusNode();
+  final FocusNode _phoneFocus = FocusNode();
+  final FocusNode _passportFocus = FocusNode();
+  final FocusNode _visaFocus = FocusNode();
+  final FocusNode _idFocus = FocusNode();
+  final FocusNode _maccaHotelFocus = FocusNode();
+  final FocusNode _madinaHotelFocus = FocusNode();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _confirmPasswordFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
   String? numberSave;
   @override
   Widget build(BuildContext context) {
     var registerCubit = RegisterCubit.get(context);
     var accountTypeCubit = AccountTypeCubit.get(context);
-    return BlocConsumer<AccountTypeCubit, AccountTypeState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return BlocConsumer<RegisterCubit, RegisterState>(
-              listener: (context, state) {},
-              bloc: registerCubit.viewAboveKeyBoard(),
-              builder: (context, state) {
-                return Scaffold(
-                  appBar: headerAuthScreen(
-                    context: context,
-                    title: accountTypeCubit.isUmrah
-                        ? LocaleKeys.registerNewMoetamer.tr()
-                        : LocaleKeys.registerNewHajji.tr(),
-                  ),
-                  body: registerCubit.isGetCompany &&
-                          registerCubit.isGetNationality
-                      ? GestureDetector(
-                          onTap: () =>
-                              FocusManager.instance.primaryFocus?.unfocus(),
-                          child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.only(
-                                  start: 15.w,
-                                  end: 15.w,
-                                  bottom: registerCubit.viewInsets.bottom,
-                                  top: 10.h),
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  children: [
-                                    CustomTextField(
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        labelText:
-                                            LocaleKeys.arabicNamePassport.tr(),
-                                        validator: (val) {
-                                          if (val.isEmpty || val == null) {
-                                            return LocaleKeys
-                                                .enter_Full_arabic_name
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        controller: arabicNameController),
-                                    CustomTextField(
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys
-                                                .enter_Full_english_name
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        labelText:
-                                            LocaleKeys.englishNamePassport.tr(),
-                                        // hintText: 'الاسم بالكامل بالانجليزيه حسب الجواز',
-                                        controller: englishNameController),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+    return BlocConsumer<LocationCubit,LocationState>(
+      listener: (context,state){},
+      builder: (context,state) {
+        return BlocConsumer<AccountTypeCubit, AccountTypeState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return BlocConsumer<RegisterCubit, RegisterState>(
+                  listener: (context, state) {},
+                  bloc: registerCubit.viewAboveKeyBoard(),
+                  builder: (context, state) {
+                    return Scaffold(
+                      appBar: headerAuthScreen(
+                        context: context,
+                        title: accountTypeCubit.isUmrah
+                            ? LocaleKeys.registerNewMoetamer.tr()
+                            : LocaleKeys.registerNewHajji.tr(),
+                      ),
+                      body: registerCubit.isGetCompany &&
+                              registerCubit.isGetNationality
+                          ? GestureDetector(
+                              onTap: () =>
+                                  FocusManager.instance.primaryFocus?.unfocus(),
+                              child: SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.only(
+                                      start: 15.w,
+                                      end: 15.w,
+                                      bottom: registerCubit.viewInsets.bottom,
+                                      top: 10.h),
+                                  child: Form(
+                                    key: _formKey,
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          LocaleKeys.profilePic.tr(),
-                                          style:
-                                              cairoBold.copyWith(fontSize: 20),
-                                        ),
-                                        Stack(
-                                          alignment: Alignment.center,
+                                        CustomTextField(
+                                          focusNode: _nameArFocus,
+                                            nextFocus: _nameEnFocus,
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            labelText:
+                                                LocaleKeys.arabicNamePassport.tr(),
+                                            validator: (val) {
+                                              if (val.isEmpty || val == null) {
+                                                return LocaleKeys
+                                                    .enter_Full_arabic_name
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            controller: arabicNameController),
+                                        CustomTextField(
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            focusNode: _nameEnFocus,
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys
+                                                    .enter_Full_english_name
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            labelText:
+                                                LocaleKeys.englishNamePassport.tr(),
+                                            // hintText: 'الاسم بالكامل بالانجليزيه حسب الجواز',
+                                            controller: englishNameController),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            !registerCubit.isPickImage
-                                                ? CircleAvatar(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    radius: 35.sp,
-                                                    backgroundImage:
-                                                        const AssetImage(
-                                                            'assets/images/profile.png'),
-                                                  )
-                                                : CircleAvatar(
-                                                    radius: 35.sp,
-                                                    backgroundImage: FileImage(
-                                                        registerCubit.file!),
-                                                  ),
-                                            CustomAlertDialog(),
+                                            Text(
+                                              LocaleKeys.profilePic.tr(),
+                                              style:
+                                                  cairoBold.copyWith(fontSize: 20),
+                                            ),
+                                            Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                !registerCubit.isPickImage
+                                                    ? CircleAvatar(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        radius: 35.sp,
+                                                        backgroundImage:
+                                                            const AssetImage(
+                                                                'assets/images/profile.png'),
+                                                      )
+                                                    : CircleAvatar(
+                                                        radius: 35.sp,
+                                                        backgroundImage: FileImage(
+                                                            registerCubit.file!),
+                                                      ),
+                                                CustomAlertDialog(),
+                                              ],
+                                            )
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: CustomTextField(
-                                                minHeight: 80.h,
-                                                maxHeight: 80.h,
-                                                validator: (String val) {
-                                                  if (val.isEmpty) {
-                                                    return LocaleKeys
-                                                        .enter_phone_number
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                                keyboardType:
-                                                    TextInputType.phone,
-                                                labelText:
-                                                    LocaleKeys.phoneNumber.tr(),
-                                                controller:
-                                                    phoneNumberController),
-                                          ),
                                         ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: decorationContainerWidget(
-                                            radius: 35.sp,
-                                            context: context,
-                                            width: 100,
-                                              child: CountryPickedCodeCode(countryKey: numberSave??'+966',),
-                                              // child: Text(
-                                              //   '+966',
-                                              //   style: cairoBold.copyWith(
-                                              //       fontSize: 14,
-                                              //       color: darkMainColor),
-                                              //   textAlign: TextAlign.center,
-                                              // )
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    CustomDropDown(),
-
-                                    // dropDownButton(
-                                    //   items: registerCubit
-                                    //       .nationalityModel.data!
-                                    //       .map((e) {
-                                    //     return DropdownMenuItem(
-                                    //      // alignment: AlignmentDirectional.bottomCenter,
-                                    //       child: Text(e.name.toString()),
-                                    //       value: e.name.toString(),
-                                    //     );
-                                    //   }).toList(),
-                                    //   value:
-                                    //       registerCubit.chooseNationality,
-                                    //   hint: LocaleKeys.nationality.tr(),
-                                    //   fct: (onChange) {
-                                    //     registerCubit.onChangeCountryName(
-                                    //         onChange);
-                                    //   },
-                                    //   context: context,
-                                    // ),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: GestureDetector(
-                                              onTap: ()async{
-                                                FocusManager.instance.primaryFocus!.unfocus();
-                                                await registerCubit
-                                                    .chooseDateTimeForBirth(
-                                                    context: context,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 8.0),
+                                                child: CustomTextField(
+                                                  focusNode: _phoneFocus,
+                                                    minHeight: 80.h,
+                                                    maxHeight: 80.h,
+                                                    validator: (String val) {
+                                                      if (val.isEmpty) {
+                                                        return LocaleKeys
+                                                            .enter_phone_number
+                                                            .tr();
+                                                      }
+                                                      return null;
+                                                    },
+                                                    keyboardType:
+                                                        TextInputType.phone,
+                                                    labelText:
+                                                        LocaleKeys.phoneNumber.tr(),
                                                     controller:
-                                                    dateOfBirthController);
-                                              },
-                                              child: CustomTextField(
-                                                validator: (String val) {
-                                                  if (val.isEmpty) {
-                                                    return LocaleKeys
-                                                        .enter_date_of_birth
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                                minHeight: 80.h,
-                                                maxHeight: 80.h,
-                                                maxWidth: 400.w,
-                                                minWidth: 400.w,
-                                                isEnabled: false,
-                                                labelText:
-                                                    LocaleKeys.dateOfBirth.tr(),
-                                                controller: dateOfBirthController,
-
-                                                // labelText: registerCubit
-                                                //     .convertedDateTimeBirth ??
-                                                //     LocaleKeys.dateOfBirth
-                                                //         .tr(),
+                                                        phoneNumberController),
                                               ),
                                             ),
-                                          ),
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: decorationContainerWidget(
+                                                radius: 35.sp,
+                                                context: context,
+                                                width: 100,
+                                                  child: CountryPickedCodeCode(countryKey: numberSave??'+966',),
+                                                  // child: Text(
+                                                  //   '+966',
+                                                  //   style: cairoBold.copyWith(
+                                                  //       fontSize: 14,
+                                                  //       color: darkMainColor),
+                                                  //   textAlign: TextAlign.center,
+                                                  // )
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                        CustomDropDown(),
+
+                                        // dropDownButton(
+                                        //   items: registerCubit
+                                        //       .nationalityModel.data!
+                                        //       .map((e) {
+                                        //     return DropdownMenuItem(
+                                        //      // alignment: AlignmentDirectional.bottomCenter,
+                                        //       child: Text(e.name.toString()),
+                                        //       value: e.name.toString(),
+                                        //     );
+                                        //   }).toList(),
+                                        //   value:
+                                        //       registerCubit.chooseNationality,
+                                        //   hint: LocaleKeys.nationality.tr(),
+                                        //   fct: (onChange) {
+                                        //     registerCubit.onChangeCountryName(
+                                        //         onChange);
+                                        //   },
+                                        //   context: context,
+                                        // ),
                                         SizedBox(
-                                          width: 15.w,
+                                          height: 8.h,
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: GestureDetector(
-                                              onTap: () async {
-                                                FocusManager.instance.primaryFocus!.unfocus();
-                                                await registerCubit
-                                                    .chooseDateTimeForBirth(
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: ()async{
+                                                    FocusManager.instance.primaryFocus!.unfocus();
+                                                    await registerCubit
+                                                        .chooseDateTimeForBirth(
                                                         context: context,
                                                         controller:
-                                                            dateOfBirthController);
-                                                print(
-                                                    "222222222222222222${dateOfBirthController.text}");
-                                                //     .then((value) {
-                                                //      // set
-                                                //   registerCubit.convertedDateTimeBirth=dateOfBirthController.text;
-                                                //   print('DATE OF BIRTH ${dateOfBirthController.text}');
-                                                // });
-                                              },
-                                              child: decorationContainerWidget(
-                                                  radius: 35.sp,
-                                                  context: context,
-                                                  child: SvgPicture.asset(
-                                                      'assets/svg/Calendar.svg'))),
-                                        ),
-                                      ],
-                                    ),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys.enter_user_name
-                                                .tr();
-                                          } else if (!val.contains("@")) {
-                                            return LocaleKeys
-                                                .enter_user_name_correctly
-                                                .tr();
-                                          }
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        labelText: LocaleKeys.email.tr(),
-                                        // hintText: 'البريد الالكتروني',
-                                        controller: emailController),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys
-                                                .enter_Passport_number
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        labelText: LocaleKeys.passportNo.tr(),
-                                        // hintText: 'رقم الجواز',
-                                        controller: passportController),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys.enter_vise_no
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        labelText: LocaleKeys.visaNo.tr(),
-                                        controller: visaNumberController),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys
-                                                .enter_borderOrIdOrIqama_no
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        labelText: LocaleKeys
-                                            .enter_borderOrIdOrIqama_no
-                                            .tr(),
-                                        controller: borderNumberController),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                await  registerCubit
-                                                    .chooseDateTimeForArrival(
-                                                    controller:
-                                                    dateOfArrivalController,
-                                                    context: context);
-                                              },
-                                              child: CustomTextField(
-                                                validator: (String val) {
-                                                  if (val.isEmpty) {
-                                                    return LocaleKeys
-                                                        .enter_arrival_date
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                                minHeight: 80.h,
-                                                maxHeight: 80.h,
-                                                isEnabled: false,
-                                                labelText:
-                                                    LocaleKeys.arriveDate.tr(),
-                                                controller:
-                                                    dateOfArrivalController,
-                                                // hintText:registerCubit.convertedDateTime?? 'تاريخ الوصول',
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                            await  registerCubit
-                                                  .chooseDateTimeForArrival(
-                                                      controller:
-                                                          dateOfArrivalController,
-                                                      context: context);
-                                            },
-                                            child: decorationContainerWidget(
-                                                context: context,
-                                                child: Center(
-                                                    child: SvgPicture.asset(
-                                                        'assets/svg/Calendar.svg')),
-                                                radius: 35.sp),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                FocusManager.instance.primaryFocus!.unfocus();
-                                               await registerCubit
-                                                    .chooseDateTimeDepuration(
-                                                    controller:
-                                                    dateOfDepartureController,
-                                                    context: context);
-                                              },
-                                              child: CustomTextField(
-                                                validator: (String val) {
-                                                  if (val.isEmpty) {
-                                                    return LocaleKeys
-                                                        .enter_depurate_date
-                                                        .tr();
-                                                  }
-                                                  return null;
-                                                },
-                                                minHeight: 80.h,
-                                                maxHeight: 80.h,
-                                                // validator: (String val){
-                                                //   if(val.isEmpty){
-                                                //     return 'رجاء ادخال البيانات المطلوبه';
-                                                //   }
-                                                // },
-                                                isEnabled: false,
-                                                labelText:
-                                                    LocaleKeys.leaveDate.tr(),
-                                                controller:
-                                                    dateOfDepartureController,
-                                                // hintText:registerCubit.convertedDateTime?? 'تاريخ المغادره',
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              FocusManager.instance.primaryFocus!.unfocus();
-                                            await  registerCubit
-                                                  .chooseDateTimeDepuration(
-                                                      controller:
-                                                          dateOfDepartureController,
-                                                      context: context);
-                                            },
-                                            child: decorationContainerWidget(
-                                                context: context,
-                                                child: Center(
-                                                    child: SvgPicture.asset(
-                                                        'assets/svg/Calendar.svg')),
-                                                radius: 35.sp),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    // dropDownButton(
-                                    //     items: registerCubit.residence.map((e) {
-                                    //       return DropdownMenuItem(
-                                    //         child: Text(
-                                    //             e['residenceName'].toString()),
-                                    //         value: e['id'].toString(),
-                                    //       );
-                                    //     }).toList(),
-                                    //     value: registerCubit.chooseResidence,
-                                    //     hint: LocaleKeys.residentialAddress.tr(),
-                                    //     fct: (onChange) {
-                                    //       registerCubit
-                                    //           .onChangeResidence(onChange);
-                                    //       print(onChange);
-                                    //     },
-                                    //     context: context,
-                                    //     validator: () {}),
-                                    // registerCubit.chooseResidence == '1'
-                                    //     ?
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys.enter_makka_hotel
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        labelText:
-                                            LocaleKeys.enter_makka_hotel.tr(),
-                                        controller: maccaHotelNameController),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                FocusManager.instance.primaryFocus!.unfocus();
-                                                navigateForward(
-                                                    MapScreenForSetLocation(
-                                                        locationName:
-                                                        maccaHotelLocController,
-                                                        i: 4));
-                                              },
-                                              child: CustomTextField(
-                                                  validator: (String val) {
-                                                    if (val.isEmpty) {
-                                                      return LocaleKeys
-                                                          .macca_hotel_loc
-                                                          .tr();
-                                                    }
-                                                    return null;
+                                                        dateOfBirthController);
                                                   },
-                                                  minHeight: 80.h,
-                                                  maxHeight: 80.h,
-                                                  isEnabled: false,
-                                                  keyboardType:
-                                                      TextInputType.phone,
-                                                  labelText: LocaleKeys
-                                                      .macca_hotel_loc
-                                                      .tr(),
-                                                  controller:
-                                                      maccaHotelLocController),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              FocusManager.instance.primaryFocus!.unfocus();
-                                              navigateForward(
-                                                  MapScreenForSetLocation(
-                                                      locationName:
-                                                          maccaHotelLocController,
-                                                      i: 4));
-                                            },
-                                            child: decorationContainerWidget(
-                                                context: context,
-                                                child: Center(
-                                                    child: SvgPicture.asset(
-                                                        'assets/svg/loc.svg')),
-                                                radius: 35.sp),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys.madina_hotels_name
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        labelText:
-                                            LocaleKeys.madina_hotels_name.tr(),
-                                        // hintText: 'رقم الحدود',
-                                        controller: madinaHotelNameController),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                navigateForward(
-                                                    MapScreenForSetLocation(
-                                                        locationName:
-                                                        madinaHotelLocController,
-                                                        i: 5));
-                                              },
-                                              child: CustomTextField(
-                                                  validator: (String val) {
-                                                    if (val.isEmpty) {
-                                                      return LocaleKeys
-                                                          .madina_hotel_loc
-                                                          .tr();
-                                                    }
-                                                    return null;
-                                                  },
-                                                  minHeight: 80.h,
-                                                  maxHeight: 80.h,
-                                                  isEnabled: false,
-                                                  // keyboardType: TextInputType.phone,
-                                                  labelText: LocaleKeys
-                                                      .madina_hotel_loc
-                                                      .tr(),
-                                                  // hintText: 'رقم الجوال',
-                                                  controller:
-                                                      madinaHotelLocController),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 15.w,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              navigateForward(
-                                                  MapScreenForSetLocation(
-                                                      locationName:
-                                                          madinaHotelLocController,
-                                                      i: 5));
-                                            },
-                                            child: decorationContainerWidget(
-                                                context: context,
-                                                child: Center(
-                                                    child: SvgPicture.asset(
-                                                        'assets/svg/loc.svg')),
-                                                radius: 35.sp),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    // GestureDetector(
-                                    //   onTap: () {
-                                    //     navigateForward(
-                                    //         MapScreenForSetLocation(
-                                    //             locationName: mennaLocController,
-                                    //             i: 0));
-                                    //   },
-                                    //   child: CustomTextField(
-                                    //       validator: (String val){
-                                    //         if(val.isEmpty){
-                                    //           return 'برجاء تحديد موقع منى';
-                                    //         }
-                                    //         return null;
-                                    //       },
-                                    //       minHeight: 80.h,
-                                    //       maxHeight: 80.h,
-                                    //       isEnabled: false,
-                                    //       maxWidth: 400.w,
-                                    //       minWidth: 400.w,
-                                    //       lines: 1,
-                                    //       labelText:  'موقع منى',
-                                    //
-                                    //       // hintText: 'رقم المخيم  (منى)',
-                                    //       controller: mennaLocController),
-                                    // ),
-                                    // GestureDetector(
-                                    //   onTap: () {
-                                    //     navigateForward(
-                                    //         MapScreenForSetLocation(
-                                    //             locationName: arafaLocController,
-                                    //             i: 1));
-                                    //   },
-                                    //   child: CustomTextField(
-                                    //       validator: (String val){
-                                    //         if(val.isEmpty){
-                                    //           return 'برجاء تحديد موقع عرفه';
-                                    //         }
-                                    //         return null;
-                                    //       },
-                                    //       minHeight: 80.h,
-                                    //       maxHeight: 80.h,
-                                    //       isEnabled: false,
-                                    //       maxWidth: 400.w,
-                                    //       minWidth: 400.w,
-                                    //       lines: 1,
-                                    //       labelText: 'موقع عرفه',
-                                    //       // hintText: 'رقم المخيم  (عرفه)',
-                                    //       controller: arafaLocController),
-                                    // ),
-                                    // GestureDetector(
-                                    //     onTap: () {
-                                    //       navigateForward(
-                                    //           MapScreenForSetLocation(
-                                    //               locationName:mozdalifaLocController ,
-                                    //               i: 2));
-                                    //     },
-                                    //     child: CustomTextField(
-                                    //         validator: (String val){
-                                    //           if(val.isEmpty){
-                                    //             return 'برجاء تحديد موقع المزدلفه';
-                                    //           }
-                                    //           return null;
-                                    //         },
-                                    //         minHeight: 80.h,
-                                    //         maxHeight: 80.h,
-                                    //         isEnabled: false,
-                                    //         maxWidth: 400.w,
-                                    //         minWidth: 400.w,
-                                    //         lines: 1,
-                                    //         labelText:'موقع المزدلفه',
-                                    //         controller:
-                                    //         mozdalifaLocController)),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          LocaleKeys.haveDisability.tr(),
-                                          style:
-                                              cairoBold.copyWith(fontSize: 17),
-                                        ),
-                                        Switch.adaptive(
-                                            value: registerCubit.isDisability,
-                                            onChanged: (onChanged) {
-                                              registerCubit
-                                                  .changeDisabilityValue();
-                                              print(registerCubit.isDisability);
-                                            })
-                                      ],
-                                    ),
-                                    registerCubit.isDisability
-                                        ? dropDownButton(
-                                            items: registerCubit.disabilities
-                                                .map((e) {
-                                              return DropdownMenuItem(
-                                                child: Text(
-                                                  e.toString(),
-                                                  style: cairoSemiBold,
+                                                  child: CustomTextField(
+                                                    validator: (String val) {
+                                                      if (val.isEmpty) {
+                                                        return LocaleKeys
+                                                            .enter_date_of_birth
+                                                            .tr();
+                                                      }
+                                                      return null;
+                                                    },
+                                                    minHeight: 80.h,
+                                                    maxHeight: 80.h,
+                                                    maxWidth: 400.w,
+                                                    minWidth: 400.w,
+                                                    isEnabled: false,
+                                                    labelText:
+                                                        LocaleKeys.dateOfBirth.tr(),
+                                                    controller: dateOfBirthController,
+                                                  ),
                                                 ),
-                                                value: e.toString(),
-                                              );
-                                            }).toList(),
-                                            value:
-                                                registerCubit.chooseDisability,
-                                            hint:
-                                                LocaleKeys.disabilityType.tr(),
-                                            fct: (onChange) {
-                                              registerCubit
-                                                  .onChangeDisability(onChange);
-                                              print(onChange);
-                                            },
-                                            context: context,
-                                          )
-                                        : const SizedBox(),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    dropDownButton(
-                                      items: registerCubit
-                                          .companyModel.companies!
-                                          .map((e) {
-                                        return DropdownMenuItem(
-                                          child: Text(e.companyName!),
-                                          value: e.id.toString(),
-                                        );
-                                      }).toList(),
-                                      value: registerCubit.chooseCompany,
-                                      hint: LocaleKeys.agentName.tr(),
-                                      fct: (onChange) {
-                                        registerCubit.onChangeCompany(onChange);
-                                        print(onChange);
-                                      },
-                                      context: context,
-                                      //  validator: () {}
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    // CustomTextField(
-                                    //     context: context,
-                                    //     labelText: LocaleKeys.agentName.tr(),
-                                    //     maxWidth: 400.w,
-                                    //     minWidth: 400.w,
-                                    //     // hintText: 'اسم الوكيل',
-                                    //     controller: agentNameController),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys.enter_password
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        suffixIcon: IconButton(
-                                          onPressed: () {
-                                            registerCubit
-                                                .changeVisabilityState();
-                                          },
-                                          icon: registerCubit.isVisable
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
-                                        ),
-                                        labelText: LocaleKeys.password.tr(),
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        secure: registerCubit.isVisable,
-                                        //  hintText: 'كلمه المرور',
-                                        controller: passwordController),
-                                    CustomTextField(
-                                        validator: (String val) {
-                                          if (val.isEmpty) {
-                                            return LocaleKeys.confirmPassword
-                                                .tr();
-                                          }
-                                          return null;
-                                        },
-                                        minHeight: 80.h,
-                                        maxHeight: 80.h,
-                                        secure: registerCubit.isVisable,
-                                        suffixIcon: IconButton(
-                                          onPressed: () {
-                                            registerCubit
-                                                .changeVisabilityState();
-                                          },
-                                          icon: registerCubit.isVisable
-                                              ? const Icon(Icons.visibility_off)
-                                              : const Icon(Icons.visibility),
-                                        ),
-                                        labelText:
-                                            LocaleKeys.confirmPassword.tr(),
-                                        maxWidth: 400.w,
-                                        minWidth: 400.w,
-                                        controller: confirmPasswordController),
-                                    richText(
-                                        navigation: () => navigateForward(
-                                            const TermsScreen()),
-                                        text: LocaleKeys.whenYouRegisterYouAgree
-                                            .tr(),
-                                        tappedText:
-                                            LocaleKeys.privacyPolicy.tr(),
-                                        context: context),
-                                    SizedBox(
-                                      height: 15.w,
-                                    ),
-                                    state is RegisterLoadingState
-                                        ? CircularProgressIndicator.adaptive(
-                                            backgroundColor: orangeColor,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              darkMainColor,
+                                              ),
                                             ),
-                                          )
-                                        : mainButton(
-                                            text: LocaleKeys.registerNow.tr(),
-                                            color: darkMainColor,
-                                            context: context,
-                                            fct: () {
-                                              //   if (registerCubit.file == null) {
-                                              //   showToast(
-                                              //       text:
-                                              //       'برجاء تحديد صوره شخصية',
-                                              //       state:
-                                              //       ToastState.ERROR);
-                                              // }else
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                // else {
-                                                registerCubit.moetamerRegister(
-                                                    context: context,
-                                                    dateOfArrival:
-                                                        dateOfArrivalController
-                                                            .text,
-                                                    dateOfBirth:
-                                                        dateOfBirthController
-                                                            .text,
-                                                    dateOfDeparture:
-                                                        dateOfDepartureController
-                                                            .text,
-                                                    maccaHotelName:
-                                                        maccaHotelNameController
-                                                            .text,
-                                                    madinahHotelName:
-                                                        madinaHotelNameController
-                                                            .text,
-                                                    nameAr: arabicNameController
-                                                        .text,
-                                                    nameEn:
-                                                        englishNameController
-                                                            .text,
-                                                    phoneNumber:
-                                                        phoneNumberController
-                                                            .text,
-                                                    email: emailController.text,
-                                                    visaNo: visaNumberController
-                                                        .text,
-                                                    passportNo:
-                                                        passportController.text,
-                                                    borderNo:
-                                                        borderNumberController
-                                                            .text,
-                                                    password:
-                                                        passwordController.text,
-                                                    confirmPassword:
-                                                        confirmPasswordController
-                                                            .text,
-                                                    imageFile:
-                                                        registerCubit.file!);
-                                                //  }
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: GestureDetector(
+                                                  onTap: () async {
+                                                    FocusManager.instance.primaryFocus!.unfocus();
+                                                    await registerCubit
+                                                        .chooseDateTimeForBirth(
+                                                            context: context,
+                                                            controller:
+                                                                dateOfBirthController);
+                                                    print("222222222222222222${dateOfBirthController.text}");
+                                                  },
+                                                  child: decorationContainerWidget(
+                                                      radius: 35.sp,
+                                                      context: context,
+                                                      child: SvgPicture.asset(
+                                                          'assets/svg/Calendar.svg'))),
+                                            ),
+                                          ],
+                                        ),
+
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys
+                                                    .enter_Passport_number
+                                                    .tr();
                                               }
-                                            }),
-                                    SizedBox(
-                                      height: 10.h,
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            focusNode: _passportFocus,
+                                            nextFocus: _visaFocus,
+                                            labelText: LocaleKeys.passportNo.tr(),
+                                            // hintText: 'رقم الجواز',
+                                            controller: passportController),
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys.enter_vise_no
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            focusNode: _visaFocus,
+                                            nextFocus: _idFocus,
+                                            labelText: LocaleKeys.visaNo.tr(),
+                                            controller: visaNumberController),
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys
+                                                    .enter_borderOrIdOrIqama_no
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            focusNode: _idFocus,
+                                            labelText: LocaleKeys
+                                                .enter_borderOrIdOrIqama_no
+                                                .tr(),
+                                            controller: borderNumberController),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    await  registerCubit
+                                                        .chooseDateTimeForArrival(
+                                                        controller:
+                                                        dateOfArrivalController,
+                                                        context: context);
+                                                  },
+                                                  child: CustomTextField(
+                                                    validator: (String val) {
+                                                      if (val.isEmpty) {
+                                                        return LocaleKeys
+                                                            .enter_arrival_date
+                                                            .tr();
+                                                      }
+                                                      return null;
+                                                    },
+                                                    minHeight: 80.h,
+                                                    maxHeight: 80.h,
+                                                    isEnabled: false,
+                                                    labelText:
+                                                        LocaleKeys.arriveDate.tr(),
+                                                    controller:
+                                                        dateOfArrivalController,
+                                                    // hintText:registerCubit.convertedDateTime?? 'تاريخ الوصول',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                await  registerCubit
+                                                      .chooseDateTimeForArrival(
+                                                          controller:
+                                                              dateOfArrivalController,
+                                                          context: context);
+                                                },
+                                                child: decorationContainerWidget(
+                                                    context: context,
+                                                    child: Center(
+                                                        child: SvgPicture.asset(
+                                                            'assets/svg/Calendar.svg')),
+                                                    radius: 35.sp),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    FocusManager.instance.primaryFocus!.unfocus();
+                                                   await registerCubit
+                                                        .chooseDateTimeDepuration(
+                                                        controller:
+                                                        dateOfDepartureController,
+                                                        context: context);
+                                                  },
+                                                  child: CustomTextField(
+                                                    validator: (String val) {
+                                                      if (val.isEmpty) {
+                                                        return LocaleKeys
+                                                            .enter_depurate_date
+                                                            .tr();
+                                                      }
+                                                      return null;
+                                                    },
+                                                    minHeight: 80.h,
+                                                    maxHeight: 80.h,
+                                                    // validator: (String val){
+                                                    //   if(val.isEmpty){
+                                                    //     return 'رجاء ادخال البيانات المطلوبه';
+                                                    //   }
+                                                    // },
+                                                    isEnabled: false,
+                                                    labelText:
+                                                        LocaleKeys.leaveDate.tr(),
+                                                    controller:
+                                                        dateOfDepartureController,
+                                                    // hintText:registerCubit.convertedDateTime?? 'تاريخ المغادره',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  FocusManager.instance.primaryFocus!.unfocus();
+                                                await  registerCubit
+                                                      .chooseDateTimeDepuration(
+                                                          controller:
+                                                              dateOfDepartureController,
+                                                          context: context);
+                                                },
+                                                child: decorationContainerWidget(
+                                                    context: context,
+                                                    child: Center(
+                                                        child: SvgPicture.asset(
+                                                            'assets/svg/Calendar.svg')),
+                                                    radius: 35.sp),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // dropDownButton(
+                                        //     items: registerCubit.residence.map((e) {
+                                        //       return DropdownMenuItem(
+                                        //         child: Text(
+                                        //             e['residenceName'].toString()),
+                                        //         value: e['id'].toString(),
+                                        //       );
+                                        //     }).toList(),
+                                        //     value: registerCubit.chooseResidence,
+                                        //     hint: LocaleKeys.residentialAddress.tr(),
+                                        //     fct: (onChange) {
+                                        //       registerCubit
+                                        //           .onChangeResidence(onChange);
+                                        //       print(onChange);
+                                        //     },
+                                        //     context: context,
+                                        //     validator: () {}),
+                                        // registerCubit.chooseResidence == '1'
+                                        //     ?
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys.enter_makka_hotel
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            focusNode: _maccaHotelFocus,
+                                            labelText:
+                                                LocaleKeys.enter_makka_hotel.tr(),
+                                            controller: maccaHotelNameController),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    FocusManager.instance.primaryFocus!.unfocus();
+                                                    navigateForward(
+                                                        MapScreenForSetLocation(
+                                                            locationName:
+                                                            maccaHotelLocController,
+                                                            i: 4));
+                                                  },
+                                                  child: CustomTextField(
+                                                      validator: (String val) {
+                                                        if (val.isEmpty) {
+                                                          return LocaleKeys
+                                                              .macca_hotel_loc
+                                                              .tr();
+                                                        }
+                                                        return null;
+                                                      },
+                                                      minHeight: 80.h,
+                                                      maxHeight: 80.h,
+                                                      isEnabled: false,
+                                                      keyboardType:
+                                                          TextInputType.phone,
+                                                      labelText: LocaleKeys
+                                                          .macca_hotel_loc
+                                                          .tr(),
+                                                      controller:
+                                                          maccaHotelLocController),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  FocusManager.instance.primaryFocus!.unfocus();
+                                                  navigateForward(
+                                                      MapScreenForSetLocation(
+                                                          locationName:
+                                                              maccaHotelLocController,
+                                                          i: 4));
+                                                },
+                                                child: decorationContainerWidget(
+                                                    context: context,
+                                                    child: Center(
+                                                        child: SvgPicture.asset(
+                                                            'assets/svg/loc.svg')),
+                                                    radius: 35.sp),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys.madina_hotels_name
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            focusNode: _madinaHotelFocus,
+                                            labelText:
+                                                LocaleKeys.madina_hotels_name.tr(),
+                                            // hintText: 'رقم الحدود',
+                                            controller: madinaHotelNameController),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.only(top: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    navigateForward(
+                                                        MapScreenForSetLocation(
+                                                            locationName:
+                                                            madinaHotelLocController,
+                                                            i: 5));
+                                                  },
+                                                  child: CustomTextField(
+                                                      validator: (String val) {
+                                                        if (val.isEmpty) {
+                                                          return LocaleKeys
+                                                              .madina_hotel_loc
+                                                              .tr();
+                                                        }
+                                                        return null;
+                                                      },
+                                                      minHeight: 80.h,
+                                                      maxHeight: 80.h,
+                                                      isEnabled: false,
+                                                      // keyboardType: TextInputType.phone,
+                                                      labelText: LocaleKeys
+                                                          .madina_hotel_loc
+                                                          .tr(),
+                                                      // hintText: 'رقم الجوال',
+                                                      controller:
+                                                          madinaHotelLocController),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  navigateForward(
+                                                      MapScreenForSetLocation(
+                                                          locationName:
+                                                              madinaHotelLocController,
+                                                          i: 5));
+                                                },
+                                                child: decorationContainerWidget(
+                                                    context: context,
+                                                    child: Center(
+                                                        child: SvgPicture.asset(
+                                                            'assets/svg/loc.svg')),
+                                                    radius: 35.sp),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // GestureDetector(
+                                        //   onTap: () {
+                                        //     navigateForward(
+                                        //         MapScreenForSetLocation(
+                                        //             locationName: mennaLocController,
+                                        //             i: 0));
+                                        //   },
+                                        //   child: CustomTextField(
+                                        //       validator: (String val){
+                                        //         if(val.isEmpty){
+                                        //           return 'برجاء تحديد موقع منى';
+                                        //         }
+                                        //         return null;
+                                        //       },
+                                        //       minHeight: 80.h,
+                                        //       maxHeight: 80.h,
+                                        //       isEnabled: false,
+                                        //       maxWidth: 400.w,
+                                        //       minWidth: 400.w,
+                                        //       lines: 1,
+                                        //       labelText:  'موقع منى',
+                                        //
+                                        //       // hintText: 'رقم المخيم  (منى)',
+                                        //       controller: mennaLocController),
+                                        // ),
+                                        // GestureDetector(
+                                        //   onTap: () {
+                                        //     navigateForward(
+                                        //         MapScreenForSetLocation(
+                                        //             locationName: arafaLocController,
+                                        //             i: 1));
+                                        //   },
+                                        //   child: CustomTextField(
+                                        //       validator: (String val){
+                                        //         if(val.isEmpty){
+                                        //           return 'برجاء تحديد موقع عرفه';
+                                        //         }
+                                        //         return null;
+                                        //       },
+                                        //       minHeight: 80.h,
+                                        //       maxHeight: 80.h,
+                                        //       isEnabled: false,
+                                        //       maxWidth: 400.w,
+                                        //       minWidth: 400.w,
+                                        //       lines: 1,
+                                        //       labelText: 'موقع عرفه',
+                                        //       // hintText: 'رقم المخيم  (عرفه)',
+                                        //       controller: arafaLocController),
+                                        // ),
+                                        // GestureDetector(
+                                        //     onTap: () {
+                                        //       navigateForward(
+                                        //           MapScreenForSetLocation(
+                                        //               locationName:mozdalifaLocController ,
+                                        //               i: 2));
+                                        //     },
+                                        //     child: CustomTextField(
+                                        //         validator: (String val){
+                                        //           if(val.isEmpty){
+                                        //             return 'برجاء تحديد موقع المزدلفه';
+                                        //           }
+                                        //           return null;
+                                        //         },
+                                        //         minHeight: 80.h,
+                                        //         maxHeight: 80.h,
+                                        //         isEnabled: false,
+                                        //         maxWidth: 400.w,
+                                        //         minWidth: 400.w,
+                                        //         lines: 1,
+                                        //         labelText:'موقع المزدلفه',
+                                        //         controller:
+                                        //         mozdalifaLocController)),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              LocaleKeys.haveDisability.tr(),
+                                              style:
+                                                  cairoBold.copyWith(fontSize: 17),
+                                            ),
+                                            Switch.adaptive(
+                                                value: registerCubit.isDisability,
+                                                onChanged: (onChanged) {
+                                                  registerCubit
+                                                      .changeDisabilityValue();
+                                                  print(registerCubit.isDisability);
+                                                })
+                                          ],
+                                        ),
+                                        registerCubit.isDisability
+                                            ? dropDownButton(
+                                                items: registerCubit.disabilities
+                                                    .map((e) {
+                                                  return DropdownMenuItem(
+                                                    child: Text(
+                                                      e.toString(),
+                                                      style: cairoSemiBold,
+                                                    ),
+                                                    value: e.toString(),
+                                                  );
+                                                }).toList(),
+                                                value:
+                                                    registerCubit.chooseDisability,
+                                                hint:
+                                                    LocaleKeys.disabilityType.tr(),
+                                                fct: (onChange) {
+                                                  registerCubit
+                                                      .onChangeDisability(onChange);
+                                                  print(onChange);
+                                                },
+                                                context: context,
+                                              )
+                                            : const SizedBox(),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        dropDownButton(
+                                          items: registerCubit
+                                              .companyModel.companies!
+                                              .map((e) {
+                                            return DropdownMenuItem(
+                                              child: Text(e.companyName!),
+                                              value: e.id.toString(),
+                                            );
+                                          }).toList(),
+                                          value: registerCubit.chooseCompany,
+                                          hint: LocaleKeys.agentName.tr(),
+                                          fct: (onChange) {
+                                            registerCubit.onChangeCompany(onChange);
+                                            print(onChange);
+                                          },
+                                          context: context,
+                                          //  validator: () {}
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        // CustomTextField(
+                                        //     context: context,
+                                        //     labelText: LocaleKeys.agentName.tr(),
+                                        //     maxWidth: 400.w,
+                                        //     minWidth: 400.w,
+                                        //     // hintText: 'اسم الوكيل',
+                                        //     controller: agentNameController),
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys.enter_user_name
+                                                    .tr();
+                                              } else if (!val.contains("@")) {
+                                                return LocaleKeys
+                                                    .enter_user_name_correctly
+                                                    .tr();
+                                              }
+                                            },
+                                            minHeight: 80.h,
+                                            focusNode: _emailFocus,
+                                            nextFocus: _passwordFocus,
+                                            maxHeight: 80.h,
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            keyboardType:
+                                            TextInputType.emailAddress,
+                                            labelText: LocaleKeys.email.tr(),
+                                            // hintText: 'البريد الالكتروني',
+                                            controller: emailController),
+
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys.enter_password
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                            focusNode: _passwordFocus,
+                                            nextFocus: _confirmPasswordFocus,
+                                            maxHeight: 80.h,
+                                            suffixIcon: IconButton(
+                                              onPressed: () {
+                                                registerCubit
+                                                    .changeVisabilityState();
+                                              },
+                                              icon: registerCubit.isVisable
+                                                  ? Icon(Icons.visibility_off)
+                                                  : Icon(Icons.visibility),
+                                            ),
+                                            labelText: LocaleKeys.password.tr(),
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            secure: registerCubit.isVisable,
+                                            //  hintText: 'كلمه المرور',
+                                            controller: passwordController),
+                                        CustomTextField(
+                                            validator: (String val) {
+                                              if (val.isEmpty) {
+                                                return LocaleKeys.confirmPassword
+                                                    .tr();
+                                              }
+                                              return null;
+                                            },
+                                            minHeight: 80.h,
+                                         //   focusNode: _confirmPasswordFocus,
+                                            maxHeight: 80.h,
+                                            secure: registerCubit.isVisable,
+                                            suffixIcon: IconButton(
+                                              onPressed: () {
+                                                registerCubit
+                                                    .changeVisabilityState();
+                                              },
+                                              icon: registerCubit.isVisable
+                                                  ? const Icon(Icons.visibility_off)
+                                                  : const Icon(Icons.visibility),
+                                            ),
+                                            labelText:
+                                                LocaleKeys.confirmPassword.tr(),
+                                            maxWidth: 400.w,
+                                            minWidth: 400.w,
+                                            controller: confirmPasswordController),
+                                        richText(
+                                            navigation: () => navigateForward(
+                                                const TermsScreen()),
+                                            text: LocaleKeys.whenYouRegisterYouAgree
+                                                .tr(),
+                                            tappedText:
+                                                LocaleKeys.privacyPolicy.tr(),
+                                            context: context),
+                                        SizedBox(
+                                          height: 15.w,
+                                        ),
+                                        state is RegisterLoadingState
+                                            ? CircularProgressIndicator.adaptive(
+                                                backgroundColor: orangeColor,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<Color>(
+                                                  darkMainColor,
+                                                ),
+                                              )
+                                            : mainButton(
+                                                text: LocaleKeys.registerNow.tr(),
+                                                color: darkMainColor,
+                                                context: context,
+                                                fct: () {
+                                                  //   if (registerCubit.file == null) {
+                                                  //   showToast(
+                                                  //       text:
+                                                  //       'برجاء تحديد صوره شخصية',
+                                                  //       state:
+                                                  //       ToastState.ERROR);
+                                                  // }else
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    // else {
+                                                    registerCubit.moetamerRegister(
+                                                        context: context,
+                                                        dateOfArrival:
+                                                            dateOfArrivalController
+                                                                .text,
+                                                        dateOfBirth:
+                                                            dateOfBirthController
+                                                                .text,
+                                                        dateOfDeparture:
+                                                            dateOfDepartureController
+                                                                .text,
+                                                        maccaHotelName:
+                                                            maccaHotelNameController
+                                                                .text,
+                                                        madinahHotelName:
+                                                            madinaHotelNameController
+                                                                .text,
+                                                        nameAr: arabicNameController
+                                                            .text,
+                                                        nameEn:
+                                                            englishNameController
+                                                                .text,
+                                                        phoneNumber:
+                                                            phoneNumberController
+                                                                .text,
+                                                        email: emailController.text,
+                                                        visaNo: visaNumberController
+                                                            .text,
+                                                        passportNo:
+                                                            passportController.text,
+                                                        borderNo:
+                                                            borderNumberController
+                                                                .text,
+                                                        password:
+                                                            passwordController.text,
+                                                        confirmPassword:
+                                                            confirmPasswordController
+                                                                .text,
+                                                        imageFile:
+                                                            registerCubit.file!);
+                                                    //  }
+                                                  }
+                                                }),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        richText(
+                                            navigation: () =>
+                                                navigateForward(LoginScreen(
+                                                  index: 0,
+                                                )),
+                                            text: LocaleKeys.haveAccount.tr(),
+                                            tappedText: LocaleKeys.loginNow.tr(),
+                                            context: context),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                      ],
                                     ),
-                                    richText(
-                                        navigation: () =>
-                                            navigateForward(LoginScreen(
-                                              index: 0,
-                                            )),
-                                        text: LocaleKeys.haveAccount.tr(),
-                                        tappedText: LocaleKeys.loginNow.tr(),
-                                        context: context),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                  ],
+                                  ),
                                 ),
+                              ))
+                          : Center(
+                              child: CircularProgressIndicator.adaptive(
+                              backgroundColor: orangeColor,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                darkMainColor, //<-- SEE HERE
                               ),
-                            ),
-                          ))
-                      : Center(
-                          child: CircularProgressIndicator.adaptive(
-                          backgroundColor: orangeColor,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            darkMainColor, //<-- SEE HERE
-                          ),
-                        )),
-                );
-              });
-        });
+                            )),
+                    );
+                  });
+            });
+      }
+    );
   }
 }

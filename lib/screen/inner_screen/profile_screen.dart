@@ -22,13 +22,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var profileCubit = ProfileCubit.get(context);
-    var generalCubit = GeneralCubit.get(context);
+  //  var generalCubit = GeneralCubit.get(context);
 
     return BlocConsumer<ProfileCubit, ProfileState>(
 
-        listener: (context, state) {
-          profileCubit.getProfileDate();
-        },
+        listener: (context, state) {},
      //   bloc: profileCubit.getProfileDate(),
         builder: (context, state) {
 

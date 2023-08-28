@@ -18,7 +18,26 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(InitialProfileState());
 
   static ProfileCubit get(context) => BlocProvider.of(context);
+  late ProfileModel profileModel;
+  bool isLoading = false;
 
+  getProfileDate() {
+    getAllNationality();
+    isLoading = false;
+    emit(GetProfileLoadingState());
+    DioHelper.getData(
+        url: 'https://murshidguide.com/api/pilgrims/show',
+        token: CacheHelper.getData(key: 'token'))
+        .then((value) {
+      print(value.data);
+      profileModel = ProfileModel.fromJson(value.data);
+      emit(GetProfileSuccessState());
+      isLoading = true;
+    }).catchError((error) {
+      print(error.toString());
+      emit(GetProfileErrorState(error: error.toString()));
+    });
+  }
 
   String? chooseNationality;
   late NationalityModel nationalityModel;
@@ -113,26 +132,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     // emit(ChooseDateOfBirthProfileState());
   }
 
-  late ProfileModel profileModel;
-  bool isLoading = false;
 
-  getProfileDate() {
-    getAllNationality();
-    isLoading = false;
-    emit(GetProfileLoadingState());
-    DioHelper.getData(
-        url: 'https://murshidguide.com/api/pilgrims/show',
-        token: CacheHelper.getData(key: 'token'))
-        .then((value) {
-      print(value.data);
-      profileModel = ProfileModel.fromJson(value.data);
-      emit(GetProfileSuccessState());
-      isLoading = true;
-    }).catchError((error) {
-      print(error.toString());
-      emit(GetProfileErrorState(error: error.toString()));
-    });
-  }
 
   updateUserInfo({
     required String nameAr,

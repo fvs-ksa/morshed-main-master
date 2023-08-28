@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,7 @@ import '../../../component/navigation_functions.dart';
 import '../../../constant/const_color.dart';
 import '../../../component/guide_escorts_component.dart';
 import '../../../tranlations/locale_keys.g.dart';
+import '../../bottom_navigations_screens/widget/resisdance_Widget.dart';
 
 class MyReportsDetailsScreen extends StatelessWidget {
   String status;
@@ -85,45 +87,89 @@ class MyReportsDetailsScreen extends StatelessWidget {
                           height: 15.h,
                         ),
                         CustomTextField(
+                          padding: 10,
                             labelText: LocaleKeys.reportNumber.tr(),
                             controller: reportIdController,
                             isEnabled: false),
                         CustomTextField(
+                            padding: 10,
                             labelText: LocaleKeys.passportNo.tr(),
                             controller: passportNoController,
                             isEnabled: false),
-                        GestureDetector(
-                          onTap: () async {
-                            if(reportCubit.getMyReportsModel.reports![index].latitude==null){
-                              showToast(text: 'لا يوجد موقع لفندق الإقامه في المدينة المنورة', state: ToastState.ERROR);
-                            }else{
-                              if (Platform.isIOS) {
-                                await launchUrl(Uri.parse(
-                                    "comgooglemaps://?q=${reportCubit.getMyReportsModel.reports![index].latitude},"
-                                        "${reportCubit.getMyReportsModel.reports![index].longitude}&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is"));
-                              } else {
-                                await launchUrl(Uri.parse(
-                                    'google.navigation:q='
-                                        '${reportCubit.getMyReportsModel.reports![index].latitude}, '
-                                        '${reportCubit.getMyReportsModel.reports![index].longitude}'
-                                        '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
+                        clikedLocationWidget(controller: locationController,
+                            fct: () async {
+                              if(reportCubit.getMyReportsModel.reports![index].latitude==null){
+                                showToast(text: 'لا يوجد موقع للبلاغ', state: ToastState.ERROR);
+                              }else{
+                                if (Platform.isIOS) {
+                                  await launchUrl(Uri.parse(
+                                      "comgooglemaps://?q=${reportCubit.getMyReportsModel.reports![index].latitude},"
+                                          "${reportCubit.getMyReportsModel.reports![index].longitude}&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is"));
+                                } else {
+                                  await launchUrl(Uri.parse(
+                                      'google.navigation:q='
+                                          '${reportCubit.getMyReportsModel.reports![index].latitude}, '
+                                          '${reportCubit.getMyReportsModel.reports![index].longitude}'
+                                          '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
+                                }
                               }
-                            }
 
-                          },
-                          // onTap: ()async{
-                          //   await launchUrl(Uri.parse
-                          //     ('google.navigation:q='
-                          //       '${reportCubit.getMyReportsModel.reports![index].latitude!}, '
-                          //       '${reportCubit.getMyReportsModel.reports![index].longitude!}'
-                          //       '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
-                          //
-                          // },
-                          child: CustomTextField(
-                              labelText: LocaleKeys.reportLocation.tr(),
-                              controller: locationController,
-                              isEnabled: false),
-                        ),
+                            },
+                            context: context, labelText: LocaleKeys.reportLocation.tr(),),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: GestureDetector(
+                        //         onTap: () async {
+                        //           if(reportCubit.getMyReportsModel.reports![index].latitude==null){
+                        //             showToast(text: 'لا يوجد موقع لفندق الإقامه في المدينة المنورة', state: ToastState.ERROR);
+                        //           }else{
+                        //             if (Platform.isIOS) {
+                        //               await launchUrl(Uri.parse(
+                        //                   "comgooglemaps://?q=${reportCubit.getMyReportsModel.reports![index].latitude},"
+                        //                       "${reportCubit.getMyReportsModel.reports![index].longitude}&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is"));
+                        //             } else {
+                        //               await launchUrl(Uri.parse(
+                        //                   'google.navigation:q='
+                        //                       '${reportCubit.getMyReportsModel.reports![index].latitude}, '
+                        //                       '${reportCubit.getMyReportsModel.reports![index].longitude}'
+                        //                       '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
+                        //             }
+                        //           }
+                        //
+                        //         },
+                        //         // onTap: ()async{
+                        //         //   await launchUrl(Uri.parse
+                        //         //     ('google.navigation:q='
+                        //         //       '${reportCubit.getMyReportsModel.reports![index].latitude!}, '
+                        //         //       '${reportCubit.getMyReportsModel.reports![index].longitude!}'
+                        //         //       '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
+                        //         //
+                        //         // },
+                        //         child: CustomTextField(
+                        //             padding: 10,
+                        //             labelText: LocaleKeys.reportLocation.tr(),
+                        //             controller: locationController,
+                        //             isEnabled: false),
+                        //       ),
+                        //     ),
+                        //     decorationContainerWidget(
+                        //         context: context,
+                        //         radius: 50.sp,
+                        //         width: 70.w,
+                        //         height: 54.h,
+                        //         child: Padding(
+                        //             padding: EdgeInsets.all(8),
+                        //             child: FittedBox(
+                        //               child: AutoSizeText(
+                        //                   presetFontSizes: [10,8,6],
+                        //                   "press_here".tr(),
+                        //                   style:cairoMedium.copyWith(color: darkMainColor)
+                        //                 // TextStyle(color: darkMainColor),
+                        //               ),
+                        //             ))),
+                        //   ],
+                        // ),
                         bigTextFieldForNotes(
                           controller: detailsController,
                             context: context,

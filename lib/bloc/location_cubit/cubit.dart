@@ -80,8 +80,9 @@ class LocationCubit extends Cubit<LocationState>{
 
 
   Future<dynamic> getUserCurrentLocation(BuildContext context) async {
-    emit(GetUserCurrentLocation());
+
     await determinePosition().then((value) => getPlace(value, context));
+    emit(GetUserCurrentLocation());
   }
   LatLng? latLn;
   String addressFromMap = '';
@@ -136,12 +137,69 @@ class LocationCubit extends Cubit<LocationState>{
       ));
     }
   }
-  getStringAddress(int i){
+  // getStringAddress(int i){
+  //
+  //   if(i == 3) {
+  //     reportLocation = addressFromMap;
+  //     emit(ChangeAddressState());
+  //     addressFromMap = '';
+  //   }
+  // }
 
-    if(i == 3) {
+  getStringAddress({required int i, required TextEditingController controller}) {
+    if (i == 0) {
+      controller.clear();
+      meenaLoc = addressFromMap;
+      controller.text=addressFromMap;
+      latMinna = lat;
+      lngMinna = lng;
+      emit(ChangeAddressState());
+      print('controller ${controller.text}');
+      addressFromMap = '';
+    } else if (i == 1) {
+      controller.clear();
+      arafaLoc = addressFromMap;
+      controller.text=addressFromMap;
+      latArafa = lat;
+      lngArafa = lng;
+      emit(ChangeAddressState());
+      print('controller ${controller.text}');
+      addressFromMap = '';
+    } else if (i == 3) {
+      controller.clear();
       reportLocation = addressFromMap;
+      controller.text=addressFromMap;
+      print('controller ${controller.text}');
       emit(ChangeAddressState());
       addressFromMap = '';
+    } else if (i == 4) {
+      controller.clear();
+      maccaHotelLocation = addressFromMap;
+      controller.text=addressFromMap;
+      latMaccaHotel = lat;
+      lngMaccaHotel = lng;
+      print('controller ${controller.text}');
+      emit(ChangeAddressState());
+      addressFromMap = '';
+    } else if (i == 5) {
+      controller.clear();
+      madinaHotelLocation = addressFromMap;
+      controller.text=addressFromMap;
+      latMadinaHotel = lat;
+      lngMadinaHotel = lng;
+      print('controller ${controller.text}');
+      emit(ChangeAddressState());
+      addressFromMap = '';
+    } else {
+      controller.clear();
+      mozdalifaLoc = addressFromMap;
+      controller.text=addressFromMap;
+      latMozdalifa = lat;
+      lngMozdalifa = lng;
+      emit(ChangeAddressState());
+      print('controller ${controller.text}');
+      addressFromMap = '';
+
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:morshed/bloc/location_cubit/cubit.dart';
+import 'package:morshed/bloc/location_cubit/state.dart';
 import 'package:morshed/bloc/register_cubit/state.dart';
 import 'package:morshed/component/navigation_functions.dart';
 import 'package:morshed/constant/const_color.dart';
@@ -35,9 +36,9 @@ class _MapScreenForSetLocationState extends State<MapScreenForSetLocation> {
   // MapScreenForSetLocation({required this.locationName});
   @override
   Widget build(BuildContext context) {
-    var cubit = RegisterCubit.get(context);
+    var cubit = LocationCubit.get(context);
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<RegisterCubit, RegisterState>(
+    return BlocConsumer<LocationCubit, LocationState>(
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(

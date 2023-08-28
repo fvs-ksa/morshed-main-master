@@ -12,16 +12,16 @@ class ChangeResidenceDropDownState extends RegisterState {}
 class ChooseDateOfBirthState extends RegisterState {}
 
 class ChangeDisabilitySwitchValueState extends RegisterState {}
-class GetPlacesSuccessState extends RegisterState {}
-class GetUserCurrentLocation extends RegisterState{}
-class ConvertLocationFromMapSuccessState extends RegisterState{}
-class GetCurrentLocationLoadingState extends RegisterState{}
-class GetCurrentLocationSuccessState extends RegisterState{}
-class GetCurrentLocationErrorState extends RegisterState{
-  final String error;
-  GetCurrentLocationErrorState({required this.error});
-}
-class ChangeAddressState extends RegisterState{}
+// class GetPlacesSuccessState extends RegisterState {}
+// class GetUserCurrentLocation extends RegisterState{}
+// class ConvertLocationFromMapSuccessState extends RegisterState{}
+// class GetCurrentLocationLoadingState extends RegisterState{}
+// class GetCurrentLocationSuccessState extends RegisterState{}
+// class GetCurrentLocationErrorState extends RegisterState{
+//   final String error;
+//   GetCurrentLocationErrorState({required this.error});
+// }
+// class ChangeAddressState extends RegisterState{}
 class PickImageFromCameraState extends RegisterState{}
 class PickImageFromGalleryState extends RegisterState{}
 class RegisterLoadingState extends RegisterState{}

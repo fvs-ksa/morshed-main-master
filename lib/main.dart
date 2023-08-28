@@ -140,8 +140,8 @@ class MyApp extends StatelessWidget {
               create: (context) =>
               RegisterCubit()
                 ..getAllNationality()
-                ..getCurrentLocation()
-                ..getUserCurrentLocation(context)
+                // ..getCurrentLocation()
+                // ..getUserCurrentLocation(context)
                 ..getAllCompanies()),
           BlocProvider<LoginCubit>(create: (context) => LoginCubit()),
           BlocProvider<AnotherServicesCubit>(
@@ -196,6 +196,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<LocationCubit>(
               create: (context) =>
               LocationCubit()
+
                 ..getCurrentLocation()
                 ..getUserCurrentLocation(context)),
           BlocProvider<ShowOfficesAndProviderInfoCubit>(
