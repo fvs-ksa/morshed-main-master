@@ -123,13 +123,14 @@ class _SettingScreenState extends State<SettingScreen> {
                                       color: whiteGreyColor,
                                       context: context,
                                       fct: () {
+
                                         settingCubit.deleteUser(context);
                                         //     .then((value) {
                                         //   if (state is DeleteUserSuccessState) {
                                         //
                                         //   }
                                         // });
-                                        Navigator.pop(context);
+
 
                                       },
                                       width: 80),

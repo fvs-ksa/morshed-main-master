@@ -3,12 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:morshed/bloc/general_cubit/general_cubit.dart';
 import 'package:morshed/bloc/setting_cubit/state.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/utiels/dio_helper.dart';
 import 'package:morshed/utiels/shared_pref.dart';
 
 import '../../screen/borading_screen/boarding_screen.dart';
+import '../../screen/bottom_navigations_screens/main_screen.dart';
 
 class SettingCubit extends Cubit<SettingState> {
   SettingCubit() : super(InitialSettingState());
@@ -26,6 +28,8 @@ class SettingCubit extends Cubit<SettingState> {
       print('ISENGLISH :$isEnglish ');
       print('myLocale $myLocale');
       emit(SetLanguageENState());
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)
+      => MainScreen(i: GeneralCubit.get(context).currentIndex = 0)), (route) => false);
       // Phoenix.rebirth(context);
       // navigateForwardReplace(SecondSplash());
     } else {
@@ -36,7 +40,8 @@ class SettingCubit extends Cubit<SettingState> {
       print('ISArabic :$isEnglish ');
       print('myLocale $myLocale');
       emit(SetLanguageARState());
-
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)
+      => MainScreen(i: GeneralCubit.get(context).currentIndex = 0)), (route) => false);
       // navigateForwardReplace(SecondSplash());
     }
   }
@@ -49,6 +54,7 @@ bool isDeleteUser=false;
       print(value.data);
       CacheHelper.removeData();
       isDeleteUser=true;
+      Navigator.pop(context);
      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BoardingScreen()), (route) => false);
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>BoardingScreen()), (route) => false);
       emit(DeleteUserSuccessState());

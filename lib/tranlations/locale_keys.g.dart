@@ -39,7 +39,7 @@ abstract class  LocaleKeys {
   static const hotelAndCampsiteName = 'hotelAndCampsiteName';
   static const officialMissionName = 'officialMissionName';
   static const edit = 'edit';
-  static const haveDisability = 'haveDisability?';
+  static const haveDisability= 'haveDisability?';
   static const agentName = 'agentName';
   static const confirmPassword = 'confirmPassword';
   static const whenYouRegisterYouAgree = 'whenYouRegisterYouAgree';
@@ -90,7 +90,7 @@ abstract class  LocaleKeys {
   static const hajjiInfo = 'hajjiInfo';
   static const yourComplaintHasBeenReceivedSuccessfully = 'yourComplaintHasBeenReceivedSuccessfully';
   static const subTitleOfReceivedComplaintSuccessfully = 'subTitleOfReceivedComplaintSuccessfully';
-  static const findingInfoByNamePHoneOrLang = 'findingInfoByNamePHoneOrLang';
+  static const findingInfoByNameOrPHone = 'findingInfoByNameOrPHone';
   static const SorryYouMustSubscribe = 'SorryYouMustSubscribe';
   static const moveToPaymentScreen = 'moveToPaymentScreen';
   static const technicalSupport = 'technicalSupport';
@@ -208,6 +208,12 @@ abstract class  LocaleKeys {
   static const finidingInfoByBorderNo = 'finidingInfoByBorderNo';
   static const no_service_provider = 'no_service_provider';
   static const no_company_found = 'no_company_found';
+  static const save = 'save';
+  static const youArenotLogin = 'youArenotLogin';
+  static const showProvidersMap = 'showProvidersMap';
+  static const requiredField = 'requiredField';
+  static const passwordLenght = 'passwordLenght';
   static const male = 'male';
   static const female = 'female';
+
 }

@@ -53,3 +53,12 @@ class GetAllNationalityErrorState extends RegisterState{
   final String error;
   GetAllNationalityErrorState({required this.error});
 }
+
+
+class GetAllCountryLoadingState extends RegisterState{}
+class GetAllCountrySuccessState extends RegisterState{}
+class GetAllCountryErrorState extends RegisterState{
+  final String error;
+  GetAllCountryErrorState({required this.error});
+}
+class ChangeCountryDropDownState extends RegisterState{}

@@ -80,16 +80,20 @@ headerForGuide(
           children: [
             Expanded(
                 child: CustomTextField(
+                  padding: 15,
                     controller: searchController,
-                    labelText: LocaleKeys.findingInfoByNamePHoneOrLang.tr(),
+                    labelText: LocaleKeys.findingInfoByNameOrPHone.tr(),
                     // hintText: 'بحث بالأسم أو رقم الجوال',
                     )),
-            dropDownWidget ?? SizedBox(),
+            Padding(
+              padding: EdgeInsetsDirectional.only(bottom: 1.h),
+              child: dropDownWidget ?? SizedBox(),
+            ),
             SizedBox(
               width: 8.w,
             ),
             Padding(
-                padding: EdgeInsetsDirectional.only(bottom: 15.h),
+                padding: EdgeInsetsDirectional.only(bottom: 18.h),
                 child: mainButton(
                     height: 54.h,
                     width: 73.w,
@@ -114,6 +118,8 @@ Widget itemContainerOfGuidesAndEscorts(
     Widget? contactColumn,
     required String image,
     required String name,
+      String? language,
+      bool isGuides=false,
     required String phone}) {
   return Container(
     margin: EdgeInsetsDirectional.only(bottom: 5.h),
@@ -130,15 +136,30 @@ Widget itemContainerOfGuidesAndEscorts(
               name,
               style:cairoBold.copyWith(fontSize: 17),
             ),
-            subtitle: RichText(
-              text: TextSpan(
-                  text: '${LocaleKeys.phoneNumber.tr()} : ',
-                  style: cairoSemiBold.copyWith(fontSize: 12,color: greyColor),
-                  children: [
-                    TextSpan(
-                        text: phone,
-                        style: cairoRegular.copyWith(fontSize: 14,color: blackColor))
-                  ]),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                      text: '${LocaleKeys.phoneNumber.tr()} : ',
+                      style: cairoSemiBold.copyWith(fontSize: 12,color: greyColor),
+                      children: [
+                        TextSpan(
+                            text: phone,
+                            style: cairoRegular.copyWith(fontSize: 14,color: blackColor))
+                      ]),
+                ),
+                isGuides?   RichText(
+                  text: TextSpan(
+                      text: '${LocaleKeys.language.tr()} : ',
+                      style: cairoSemiBold.copyWith(fontSize: 12,color: greyColor),
+                      children: [
+                        TextSpan(
+                            text: language,
+                            style: cairoRegular.copyWith(fontSize: 14,color: blackColor))
+                      ]),
+                ):SizedBox(),
+              ],
             ),
             leading: CircleAvatar(
               radius: 30,

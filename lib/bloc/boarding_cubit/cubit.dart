@@ -8,14 +8,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:morshed/bloc/boarding_cubit/state.dart';
-import 'package:morshed/component/navigation_functions.dart';
 import 'package:morshed/constant/const_color.dart';
-import 'package:morshed/screen/borading_screen/boarding_screen.dart';
-import 'package:morshed/screen/bottom_navigations_screens/main_screen.dart';
-
 import '../../models/account_type_model.dart';
-import '../../models/api_model/company_model.dart';
-import '../../utiels/dio_helper.dart';
 
 class BoardingCubit extends Cubit<BoardingState> {
   BoardingCubit() : super(InitialBoardingState());

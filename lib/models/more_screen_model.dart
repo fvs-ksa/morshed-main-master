@@ -7,6 +7,7 @@ import 'package:morshed/screen/inner_screen/my_card_screen.dart';
 import 'package:morshed/screen/inner_screen/profile_screen.dart';
 import 'package:morshed/screen/inner_screen/setting_screen.dart';
 
+import '../bloc/profile_cubit/cubit.dart';
 import '../component/navigation_functions.dart';
 import '../screen/inner_screen/contact_us.dart';
 import '../screen/inner_screen/my_reports/my_reports.dart';
@@ -28,6 +29,7 @@ List<MoreScreenModel> moreList = [
   MoreScreenModel(
       title:LocaleKeys.profile,
       onTap: () {
+
         navigateForward(const ProfileScreen());
       },
       svgImage: 'assets/svg/profile.svg'),

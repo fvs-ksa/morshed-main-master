@@ -1,13 +1,8 @@
-import 'package:country_code_picker/country_code_picker.dart';
-import 'package:country_picker/country_picker.dart';
-import 'package:country_pickers/country_pickers.dart';
-import 'package:country_provider2/country_provider2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:morshed/bloc/account_type_cubit/cubit.dart';
 import 'package:morshed/bloc/account_type_cubit/state.dart';
 import 'package:morshed/bloc/location_cubit/cubit.dart';
@@ -20,7 +15,6 @@ import 'package:morshed/component/component.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 import 'package:morshed/screen/inner_screen/locations/set_location_on_map.dart';
-import 'package:quickalert/quickalert.dart';
 import '../../../component/custom_alert_dialog.dart';
 import '../../../component/custom_drop_down.dart';
 import '../../../component/cutom_text_filed.dart';
@@ -64,7 +58,7 @@ class RegisterScreen extends StatelessWidget {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _confirmPasswordFocus = FocusNode();
-  PhoneNumber number = PhoneNumber(isoCode: 'SA');
+ // PhoneNumber number = PhoneNumber(isoCode: 'SA');
   String? numberSave;
   final _formKey = GlobalKey<FormState>();
 
@@ -73,13 +67,51 @@ class RegisterScreen extends StatelessWidget {
     var registerCubit = RegisterCubit.get(context);
     var accountTypeCubit = AccountTypeCubit.get(context);
     return BlocConsumer<LocationCubit,LocationState>(
-      listener: (context,state){},
+      listener: (context,state){
+
+      },
       builder: (context,state) {
         return BlocConsumer<AccountTypeCubit, AccountTypeState>(
             listener: (context, state) {},
             builder: (context, state) {
               return BlocConsumer<RegisterCubit, RegisterState>(
-                  listener: (context, state) {},
+                  listener: (context, state) {
+                    if(state is RegisterLoadingState){
+
+                      showAdaptiveDialog(
+                          barrierDismissible:  false,
+                          context: context, builder: (context){
+                        return AlertDialog.adaptive(
+                              backgroundColor: Colors.transparent,
+                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          content:Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // ClipRRect(
+                                  //     borderRadius: BorderRadius.circular(20),
+                                  //     child: Image.asset('assets/images/app icon.png',height: 50,width: 50,)),
+                                  Text('إنتظر من فضلك',style: cairoRegular.copyWith(color: whiteColor),),
+                                  Center(
+                                      child: CircularProgressIndicator.adaptive(
+                                        backgroundColor: orangeColor,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          darkMainColor, //<-- SEE HERE
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                    }
+                    if(state is RegisterErrorState){
+                      Navigator.pop(context);
+                    }
+                  },
                   bloc: registerCubit.viewAboveKeyBoard(),
                   builder: (context, state) {
                     return Scaffold(
@@ -89,9 +121,11 @@ class RegisterScreen extends StatelessWidget {
                             ? LocaleKeys.registerNewMoetamer.tr()
                             : LocaleKeys.registerNewHajji.tr(),
                       ),
-                      body: registerCubit.isGetCompany &&
+                      body:
+                      registerCubit.isGetCompany &&
                               registerCubit.isGetNationality
-                          ? GestureDetector(
+                          ?
+                      GestureDetector(
                               onTap: () =>
                                   FocusManager.instance.primaryFocus?.unfocus(),
                               child: SingleChildScrollView(
@@ -215,7 +249,7 @@ class RegisterScreen extends StatelessWidget {
                                                   radius: 35.sp,
                                                   context: context,
                                                   width: 100,
-                                                  child: CountryPickedCodeCode(countryKey: numberSave??'+966',),
+                                                  child: CountryPickedCode(countryKey: numberSave??'+966',),
                                                   // CountryCodePicker(
                                                   //   onChanged: (prints) {
                                                   //     print('${prints.name}');
@@ -335,7 +369,17 @@ class RegisterScreen extends StatelessWidget {
                                           height: 10,
                                         ),
                                            CustomDropDown(),
+                                            dropDownButton(
+                                                items: registerCubit.sexList.map((e) {
+                                                  return DropdownMenuItem(child: Text(e),value: e,);
+                                                }).toList(),
+                                                value: registerCubit.chooseSex,
+                                                hint: LocaleKeys.sex.tr(),
 
+                                                fct: (onChange){
+                                                  return registerCubit.onChangeSex(onChange);
+                                                },
+                                                context: context),
                                         // decorationContainerWidget(
                                         //     radius: 35.sp,
                                         //     context: context,
@@ -471,11 +515,6 @@ class RegisterScreen extends StatelessWidget {
                                                     labelText:
                                                         LocaleKeys.dateOfBirth.tr(),
                                                     controller: dateOfBirthController,
-
-                                                    // labelText: registerCubit
-                                                    //     .convertedDateTimeBirth ??
-                                                    //     LocaleKeys.dateOfBirth
-                                                    //         .tr(),
                                                   ),
                                                 ),
                                               ),
@@ -496,11 +535,6 @@ class RegisterScreen extends StatelessWidget {
                                                                 dateOfBirthController);
                                                     print(
                                                         "222222222222222222${dateOfBirthController.text}");
-                                                    //     .then((value) {
-                                                    //      // set
-                                                    //   registerCubit.convertedDateTimeBirth=dateOfBirthController.text;
-                                                    //   print('DATE OF BIRTH ${dateOfBirthController.text}');
-                                                    // });
                                                   },
                                                   child: decorationContainerWidget(
                                                       radius: 35.sp,
@@ -527,7 +561,6 @@ class RegisterScreen extends StatelessWidget {
                                             labelText: LocaleKeys.passportNo.tr(),
                                             focusNode: _passportFocus,
                                             nextFocus: _visaFocus,
-                                            // hintText: 'رقم الجواز',
                                             controller: passportController),
                                         CustomTextField(
                                             validator: (String val) {
@@ -581,11 +614,6 @@ class RegisterScreen extends StatelessWidget {
                                                         dateOfArrivalController);
                                                     print(
                                                         "222222222222222222${dateOfArrivalController.text}");
-                                                    //     .then((value) {
-                                                    //      // set
-                                                    //   registerCubit.convertedDateTimeBirth=dateOfBirthController.text;
-                                                    //   print('DATE OF BIRTH ${dateOfBirthController.text}');
-                                                    // });
                                                   },
                                                   child: CustomTextField(
                                                     validator: (String val) {
@@ -610,11 +638,6 @@ class RegisterScreen extends StatelessWidget {
                                                                   dateOfArrivalController);
                                                       print(
                                                           "222222222222222222${dateOfArrivalController.text}");
-                                                      //     .then((value) {
-                                                      //      // set
-                                                      //   registerCubit.convertedDateTimeBirth=dateOfBirthController.text;
-                                                      //   print('DATE OF BIRTH ${dateOfBirthController.text}');
-                                                      // });
                                                     },
                                                     controller:
                                                         dateOfArrivalController,
@@ -667,11 +690,6 @@ class RegisterScreen extends StatelessWidget {
                                                         dateOfDepartureController);
                                                     print(
                                                         "222222222222222222${dateOfDepartureController.text}");
-                                                    //     .then((value) {
-                                                    //      // set
-                                                    //   registerCubit.convertedDateTimeBirth=dateOfBirthController.text;
-                                                    //   print('DATE OF BIRTH ${dateOfBirthController.text}');
-                                                    // });
                                                   },
                                                   child: CustomTextField(
                                                     validator: (String val) {
@@ -684,18 +702,11 @@ class RegisterScreen extends StatelessWidget {
                                                     },
                                                     minHeight: 80.h,
                                                     maxHeight: 80.h,
-
-                                                    // validator: (String val){
-                                                    //   if(val.isEmpty){
-                                                    //     return 'رجاء ادخال البيانات المطلوبه';
-                                                    //   }
-                                                    // },
                                                     isEnabled: false,
                                                     labelText:
                                                         LocaleKeys.leaveDate.tr(),
                                                     controller:
                                                         dateOfDepartureController,
-                                                    // hintText:registerCubit.convertedDateTime?? 'تاريخ المغادره',
                                                   ),
                                                 ),
                                               ),
@@ -725,25 +736,6 @@ class RegisterScreen extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        // dropDownButton(
-                                        //     items: registerCubit.residence.map((e) {
-                                        //       return DropdownMenuItem(
-                                        //         child: Text(
-                                        //             e['residenceName'].toString()),
-                                        //         value: e['id'].toString(),
-                                        //       );
-                                        //     }).toList(),
-                                        //     value: registerCubit.chooseResidence,
-                                        //     hint: LocaleKeys.residentialAddress.tr(),
-                                        //     fct: (onChange) {
-                                        //       registerCubit
-                                        //           .onChangeResidence(onChange);
-                                        //       print(onChange);
-                                        //     },
-                                        //     context: context,
-                                        //     validator: () {}),
-                                        // registerCubit.chooseResidence == '1'
-                                        //     ?
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
@@ -840,7 +832,6 @@ class RegisterScreen extends StatelessWidget {
                                             minWidth: 400.w,
                                             labelText:
                                                 LocaleKeys.madinaHotelName.tr(),
-                                            // hintText: 'رقم الحدود',
                                             controller: madinaHotelNameController),
                                         Row(
                                           crossAxisAlignment:
@@ -872,11 +863,9 @@ class RegisterScreen extends StatelessWidget {
                                                       minHeight: 80.h,
                                                       maxHeight: 80.h,
                                                       isEnabled: false,
-                                                      // keyboardType: TextInputType.phone,
                                                       labelText: LocaleKeys
                                                           .madina_hotel_loc
                                                           .tr(),
-                                                      // hintText: 'رقم الجوال',
                                                       controller:
                                                           madinaHotelLocController),
                                                 ),
@@ -928,8 +917,6 @@ class RegisterScreen extends StatelessWidget {
                                               minWidth: 400.w,
                                               lines: 1,
                                               labelText: LocaleKeys.menna_loc.tr(),
-
-                                              // hintText: 'رقم المخيم  (منى)',
                                               controller: mennaLocController),
                                         ),
                                         GestureDetector(
@@ -953,7 +940,6 @@ class RegisterScreen extends StatelessWidget {
                                               minWidth: 400.w,
                                               lines: 1,
                                               labelText: LocaleKeys.arafa_loc.tr(),
-                                              // hintText: 'رقم المخيم  (عرفه)',
                                               controller: arafaLocController),
                                         ),
                                         GestureDetector(
@@ -1037,12 +1023,12 @@ class RegisterScreen extends StatelessWidget {
                                               .map((e) {
                                             return DropdownMenuItem(
                                               child: Text(
-                                                e.companyName!,
+                                                e.companyName??'',
                                                 style: cairoSemiBold,
                                               ),
-                                              value: e.id.toString(),
+                                              value: e.id==null?e.id:e.id.toString(),
                                             );
-                                          }).toList(),
+                                          }).toList(growable: false),
                                           value: registerCubit.chooseCompany,
                                           hint: LocaleKeys.agentName.tr(),
                                           fct: (onChange) {
@@ -1075,16 +1061,7 @@ class RegisterScreen extends StatelessWidget {
                                             keyboardType:
                                                 TextInputType.emailAddress,
                                             labelText: LocaleKeys.email.tr(),
-                                            // hintText: 'البريد الالكتروني',
                                             controller: emailController),
-
-                                        // CustomTextField(
-                                        //     context: context,
-                                        //     labelText: LocaleKeys.agentName.tr(),
-                                        //     maxWidth: 400.w,
-                                        //     minWidth: 400.w,
-                                        //     // hintText: 'اسم الوكيل',
-                                        //     controller: agentNameController),
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
@@ -1150,69 +1127,74 @@ class RegisterScreen extends StatelessWidget {
                                         SizedBox(
                                           height: 15.w,
                                         ),
-                                       state is RegisterLoadingState && registerCubit.registerLoading==false
-                                            ?CircularProgressIndicator.adaptive(
-                                         backgroundColor: orangeColor,
-                                         valueColor:
-                                         AlwaysStoppedAnimation<Color>(
-                                           darkMainColor,
-                                         ),
-                                       )
-                                            : mainButton(
+                                       // state is RegisterLoadingState && registerCubit.registerLoading==false
+                                       //      ?CircularProgressIndicator.adaptive(
+                                       //   backgroundColor: orangeColor,
+                                       //   valueColor:
+                                       //   AlwaysStoppedAnimation<Color>(
+                                       //     darkMainColor,
+                                       //   ),
+                                       // )
+                                       //      :
+                                       mainButton(
                                                 text: LocaleKeys.registerNow.tr(),
                                                 color: darkMainColor,
                                                 context: context,
                                                 fct: () {
                                                   FocusManager.instance.primaryFocus!.unfocus();
-                                                  //   if (registerCubit.file == null) {
-                                                  //   showToast(
-                                                  //       text:
-                                                  //       'برجاء تحديد صوره شخصية',
-                                                  //       state:
-                                                  //       ToastState.ERROR);
-                                                  // }else
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    // else {
-                                                    registerCubit.hajjiRegister(
-                                                        context: context,
-                                                        dateOfArrival:
+                                                    if (registerCubit.file == null) {
+                                                    showToast(
+                                                        text:
+                                                        'برجاء تحديد صوره شخصية',
+                                                        state:
+                                                        ToastState.ERROR);
+                                                  }else{
+                                                      if (_formKey.currentState!
+                                                          .validate()) {
+                                                        // else {
+                                                        registerCubit.hajjiRegister(
+                                                            context: context,
+                                                            dateOfArrival:
                                                             dateOfArrivalController
                                                                 .text,
-                                                        dateOfBirth:
+                                                            dateOfBirth:
                                                             dateOfBirthController
                                                                 .text,
-                                                        dateOfDeparture:
+                                                            dateOfDeparture:
                                                             dateOfDepartureController
                                                                 .text,
-                                                        maccaHotelName:
+                                                            maccaHotelName:
                                                             maccaHotelNameController
                                                                 .text,
-                                                        madinahHotelName:
+                                                            madinahHotelName:
                                                             madinaHotelNameController
                                                                 .text,
-                                                        nameAr: arabicNameController
-                                                            .text,
-                                                        nameEn:
+                                                            nameAr: arabicNameController
+                                                                .text,
+                                                            nameEn:
                                                             englishNameController
                                                                 .text,
-                                                        phoneNumber:numberSave ?? '+966' + phoneNumberController.text,
-                                                        email: emailController.text,
-                                                        visaNo: visaNumberController
-                                                            .text,
-                                                        passportNo:
+                                                            phoneNumber:numberSave ?? '+966' + phoneNumberController.text,
+                                                            email: emailController.text,
+                                                            visaNo: visaNumberController
+                                                                .text,
+                                                            passportNo:
                                                             passportController.text,
-                                                        borderNo:
+                                                            borderNo:
                                                             borderNumberController
                                                                 .text,
-                                                        password:
+                                                            password:
                                                             passwordController.text,
-                                                        confirmPassword:
+                                                            confirmPassword:
                                                             confirmPasswordController
                                                                 .text,
-                                                        imageFile:
-                                                            registerCubit.file!);
-                                                  }
+
+                                                            // imageFile:
+                                                            // registerCubit.file!
+                                                        );
+                                                      }
+                                                    }
+
                                                   print(numberSave ??
                                                       '+966' +
                                                           phoneNumberController

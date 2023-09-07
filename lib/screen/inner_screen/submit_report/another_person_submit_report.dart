@@ -47,6 +47,7 @@ class SubmitReportAnotherPerson extends StatelessWidget {
                             labelText: LocaleKeys
                                 .findingInformationByScanningQrCode
                                 .tr(),
+                            padding: 10,
                             onTap: () {
                               print('object');
                             },
@@ -62,27 +63,32 @@ class SubmitReportAnotherPerson extends StatelessWidget {
                         labelText: LocaleKeys.findingInformationUsingId.tr(),
                         controller: idController,
                         keyboardType: TextInputType.phone,
+                        padding: 10,
                       ),
                       CustomTextField(
                         labelText:LocaleKeys.finidingInfoByPhone.tr(),
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
+                        padding: 10,
                       ),
                       CustomTextField(
                         labelText: LocaleKeys
                             .findingInformationUsingPassportNumber
                             .tr(),
+                        padding: 10,
                         controller: passportNumberController,
                         // keyboardType: TextInputType.phone,
                       ),
                       CustomTextField(
                         labelText:
                             LocaleKeys.findingInformationUsingVisaNumber.tr(),
+                        padding: 10,
                         controller: visaNumberController,
                         // keyboardType: TextInputType.phone,
                       ),
                       CustomTextField(
                         labelText:LocaleKeys.finidingInfoByBorderNo.tr() ,
+                        padding: 10,
                         controller: borderNumberController,
                         //   keyboardType: TextInputType.phone,
                       ),

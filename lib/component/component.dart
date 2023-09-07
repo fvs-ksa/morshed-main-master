@@ -96,19 +96,24 @@ Widget accountType(
 
 
 Widget dropDownButton(
-    {required List<DropdownMenuItem> items,
+    {
+      required List<DropdownMenuItem> items,
+
     required var value,
     required String hint,
     required Function fct,
+      //required Key key,
     required BuildContext context,
     bool isFlag = false,
     // Function? validator
     }) {
+  
   return Align(
     alignment: AlignmentDirectional.topStart,
     child: Padding(
         padding: EdgeInsetsDirectional.only(bottom: 5.h, top: 10.h),
         child: Container(
+          
             padding:
                 EdgeInsetsDirectional.only(start: isFlag ? 0 : 0.w, end: 10.w),
             height: 54.h,
@@ -121,14 +126,26 @@ Widget dropDownButton(
               children: [
                 Expanded(
                   child: ButtonTheme(
+
+                       //     key: key,
                     alignedDropdown: true,
+
+                   // height: 20,
+                    materialTapTargetSize:MaterialTapTargetSize.shrinkWrap ,
+
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     child: DropdownButtonFormField(
+                      menuMaxHeight: 250,
+
 
                       isExpanded: true,
+
                       decoration: const InputDecoration(
+
                         border: InputBorder.none,
                       ),
                       hint: FittedBox(child: Text(hint)),
+
                       style: cairoRegular.copyWith(fontSize: 14,color: blackColor),
                       iconSize: 0.0,
                       borderRadius: BorderRadius.circular(12.sp),
@@ -137,6 +154,7 @@ Widget dropDownButton(
                       onChanged: (v) {
                         fct(v);
                       },
+
                       // validator: (v) {
                       //   return validator!(v);
                       // },

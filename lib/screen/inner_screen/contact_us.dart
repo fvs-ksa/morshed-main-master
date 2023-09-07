@@ -23,9 +23,10 @@ class ContactUs extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 Image.asset(
-                  'assets/images/contact_header.png',
+                  'assets/images/contactUs.png',
                   fit: BoxFit.cover,
                 ),
+                Align(alignment: AlignmentDirectional.bottomEnd,child: Image.asset('assets/images/contact_stack.png',height: 200,width: 200,)),
                 Padding(
                   padding: EdgeInsetsDirectional.only(start: 30.w, top: 70.h,end: 10.w),
                   child: Column(

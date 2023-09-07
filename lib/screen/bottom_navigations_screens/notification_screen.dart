@@ -563,10 +563,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:morshed/bloc/notification_cubit/state.dart';
+import 'package:morshed/component/component.dart';
 import 'package:morshed/constant/const_color.dart';
+import 'package:morshed/screen/borading_screen/account_type_screen.dart';
 import '../../bloc/notification_cubit/cubit.dart';
+import '../../component/animation_component.dart';
+import '../../component/gesut_widget.dart';
+import '../../component/navigation_functions.dart';
 import '../../constant/text_theme.dart';
 import '../../tranlations/locale_keys.g.dart';
+import '../auth_screen/hajji/register_Screen.dart';
+import '../auth_screen/mo3tamer/moetamer_register.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
@@ -578,7 +585,9 @@ class NotificationsScreen extends StatelessWidget {
         listener: (context, state) {},
         bloc: notificationCubit.getNotificationData(),
         builder: (context, state) {
-          return notificationCubit.isNotificationGet
+          return
+            token==null?GuestWidget():
+            notificationCubit.isNotificationGet
               ? notificationCubit.getNotificationModel.notifications!.isEmpty
               ? Column(
             mainAxisAlignment: MainAxisAlignment.center,

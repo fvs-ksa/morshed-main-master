@@ -8,6 +8,7 @@ import 'package:morshed/bloc/login_cubit/login_cubit.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 
+import '../../component/gesut_widget.dart';
 import '../../tranlations/locale_keys.g.dart';
 
 class QrScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class QrScreen extends StatelessWidget {
 
       },
       builder: (context,state) {
-        return Stack(
+        return  token==null?GuestWidget():Stack(
           alignment: Alignment.center,
           children: [
             Container(

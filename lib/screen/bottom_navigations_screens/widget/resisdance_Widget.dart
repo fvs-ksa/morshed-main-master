@@ -1,5 +1,3 @@
-
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,19 +8,26 @@ import '../../../component/cutom_text_filed.dart';
 import '../../../component/info_profile_component.dart';
 import '../../../constant/const_color.dart';
 
-clikedLocationWidget({required TextEditingController controller,required Function fct,required BuildContext context,required String labelText}){
-  return  Row(
+clikedLocationWidget(
+    {required TextEditingController controller,
+    required Function fct,
+    required BuildContext context,
+    required String labelText}) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Expanded(
         flex: 1,
         child: CustomTextField(
           startPadding: 8,
+          padding: 20,
           controller: controller,
           isEnabled: false,
-          labelText: labelText, ),
+          labelText: labelText,
+        ),
       ),
       Padding(
-        padding:  EdgeInsetsDirectional.only(end: 8.0,start: 8),
+        padding: EdgeInsetsDirectional.only(end: 8.0, start: 8, bottom: 8),
         child: GestureDetector(
           onTap: () async {
             await fct();
@@ -41,11 +46,11 @@ clikedLocationWidget({required TextEditingController controller,required Functio
                   padding: EdgeInsetsDirectional.only(start: 8.0),
                   child: FittedBox(
                     child: AutoSizeText(
-                      presetFontSizes: [10,8,6],
-                      "press_here".tr(),
-                      style:cairoMedium.copyWith(color: darkMainColor)
-                     // TextStyle(color: darkMainColor),
-                    ),
+                        presetFontSizes: [10, 8, 6],
+                        "press_here".tr(),
+                        style: cairoMedium.copyWith(color: darkMainColor)
+                        // TextStyle(color: darkMainColor),
+                        ),
                   ))),
         ),
       )

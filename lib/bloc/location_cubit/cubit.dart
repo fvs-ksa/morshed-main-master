@@ -80,9 +80,9 @@ class LocationCubit extends Cubit<LocationState>{
 
 
   Future<dynamic> getUserCurrentLocation(BuildContext context) async {
-
-    await determinePosition().then((value) => getPlace(value, context));
     emit(GetUserCurrentLocation());
+    await determinePosition().then((value) => getPlace(value, context));
+
   }
   LatLng? latLn;
   String addressFromMap = '';

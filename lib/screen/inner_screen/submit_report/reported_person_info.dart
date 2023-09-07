@@ -110,21 +110,28 @@ class ReportedPersonInfo extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       CustomTextField(
+
                                           labelText: LocaleKeys
                                               .arabicNamePassport
                                               .tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: arabicNameController),
                                       CustomTextField(
                                           labelText: LocaleKeys
                                               .englishNamePassport
                                               .tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: englishNameController),
                                       CustomTextField(
                                           labelText:
                                               LocaleKeys.nationality.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: nationalityController),
                                       // CustomTextField(
                                       //     labelText: LocaleKeys.age.tr(),
@@ -134,26 +141,39 @@ class ReportedPersonInfo extends StatelessWidget {
                                       CustomTextField(
                                           labelText: LocaleKeys.email.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: emailController),
                                       CustomTextField(
                                           labelText: LocaleKeys.boardNo.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: borderNumberController),
                                       CustomTextField(
                                           labelText: LocaleKeys.visaNo.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
+
                                           controller: visaNumberController),
                                       CustomTextField(
                                           labelText: LocaleKeys.passportNo.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: passportController),
                                       CustomTextField(
                                           labelText: LocaleKeys.arriveDate.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: arrivalDateController),
                                       CustomTextField(
                                           labelText: LocaleKeys.leaveDate.tr(),
                                           isEnabled: false,
+                                          padding: 10,
+                                          controllerColor: blackColor,
                                           controller: leaveController),
                                       // CustomTextField(
                                       //     labelText: LocaleKeys.residentialAddress.tr(),
@@ -165,6 +185,7 @@ class ReportedPersonInfo extends StatelessWidget {
                                               .officialMissionName
                                               .tr(),
                                           isEnabled: false,
+                                          controllerColor: blackColor,
                                           controller: touristCompanyController),
                                       // CustomTextField(
                                       //     labelText: LocaleKeys.agentName.tr(),

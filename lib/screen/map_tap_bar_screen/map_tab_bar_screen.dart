@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:morshed/bloc/show_office_provider_info/cubit.dart';
 import 'package:morshed/component/component.dart';
 import 'package:morshed/component/cutom_text_filed.dart';
+import 'package:morshed/component/gesut_widget.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 import 'package:morshed/screen/map_tap_bar_screen/office_location_sccren.dart';
@@ -47,25 +48,27 @@ class _MapTabBarScreenState extends State<MapTabBarScreen>
   @override
   Widget build(BuildContext context) {
     var cubit=ShowOfficesAndProviderInfoCubit.get(context);
-    return BlocConsumer<ShowOfficesAndProviderInfoCubit,ShowOfficesAndProviderInfoState>(
+    return  BlocConsumer<ShowOfficesAndProviderInfoCubit,ShowOfficesAndProviderInfoState>(
       listener: (context,state){},
       builder: (context,state) {
         return GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: Scaffold(
+          child:token==null?Scaffold(body: GuestWidget()): Scaffold(
             appBar: AppBar(
-              toolbarHeight:cubit.index==0? 170.h:90.h,
+              toolbarHeight: 170.h,
               automaticallyImplyLeading: false,
-              backgroundColor: cubit.index==0?whiteColor:darkMainColor,
+              backgroundColor: whiteColor,
               centerTitle: true,
+            //  leading:cubit.index==1? backButtonWidget(context: context):SizedBox(),
               title:cubit.index==0? Padding(
                 padding:  const EdgeInsetsDirectional.only(top: 15.0,bottom: 10),
                 child: Row(
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        padding: 5,
                         labelText: LocaleKeys.searchForGuidanceOffices.tr(),controller: searchController,hintText:LocaleKeys.search.tr() ,prefixIcon:Padding(
                         padding:  const EdgeInsetsDirectional.only(start: 0,end: 5),
                         child: backButtonWidget(context: context),
@@ -90,7 +93,7 @@ class _MapTabBarScreenState extends State<MapTabBarScreen>
                     )
                   ],
                 ),
-              ):SizedBox(),
+              ):Text(LocaleKeys.showProvidersMap.tr(),style: cairoBold.copyWith(fontSize: 14,color: blackColor),),
               bottom: PreferredSize(
                   child: Stack(
                     alignment: AlignmentDirectional.center,

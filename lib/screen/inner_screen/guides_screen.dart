@@ -8,9 +8,12 @@ import 'package:morshed/component/component.dart';
 import 'package:morshed/component/guide_escorts_component.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/guides_cubit/cubit.dart';
+import '../../component/gesut_widget.dart';
+import '../../component/navigation_functions.dart';
 import '../../constant/const_color.dart';
 import '../../constant/text_theme.dart';
 import '../../tranlations/locale_keys.g.dart';
+import 'chat_with_guides.dart';
 
 class GuidesScreen extends StatefulWidget {
   int? index;
@@ -27,7 +30,7 @@ class _GuidesScreenState extends State<GuidesScreen> {
   @override
   Widget build(BuildContext context) {
     var guidesCubit = GuidesCubit.get(context);
-    return BlocConsumer<GuidesCubit, GuidesState>(
+    return   BlocConsumer<GuidesCubit, GuidesState>(
         // bloc: guidesCubit.getAllGuides(),
         listener: (context, state) {},
         builder: (context, state) {
@@ -114,20 +117,21 @@ class _GuidesScreenState extends State<GuidesScreen> {
                             ),
                           ),
                     fct: () {
-                      searchController.text.isEmpty
+                      searchController.text.isEmpty&&guidesCubit.flag==null
                           ? null
                           : guidesCubit.searchProvider(
                               name: searchController.text,
                               langId: guidesCubit.flag ?? '');
                     }),
                 backgroundColor: whiteGreyColor,
-                body: guidesCubit.isProvidersGet
+                body:token==null?GuestWidget(): guidesCubit.isProvidersGet
                     ? guidesCubit.getProvidersModel.providers!.isEmpty
                         ?
 
                 ListView(
 
                   children: [
+
                     Container(
                       alignment: AlignmentDirectional.center,
                       height:
@@ -162,12 +166,15 @@ class _GuidesScreenState extends State<GuidesScreen> {
                                   .getProvidersModel.providers!.length,
                               itemBuilder: (context, index) {
                                 return itemContainerOfGuidesAndEscorts(
+                                  isGuides: true,
+                                    language: guidesCubit.getProvidersModel.providers![index].preferredLanguage=="1"?'العربية':"الإنجليزية",
                                     context: context,
                                     image: 'assets/images/profile.png',
                                     name: guidesCubit.getProvidersModel
                                         .providers![index].name!,
                                     phone: guidesCubit.getProvidersModel
                                         .providers![index].phoneNumber!,
+
                                     contactColumn: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -184,15 +191,19 @@ class _GuidesScreenState extends State<GuidesScreen> {
                                         circleAvtarWidget(
                                             svgImage: 'assets/svg/msg.svg',
                                             fct: () {
-                                                showToast(text:LocaleKeys.service_under_development.tr(), state: ToastState.WARNING);
-                                              // navigateForward(
-                                              //     ChatWithGuidesScreen(
-                                              //   channelName: guidesCubit
-                                              //       .getProvidersModel
-                                              //       .providers![index]
-                                              //       .id
-                                              //       .toString(),
-                                              // ));
+                                              //  showToast(text:LocaleKeys.service_under_development.tr(), state: ToastState.WARNING);
+                                              navigateForward(
+                                                  ChatWithGuidesScreen(
+                                                    name: guidesCubit
+                                                        .getProvidersModel
+                                                        .providers![index]
+                                                        .name
+                                                        .toString(),
+                                                channelName: guidesCubit
+                                                    .getProvidersModel
+                                                    .providers![index]
+                                                    .id!,
+                                              ));
                                             })
                                       ],
                                     ));

@@ -143,6 +143,7 @@ class _ReportDetailsWidgetState extends State<ReportDetailsWidget> {
                       context: context,
 
                       hint: LocaleKeys.commentsAndAssistance.tr()),
+                  SizedBox(height: 15,),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -151,12 +152,14 @@ class _ReportDetailsWidgetState extends State<ReportDetailsWidget> {
                               controller:reportLocationAnotherPerson,
                               labelText: LocaleKeys.reportLocation.tr(),
                               lines: 1,
+                              padding: 10,
                               isEnabled: false)):
                       Expanded(
                           child: CustomTextField(
                               controller: reportLocationController,
                               labelText: LocaleKeys.reportLocation.tr(),
                               lines: 1,
+                              padding: 10,
                               isEnabled: false)),
                       SizedBox(
                         width: 12.w,

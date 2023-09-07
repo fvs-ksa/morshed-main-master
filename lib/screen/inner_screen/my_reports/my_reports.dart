@@ -8,6 +8,7 @@ import 'package:morshed/bloc/submitting_report/submit_report_state.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/component/reports_widgets.dart';
 import '../../../component/animation_component.dart';
+import '../../../component/gesut_widget.dart';
 import '../../../component/guide_escorts_component.dart';
 import '../../../component/navigation_functions.dart';
 import '../../../constant/text_theme.dart';
@@ -20,7 +21,7 @@ class MyReports extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var reportCubit = SubmitReportCubit.get(context);
-    return BlocConsumer<SubmitReportCubit, SubmitReportState>(
+    return  BlocConsumer<SubmitReportCubit, SubmitReportState>(
         listener: (context, state) {},
         // bloc: reportCubit.getMyReports(),
         builder: (context, state) {
@@ -33,7 +34,7 @@ class MyReports extends StatelessWidget {
                 appBar: headerOfTechnicalSupport(
                     context: context, title: LocaleKeys.myReports.tr()),
                 backgroundColor: whiteGreyColor,
-                body: reportCubit.isGetMyReport
+                body:token==null?GuestWidget(): reportCubit.isGetMyReport
                     ? reportCubit.getMyReportsModel.reports!.isEmpty
                         ? ListView(
 

@@ -124,6 +124,9 @@ class LoginScreen extends StatelessWidget {
                               text: LocaleKeys.notHaveAnAccount.tr(),
                               tappedText: LocaleKeys.registerNow.tr(),
                               context: context),
+                          TextButton(onPressed: (){
+                            navigateForward(MainScreen(i: -1));
+                          }, child: Text(LocaleKeys.signAsGuest.tr(),style: cairoBold.copyWith(color: darkMainColor,fontSize: 17,decoration: TextDecoration.underline),)),
                           SizedBox(
                             height: 30.h,
                           ),

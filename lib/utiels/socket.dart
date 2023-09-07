@@ -21,19 +21,9 @@ class ProviderLocationService {
     socket = IO.io('https://murshidguide.com:6001', <String, dynamic>{
      'port':6001,
       'transports': ['websocket'],
-     //  'connect_timeout': 5000, // 5 seconds
-     //  'timeout': 10000,
-     //  'autoConnect': false
     },
 
     );
-    // socket.connect();
-    // socket.onConnect((_) {
-    //   print('Connection established');
-    // });
-    // socket.onDisconnect((_) => print('Connection Disconnection'));
-    // socket.onConnectError((err) => print(err));
-    // socket.onError((err) => print(err));
     return getProviderData(context: context);
   }
 
@@ -59,6 +49,34 @@ class ProviderLocationService {
     socket.disconnect();
   //  _dataStreamController.close();
   }
+
+}
+
+// class LocationService extends FlutterForegroundTask {
+//   //static const String SERVICE_NAME = 'location_service';
+//
+//   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+//
+//   LocationService(this.flutterLocalNotificationsPlugin);
+//
+//   @override
+//
+//   // void onStartCommand(intent, flags, startId) {
+//   //   var locationOptions = LocationOptions(
+//   //     accuracy: LocationAccuracy.high,
+//   //     distanceFilter: 10,
+//   //   );
+//   //   final locationClient = LocationClient(locationOptions);
+//   //   locationClient.getCurrentLocation().then((location) {
+//   //     // Send location to backend API
+//   //   });
+//   //   locationClient.onLocationChanged.listen((location) {
+//   //     // Send location update to backend API
+//   //   });
+//   // }
+//
+// // Rest of service implementation...
+// }
 //   void stopListening() {
 //     _dataStreamController.close();
 //   }
@@ -90,30 +108,3 @@ class ProviderLocationService {
 //       return Future.value(true);
 //     });
 //   }
-}
-
-// class LocationService extends FlutterForegroundTask {
-//   //static const String SERVICE_NAME = 'location_service';
-//
-//   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-//
-//   LocationService(this.flutterLocalNotificationsPlugin);
-//
-//   @override
-//
-//   // void onStartCommand(intent, flags, startId) {
-//   //   var locationOptions = LocationOptions(
-//   //     accuracy: LocationAccuracy.high,
-//   //     distanceFilter: 10,
-//   //   );
-//   //   final locationClient = LocationClient(locationOptions);
-//   //   locationClient.getCurrentLocation().then((location) {
-//   //     // Send location to backend API
-//   //   });
-//   //   locationClient.onLocationChanged.listen((location) {
-//   //     // Send location update to backend API
-//   //   });
-//   // }
-//
-// // Rest of service implementation...
-// }

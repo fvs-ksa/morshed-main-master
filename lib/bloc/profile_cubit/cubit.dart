@@ -93,7 +93,7 @@ class ProfileCubit extends Cubit<ProfileState> {
               child: TextButton(onPressed: (){
                 Navigator.of(context).pop();
               emit(ChooseDateOfBirthProfileState());
-                },child: Text('حفظ'),),
+                },child: Text(LocaleKeys.save.tr()),),
             ),
             Expanded(
               child: CupertinoDatePicker(
@@ -145,7 +145,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String passport,
     required BuildContext context,
     required String visaNo,
-   String? borderNo,
+     String? borderNo,
     String? disabilityType,
      String? agentName,
      File? image }) {

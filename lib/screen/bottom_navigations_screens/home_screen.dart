@@ -61,6 +61,8 @@ class HomeScreen extends StatelessWidget {
                                 padding: const EdgeInsets.only(top: 18.0),
                                 child: GestureDetector(
                                   onTap: () {
+                                    ProfileCubit.get(context).getProfileDate();
+                                   // generalCubit.getProfileDate();
                                     navigateForward(MyCardScreen());
                                   },
                                   child: cardIdWidgetSmallSize(

@@ -112,7 +112,9 @@ class ShowOfficesAndProviderInfoCubit
     emit(ChangeTabbedMarkerState());
   }
 
+
   late GetProvidersModel getProvidersModel;
+  bool isGetProvider=false;
   final StreamController<GetProvidersModel> _dataStreamController =
       StreamController.broadcast();
 
@@ -120,6 +122,8 @@ class ShowOfficesAndProviderInfoCubit
   List<Marker> providerMarkers = [];
 
   getDataProvider() {
+    isGetProvider=false;
+    emit(GetAllProvidersDataLoadingState());
     DioHelper.getData(
       url: 'https://murshidguide.com/api/pilgrims/getproviders',
       token: token,
@@ -127,6 +131,8 @@ class ShowOfficesAndProviderInfoCubit
       getProvidersModel = GetProvidersModel.fromJson(value.data);
       print(
           '/////////////////emit////////////${value.data}/////////////////////////////////');
+      emit(GetAllProvidersDataSuccessState());
+      isGetProvider=true;
       _dataStreamController.add(getProvidersModel);
       for (var data in getProvidersModel.providers!) {
         final marker = Marker(
@@ -134,7 +140,7 @@ class ShowOfficesAndProviderInfoCubit
                 ImageConfiguration(size: Size(10, 10)),
                 'assets/images/marker.png'),
             markerId: MarkerId(data.id.toString()),
-            position: LatLng(double.parse(data.lat!), double.parse(data.lng!)),
+            position: LatLng(double.parse(data.lat??''), double.parse(data.lng??'')),
             onTap: () {
               changeTapMarkerProvider(id: data.id!);
             });
@@ -142,6 +148,7 @@ class ShowOfficesAndProviderInfoCubit
       }
     }).catchError((e) {
       print('$e : //////////////////////////////////////////////');
+      emit(GetAllProvidersDataErrorState(error: e.toString()));
     });
   }
 

@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:ui';
-
+import 'package:http/http.dart' as http;
 import 'package:app_settings/app_settings.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -14,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:morshed/bloc/register_cubit/state.dart';
 import 'package:morshed/component/navigation_functions.dart';
 import 'package:morshed/models/api_model/company_model.dart';
+import 'package:morshed/models/api_model/country_model.dart';
 import 'package:morshed/models/api_model/login_model.dart';
 import 'package:morshed/screen/bottom_navigations_screens/main_screen.dart';
 import 'package:morshed/utiels/baseurl.dart';
@@ -53,7 +55,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     };
   }
   String? chooseSex;
-  var sexList = [
+  List<String> sexList = [
     LocaleKeys.male.tr(),
     LocaleKeys.female.tr(),
   ];
@@ -72,6 +74,9 @@ class RegisterCubit extends Cubit<RegisterState> {
         .then((value) {
       print(value.data);
       companyModel = CompanyModel.fromJson(value.data);
+      companyModel.companies?.insert(0,Companies(companyName: 'لا يوجد شركه تابع لها',));
+
+      print('??????????????????????????????${companyModel.companies}');
       isGetCompany = true;
       emit(GetCompaniesSuccessState());
     }).catchError((error) {
@@ -108,6 +113,27 @@ getAllNationality(){
     chooseNationality = onChange;
     print(chooseNationality);
     emit(ChangeNationalityDropDownState());
+  }
+  String? chooseCountry;
+  late CountryModel countryModel;
+  bool isGetCountry = false;
+  getAllCountry(){
+    isGetCountry = false;
+    emit(GetAllCountryLoadingState());
+    DioHelper.getData(url: 'https://murshidguide.com/api/listCountry').then((value) {
+      print(value.data);
+      nationalityModel=NationalityModel.fromJson(value.data);
+      emit(GetAllCountrySuccessState());
+      isGetCountry = true;
+    }).catchError((error){
+      print(error.toString());
+      emit(GetAllCountryErrorState(error: error.toString()));
+    });
+  }
+  onChangeCountryName(onChange) {
+    chooseCountry = onChange;
+    print(chooseCountry);
+    emit(ChangeCountryDropDownState());
   }
 
 
@@ -165,7 +191,7 @@ getAllNationality(){
           children: [
             Align(
               alignment: AlignmentDirectional.topEnd,
-              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text('حفظ'),),
+              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text(LocaleKeys.save.tr()),),
             ),
             Expanded(
               child: CupertinoDatePicker(
@@ -219,7 +245,7 @@ getAllNationality(){
           children: [
             Align(
               alignment: AlignmentDirectional.topEnd,
-              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text('حفظ'),),
+              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text(LocaleKeys.save.tr()),),
             ),
             Expanded(
               child: CupertinoDatePicker(
@@ -271,7 +297,7 @@ getAllNationality(){
           children: [
             Align(
               alignment: AlignmentDirectional.topEnd,
-              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text('حفظ'),),
+              child: TextButton(onPressed: (){Navigator.of(context).pop();},child: Text(LocaleKeys.save.tr()),),
             ),
             Expanded(
               child: CupertinoDatePicker(
@@ -443,11 +469,14 @@ getAllNationality(){
 
   File? file;
   bool isPickImage = false;
+  String?base64Image;
 
   Future pickImageFromCamera() async {
     final XFile? pickedFile =
     await ImagePicker().pickImage(source: ImageSource.camera);
     file = (File(pickedFile!.path));
+    List<int> imageBytes = file!.readAsBytesSync();
+    base64Image = base64.encode(imageBytes);
     print('IMAGE IS $file');
     emit(PickImageFromCameraState());
     isPickImage = true;
@@ -458,6 +487,8 @@ getAllNationality(){
     final XFile? pickedFile =
     await ImagePicker().pickImage(source: ImageSource.gallery);
     file = (File(pickedFile!.path));
+    List<int> imageBytes = file!.readAsBytesSync();
+     base64Image = base64.encode(imageBytes);
     print('IMAGE IS $file');
     emit(PickImageFromGalleryState());
     isPickImage = true;
@@ -465,6 +496,102 @@ getAllNationality(){
   }
   bool registerLoading = false;
   late LoginModel loginModel;
+
+  // hajjiRegister({
+  //   required BuildContext context,
+  //   required String nameAr,
+  //   required String nameEn,
+  //   required String phoneNumber,
+  //   // required String birthDate,
+  //   //  required String nationality,
+  //   required String email,
+  //   required String visaNo,
+  //   required String passportNo,
+  //   required String borderNo,
+  //   required String maccaHotelName,
+  //   required String madinahHotelName,
+  //   required String dateOfBirth,
+  //   required String dateOfArrival,
+  //   required String dateOfDeparture,
+  //   required var password,
+  //   required var confirmPassword,
+  //   required File imageFile}) async {
+  //   registerLoading = false;
+  //   emit(RegisterLoadingState());
+  //
+  //   try {
+  //     Dio dio = Dio();
+  //     String apiUrl = 'https://murshidguide.com/api/pilgrims/register';
+  //     FormData formData = FormData.fromMap({
+  //       'name_ar':nameAr,
+  //       'name_en':nameEn,
+  //       'phone_number': phoneNumber,
+  //       'nationality': chooseNationality,
+  //       'birthdate': dateOfBirth,
+  //       'email': email,
+  //       'visa_number': visaNo,
+  //       'passport_number': passportNo,
+  //       'border_number': borderNo,
+  //       'arrival_date': dateOfArrival,
+  //       'departure_date': dateOfDeparture,
+  //       'latitude_mina': latMinna,
+  //       'longitude_mina': lngMinna,
+  //       'location_mina': meenaLoc,
+  //       'latitude_mozdalifa': latMozdalifa,
+  //       'longitude__mozdalifa': lngMozdalifa,
+  //       'location_mozdalifa': mozdalifaLoc,
+  //       'latitude_arfat': latArafa,
+  //       'longitude__arfat': lngArafa,
+  //       'location_arfat': arafaLoc,
+  //       'type_of_disability': isDisability ? chooseDisability : 'لاشيئ',
+  //       'agent_name': 'chooseCompany',
+  //       'password': password,
+  //       'disability':isDisability?1:0,
+  //       'password_confirmation': confirmPassword,
+  //       'image': isPickImage ? await MultipartFile.fromFile(imageFile.path, filename: 'image.jpg') : null,
+  //       'company_id': chooseCompany,
+  //       'location_makkah_hotel':maccaHotelLocation,
+  //       'location_madinah_hotel':madinaHotelLocation,
+  //       'hotel_madinah':madinahHotelName,
+  //       'hotel_makkah':maccaHotelName,
+  //       'latitude_makkah':latMaccaHotel,
+  //       'longitude__makkah':lngMaccaHotel,
+  //       'latitude_madinah':latMadinaHotel,
+  //       'longitude__madinah':lngMadinaHotel,
+  //     });
+  //     Response userRegister = await dio.post(apiUrl, data: formData);
+  //     loginModel = LoginModel.fromJson(userRegister.data);
+  //     print('tokeeeen ${loginModel.token}');
+  //
+  //     token = CacheHelper.saveData(key: 'token', value: loginModel.token);
+  //     token = CacheHelper.getData(key: 'token');
+  //    print('isDisability  /////////////// $isDisability');
+  //
+  //     emit(RegisterSuccessState());
+  //     print('object $token');
+  //     print('FIRE $fcmToken');
+  //     registerLoading = true;
+  //     Navigator.pushAndRemoveUntil(context,
+  //         MaterialPageRoute(builder: (context) =>
+  //             MainScreen(i: GeneralCubit
+  //                 .get(context)
+  //                 .currentIndex = 0)), (route) => false);
+  //     sendFcmToken();
+  //   } on DioError catch (e) {
+  //     if (e.response != null) {
+  //       print('Dio error!');
+  //       print('STATUS: ${e.response?.statusCode}');
+  //       print('DATA: ${e.response?.data['message']}');
+  //       print('HEADERS: ${e.response?.headers}');
+  //        showToast(text: e.response?.data['message'], state: ToastState.ERROR);
+  //     } else {
+  //       print('Error sending request!');
+  //       print('/////////////////////// ${e.message}');
+  //     }
+  //     emit(RegisterErrorState(error: e.toString()));
+  //   }
+  //  // return loginModel;
+  // }
 
   hajjiRegister({
     required BuildContext context,
@@ -482,22 +609,40 @@ getAllNationality(){
     required String dateOfBirth,
     required String dateOfArrival,
     required String dateOfDeparture,
-    required var password,
-    required var confirmPassword,
-    required File imageFile}) async {
+    required String password,
+    required String confirmPassword,
+ //   required File imageFile
+  }) async {
     registerLoading = false;
     emit(RegisterLoadingState());
 
     try {
       Dio dio = Dio();
       String apiUrl = 'https://murshidguide.com/api/pilgrims/register';
-      FormData formData = FormData.fromMap({
+     // FormData formData = FormData.fromMap({});
+     //  final http.Request response = await http.post(Uri.parse(apiUrl),headers:  {
+     //    'Content-Type': 'application/json; charset=UTF-8',
+     //    'Accept':'application/json'
+     //  },
+     //
+     //  body: jsonEncode({
+     //
+     //  })
+     //  );
+      Response response = await dio.post(apiUrl,options: Options(
+        headers: {
+          'Content-Type':'application/json',
+        },
+
+
+      ), data:jsonEncode( {
         'name_ar':nameAr,
         'name_en':nameEn,
         'phone_number': phoneNumber,
         'nationality': chooseNationality,
         'birthdate': dateOfBirth,
         'email': email,
+        'gender':chooseSex??'',
         'visa_number': visaNo,
         'passport_number': passportNo,
         'border_number': borderNo,
@@ -517,8 +662,8 @@ getAllNationality(){
         'password': password,
         'disability':isDisability?1:0,
         'password_confirmation': confirmPassword,
-        'image': isPickImage ? await MultipartFile.fromFile(imageFile.path, filename: 'image.jpg') : null,
-        'company_id': chooseCompany,
+        'image': isPickImage ?base64Image: null,
+        'company_id': chooseCompany??null,
         'location_makkah_hotel':maccaHotelLocation,
         'location_madinah_hotel':madinaHotelLocation,
         'hotel_madinah':madinahHotelName,
@@ -527,14 +672,19 @@ getAllNationality(){
         'longitude__makkah':lngMaccaHotel,
         'latitude_madinah':latMadinaHotel,
         'longitude__madinah':lngMadinaHotel,
-      });
-      Response userRegister = await dio.post(apiUrl, data: formData);
-      loginModel = LoginModel.fromJson(userRegister.data);
+      }));
+      //await MultipartFile.fromFile(imageFile.path, filename: 'image.jpg')
+      // Response userRegister= await dio.post(apiUrl,data:
+      // data: {
+      //
+      // });
+     // Response userRegister = await dio.post(apiUrl, data: formData);
+      loginModel = LoginModel.fromJson(response.data);
       print('tokeeeen ${loginModel.token}');
 
       token = CacheHelper.saveData(key: 'token', value: loginModel.token);
       token = CacheHelper.getData(key: 'token');
-     print('isDisability  /////////////// $isDisability');
+      print('isDisability  /////////////// $isDisability');
 
       emit(RegisterSuccessState());
       print('object $token');
@@ -549,17 +699,23 @@ getAllNationality(){
     } on DioError catch (e) {
       if (e.response != null) {
         print('Dio error!');
+        //emit(RegisterErrorState(error: e.toString()));
         print('STATUS: ${e.response?.statusCode}');
+        print('STATUS: ${e.response?.data}');
         print('DATA: ${e.response?.data['message']}');
+      //  emit(RegisterErrorState(error: e.toString()));
         print('HEADERS: ${e.response?.headers}');
-         showToast(text: e.response?.data['message'], state: ToastState.ERROR);
+        showToast(text: e.response?.data['message'], state: ToastState.ERROR);
+        emit(RegisterErrorState(error: e.toString()));
+
       } else {
         print('Error sending request!');
         print('/////////////////////// ${e.message}');
+        emit(RegisterErrorState(error: e.toString()));
       }
       emit(RegisterErrorState(error: e.toString()));
     }
-   // return loginModel;
+    // return loginModel;
   }
   sendFcmToken() {
     emit(SendFcmTokenLoadingState());
@@ -597,8 +753,7 @@ getAllNationality(){
     required String dateOfArrival,
     required String dateOfDeparture,
     required var password,
-    required var confirmPassword,
-    required File imageFile}) async {
+    required var confirmPassword,}) async {
     emit(RegisterLoadingState());
     registerLoading = false;
     try {
@@ -630,10 +785,12 @@ getAllNationality(){
         'password': password,
         'disability':isDisability?1:0,
         'password_confirmation': confirmPassword,
-        'image': isPickImage
-            ? await MultipartFile.fromFile(imageFile.path,
-            filename: 'image.jpg')
-            : null,
+        'image':isPickImage?base64Image:null,
+        'gender':chooseSex??'',
+        // 'image': isPickImage
+        //     ? await MultipartFile.fromFile(imageFile.path,
+        //     filename: 'image.jpg')
+        //     : null,
         'company_id': chooseCompany,
         'location_makkah_hotel':maccaHotelLocation,
         'location_madinah_hotel':madinaHotelLocation,

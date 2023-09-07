@@ -12,6 +12,8 @@ import 'package:morshed/bloc/another_services_cubit/about_us_cubit/cubit.dart';
 import 'package:morshed/bloc/another_services_cubit/another_service/cubit.dart';
 import 'package:morshed/bloc/another_services_cubit/terms_cubit/terms_cubit.dart';
 import 'package:morshed/bloc/boarding_cubit/cubit.dart';
+import 'package:morshed/bloc/chat_cubit/chat_with_provider/cubit.dart';
+import 'package:morshed/bloc/chat_cubit/chat_with_provider/state.dart';
 import 'package:morshed/bloc/chat_cubit/chat_with_support_cubit/chat_support_cubit.dart';
 import 'package:morshed/bloc/general_cubit/general_cubit.dart';
 import 'package:morshed/bloc/guides_cubit/cubit.dart';
@@ -23,7 +25,6 @@ import 'package:morshed/bloc/register_cubit/cubit.dart';
 import 'package:morshed/bloc/setting_cubit/cubit.dart';
 import 'package:morshed/bloc/show_office_provider_info/cubit.dart';
 import 'package:morshed/bloc/submitting_report/submit_report_cubit.dart';
-import 'package:morshed/pallete.dart';
 import 'package:morshed/screen/borading_screen/boarding_screen.dart';
 import 'package:morshed/screen/bottom_navigations_screens/main_screen.dart';
 import 'package:morshed/theme/light_theme.dart';
@@ -33,7 +34,6 @@ import 'package:morshed/utiels/shared_pref.dart';
 import 'bloc/companions_cubit/cubit.dart';
 import 'bloc_observe.dart';
 import 'constant/const_color.dart';
-import 'constant/text_theme.dart';
 import 'fcm/fcm.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -139,7 +139,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<RegisterCubit>(
               create: (context) =>
               RegisterCubit()
-                ..getAllNationality()
+                ..getAllNationality()..getAllCountry()
                 // ..getCurrentLocation()
                 // ..getUserCurrentLocation(context)
                 ..getAllCompanies()),
@@ -158,11 +158,7 @@ class MyApp extends StatelessWidget {
                 ..initialization()),
           BlocProvider<ChatWithSupportCubit>(
               create: (context) => ChatWithSupportCubit()),
-          BlocProvider<ProfileCubit>(
-              create: (context) =>
-              ProfileCubit()
-                ..getProfileDate()
-                ..getAllNationality()),
+          BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()..getProfileDate()..getAllNationality()),
           BlocProvider<SettingCubit>(create: (context) => SettingCubit()),
           BlocProvider<SubmitReportCubit>(
               create: (context) =>
@@ -199,6 +195,9 @@ class MyApp extends StatelessWidget {
 
                 ..getCurrentLocation()
                 ..getUserCurrentLocation(context)),
+          BlocProvider<ChatWithProvidersCubit>(
+              create: (context) =>
+              ChatWithProvidersCubit()),
           BlocProvider<ShowOfficesAndProviderInfoCubit>(
               create: (context) =>
               ShowOfficesAndProviderInfoCubit()
@@ -243,7 +242,7 @@ class MyApp extends StatelessWidget {
                //    GlobalWidgetsLocalizations.delegate,
                //  ],
 
-                title: 'مرشد',
+                title: 'الحجاج والمعتمرين',
                 theme:light,
                 home: startWidget,
               );

@@ -2,10 +2,14 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:morshed/bloc/chat_cubit/chat_with_support_cubit/chat_support_state.dart';
+import 'package:morshed/constant/text_theme.dart';
 import 'package:morshed/screen/inner_screen/vedio_chat/room_vedio_screen.dart';
+import '../../bloc/chat_cubit/chat_with_provider/cubit.dart';
+import '../../bloc/chat_cubit/chat_with_provider/state.dart';
 import '../../bloc/chat_cubit/chat_with_support_cubit/chat_support_cubit.dart';
 import '../../component/navigation_functions.dart';
 import '../../constant/const_color.dart';
@@ -13,8 +17,9 @@ import '../../component/guide_escorts_component.dart';
 import '../../tranlations/locale_keys.g.dart';
 
 class ChatWithGuidesScreen extends StatefulWidget {
-  String channelName;
-  ChatWithGuidesScreen({required this.channelName});
+ final int channelName;
+ final String name;
+  ChatWithGuidesScreen({required this.channelName,required this.name});
   @override
   State<ChatWithGuidesScreen> createState() => _ChatWithGuidesScreenState();
 }
@@ -47,8 +52,8 @@ class _ChatWithGuidesScreenState extends State<ChatWithGuidesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var chatWithSupportCubit = ChatWithSupportCubit.get(context);
-    return BlocConsumer<ChatWithSupportCubit, ChatWithSupportState>(
+    var chatWithSupportCubit = ChatWithProvidersCubit.get(context);
+    return BlocConsumer<ChatWithProvidersCubit, ChatWithProvidersState>(
         listener: (context, state) {},
         builder: (context, state) {
           return GestureDetector(
@@ -58,7 +63,7 @@ class _ChatWithGuidesScreenState extends State<ChatWithGuidesScreen> {
             child: Scaffold(
               appBar: headerOfTechnicalSupport(
                   context: context,
-                  title: 'محمد احمد',
+                  title: widget.name,
                   child: [
                     Row(
                       children: [
@@ -76,35 +81,51 @@ class _ChatWithGuidesScreenState extends State<ChatWithGuidesScreen> {
               body: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(8.0.sp),
-                  child: ListView.separated(
+                  child: ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return Align(
-                          alignment: AlignmentDirectional.centerStart,
+                        print(chatWithSupportCubit.messages);
+                        return  ChatBubble(
+                          clipper: ChatBubbleClipper1(type: BubbleType.sendBubble),
+                          alignment: Alignment.topRight,
+                          margin: EdgeInsets.only(top: 20),
+                          backGroundColor: Colors.blue,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 5.w, vertical: 3.h),
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadiusDirectional.only(
-                                bottomEnd: Radius.circular(15.sp),
-                                topEnd: Radius.circular(15.sp),
-                                topStart: Radius.circular(15.sp),
-                              ),
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.7,
                             ),
                             child: Text(
-                              chatWithSupportCubit.messages[index],
-                              style: Theme.of(context).textTheme.bodySmall,
+                                    chatWithSupportCubit.messages[index],
+                                    style: cairoSemiBold.copyWith(color: greyColor,fontSize: 14),
                             ),
                           ),
                         );
+                        // return Align(
+                        //   alignment: AlignmentDirectional.centerStart,
+                        //   child: Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //         horizontal: 5.w, vertical: 3.h),
+                        //     decoration: BoxDecoration(
+                        //       color: whiteColor,
+                        //       borderRadius: BorderRadiusDirectional.only(
+                        //         bottomEnd: Radius.circular(15.sp),
+                        //         topEnd: Radius.circular(15.sp),
+                        //         topStart: Radius.circular(15.sp),
+                        //       ),
+                        //     ),
+                        //     child: Text(
+                        //       chatWithSupportCubit.messages[index],
+                        //       style: cairoSemiBold.copyWith(color: greyColor,fontSize: 14),
+                        //     ),
+                        //   ),
+                        // );
                       },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 5.h,
-                        );
-                      },
+                      // separatorBuilder: (context, index) {
+                      //   return SizedBox(
+                      //     height: 5.h,
+                      //   );
+                      // },
                       itemCount: chatWithSupportCubit.messages.length),
                 ),
               ),
@@ -138,7 +159,7 @@ class _ChatWithGuidesScreenState extends State<ChatWithGuidesScreen> {
                                     controller: messageController);
                               },
                               controller: messageController,
-                              style: Theme.of(context).textTheme.bodySmall,
+                              style: cairoRegular.copyWith(fontSize: 17,color: greyColor),
                               decoration: InputDecoration(
                                   hintText: LocaleKeys.sendMessage.tr(),
                                   focusColor: greyColor,

@@ -94,11 +94,14 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                   child: Form(
                                     key: _formKey,
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         CustomTextField(
+                                          padding: 10,
                                           focusNode: _nameArFocus,
                                             nextFocus: _nameEnFocus,
-                                            minHeight: 80.h,
+                                            isRequired: true,
+                                            minHeight: 10.h,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
@@ -106,24 +109,27 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                 LocaleKeys.arabicNamePassport.tr(),
                                             validator: (val) {
                                               if (val.isEmpty || val == null) {
-                                                return LocaleKeys
-                                                    .enter_Full_arabic_name
-                                                    .tr();
+                                                // return LocaleKeys
+                                                //     .enter_Full_arabic_name
+                                                //     .tr();
+                                                return '';
                                               }
                                               return null;
                                             },
                                             controller: arabicNameController),
                                         CustomTextField(
-                                            minHeight: 80.h,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
+                                            isRequired: true,
+                                            minHeight: 10.h,
                                             focusNode: _nameEnFocus,
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys
-                                                    .enter_Full_english_name
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys
+                                                //     .enter_Full_english_name
+                                                //     .tr();
                                               }
                                               return null;
                                             },
@@ -133,15 +139,17 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                             controller: englishNameController),
                                         Row(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              CrossAxisAlignment.center,
+                                          // mainAxisAlignment:
+                                          //     MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               LocaleKeys.profilePic.tr(),
                                               style:
                                                   cairoBold.copyWith(fontSize: 20),
                                             ),
+                                            Text('"${LocaleKeys.requiredField.tr()}"',style: cairoSemiBold.copyWith(fontSize: 10,color: Colors.red),),
+                                            Spacer(),
                                             Stack(
                                               alignment: Alignment.center,
                                               children: [
@@ -175,13 +183,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                     const EdgeInsets.only(top: 8.0),
                                                 child: CustomTextField(
                                                   focusNode: _phoneFocus,
-                                                    minHeight: 80.h,
+                                                    isRequired: true,
+                                                    padding: 10,
+                                                    minHeight: 10.h,
                                                     maxHeight: 80.h,
                                                     validator: (String val) {
                                                       if (val.isEmpty) {
-                                                        return LocaleKeys
-                                                            .enter_phone_number
-                                                            .tr();
+                                                        return '';
+                                                        // return LocaleKeys
+                                                        //     .enter_phone_number
+                                                        //     .tr();
                                                       }
                                                       return null;
                                                     },
@@ -203,7 +214,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                 radius: 35.sp,
                                                 context: context,
                                                 width: 100,
-                                                  child: CountryPickedCodeCode(countryKey: numberSave??'+966',),
+                                                  child: CountryPickedCode(countryKey: numberSave??'+966',),
                                                   // child: Text(
                                                   //   '+966',
                                                   //   style: cairoBold.copyWith(
@@ -216,7 +227,19 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           ],
                                         ),
                                         CustomDropDown(),
+                                        Text(LocaleKeys.requiredField,style: cairoSemiBold.copyWith(fontSize: 10,color: Colors.red),).tr(),
+                                        dropDownButton(
+                                            items: registerCubit.sexList.map((e) {
+                                              return DropdownMenuItem(child: Text(e),value: e,);
+                                            }).toList(),
+                                            value: registerCubit.chooseSex,
+                                            hint: LocaleKeys.sex.tr(),
 
+                                            fct: (onChange){
+                                              return registerCubit.onChangeSex(onChange);
+                                            },
+                                            context: context),
+                                        Text(LocaleKeys.requiredField,style: cairoSemiBold.copyWith(fontSize: 10,color: Colors.red),).tr(),
                                         // dropDownButton(
                                         //   items: registerCubit
                                         //       .nationalityModel.data!
@@ -260,13 +283,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                   child: CustomTextField(
                                                     validator: (String val) {
                                                       if (val.isEmpty) {
-                                                        return LocaleKeys
-                                                            .enter_date_of_birth
-                                                            .tr();
+                                                        return '';
+                                                        // return LocaleKeys
+                                                        //     .enter_date_of_birth
+                                                        //     .tr();
                                                       }
                                                       return null;
                                                     },
-                                                    minHeight: 80.h,
+                                                    minHeight: 10.h,
+                                                    isRequired: true,
+                                                    padding: 10,
                                                     maxHeight: 80.h,
                                                     maxWidth: 400.w,
                                                     minWidth: 400.w,
@@ -306,13 +332,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys
-                                                    .enter_Passport_number
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys
+                                                //     .enter_Passport_number
+                                                //     .tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            minHeight: 10.h,
+                                            padding: 10,
+                                            isRequired: true,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
@@ -324,12 +353,15 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys.enter_vise_no
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys.enter_vise_no
+                                                //     .tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            minHeight: 10.h,
+                                            isRequired: true,
+                                            padding: 10,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
@@ -340,13 +372,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys
-                                                    .enter_borderOrIdOrIqama_no
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys
+                                                //     .enter_borderOrIdOrIqama_no
+                                                //     .tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            minHeight: 10.h,
+                                            isRequired: true,
+                                            padding: 10,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
@@ -375,13 +410,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                   child: CustomTextField(
                                                     validator: (String val) {
                                                       if (val.isEmpty) {
-                                                        return LocaleKeys
-                                                            .enter_arrival_date
-                                                            .tr();
+                                                        return '';
+                                                        // return LocaleKeys
+                                                        //     .enter_arrival_date
+                                                        //     .tr();
                                                       }
                                                       return null;
                                                     },
-                                                    minHeight: 80.h,
+                                                    minHeight: 10.h,
+                                                    isRequired: true,
+                                                    padding: 10,
                                                     maxHeight: 80.h,
                                                     isEnabled: false,
                                                     labelText:
@@ -438,14 +476,17 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                   child: CustomTextField(
                                                     validator: (String val) {
                                                       if (val.isEmpty) {
-                                                        return LocaleKeys
-                                                            .enter_depurate_date
-                                                            .tr();
+                                                        return '';
+                                                        // return LocaleKeys
+                                                        //     .enter_depurate_date
+                                                        //     .tr();
                                                       }
                                                       return null;
                                                     },
-                                                    minHeight: 80.h,
+                                                    minHeight: 10.h,
                                                     maxHeight: 80.h,
+                                                    isRequired: true,
+                                                    padding: 10,
                                                     // validator: (String val){
                                                     //   if(val.isEmpty){
                                                     //     return 'رجاء ادخال البيانات المطلوبه';
@@ -508,12 +549,15 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys.enter_makka_hotel
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys.enter_makka_hotel
+                                                //     .tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            isRequired: true,
+                                            padding: 10,
+                                            minHeight: 10,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
@@ -542,13 +586,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                   child: CustomTextField(
                                                       validator: (String val) {
                                                         if (val.isEmpty) {
-                                                          return LocaleKeys
-                                                              .macca_hotel_loc
-                                                              .tr();
+                                                          return '';
+                                                          // return LocaleKeys
+                                                          //     .macca_hotel_loc
+                                                          //     .tr();
                                                         }
                                                         return null;
                                                       },
-                                                      minHeight: 80.h,
+                                                      isRequired: true,
+                                                      padding: 10,
+                                                      minHeight: 10,
                                                       maxHeight: 80.h,
                                                       isEnabled: false,
                                                       keyboardType:
@@ -589,12 +636,15 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys.madina_hotels_name
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys.madina_hotels_name
+                                                //     .tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            isRequired: true,
+                                            padding: 10,
+                                            minHeight: 10,
                                             maxHeight: 80.h,
                                             maxWidth: 400.w,
                                             minWidth: 400.w,
@@ -623,13 +673,16 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                   child: CustomTextField(
                                                       validator: (String val) {
                                                         if (val.isEmpty) {
-                                                          return LocaleKeys
-                                                              .madina_hotel_loc
-                                                              .tr();
+                                                          return '';
+                                                          // return LocaleKeys
+                                                          //     .madina_hotel_loc
+                                                          //     .tr();
                                                         }
                                                         return null;
                                                       },
-                                                      minHeight: 80.h,
+                                                      isRequired: true,
+                                                      padding: 10,
+                                                      minHeight: 10,
                                                       maxHeight: 80.h,
                                                       isEnabled: false,
                                                       // keyboardType: TextInputType.phone,
@@ -759,30 +812,30 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                 })
                                           ],
                                         ),
-                                        registerCubit.isDisability
-                                            ? dropDownButton(
-                                                items: registerCubit.disabilities
-                                                    .map((e) {
-                                                  return DropdownMenuItem(
-                                                    child: Text(
-                                                      e.toString(),
-                                                      style: cairoSemiBold,
-                                                    ),
-                                                    value: e.toString(),
-                                                  );
-                                                }).toList(),
-                                                value:
-                                                    registerCubit.chooseDisability,
-                                                hint:
-                                                    LocaleKeys.disabilityType.tr(),
-                                                fct: (onChange) {
-                                                  registerCubit
-                                                      .onChangeDisability(onChange);
-                                                  print(onChange);
-                                                },
-                                                context: context,
-                                              )
-                                            : const SizedBox(),
+                                        // registerCubit.isDisability
+                                        //     ? dropDownButton(
+                                        //         items: registerCubit.disabilities
+                                        //             .map((e) {
+                                        //           return DropdownMenuItem(
+                                        //             child: Text(
+                                        //               e.toString(),
+                                        //               style: cairoSemiBold,
+                                        //             ),
+                                        //             value: e.toString(),
+                                        //           );
+                                        //         }).toList(),
+                                        //         value:
+                                        //             registerCubit.chooseDisability,
+                                        //         hint:
+                                        //             LocaleKeys.disabilityType.tr(),
+                                        //         fct: (onChange) {
+                                        //           registerCubit
+                                        //               .onChangeDisability(onChange);
+                                        //           print(onChange);
+                                        //         },
+                                        //         context: context,
+                                        //       )
+                                        //     : const SizedBox(),
                                         SizedBox(
                                           height: 10.h,
                                         ),
@@ -804,6 +857,7 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                           context: context,
                                           //  validator: () {}
                                         ),
+                                        Text(LocaleKeys.requiredField,style: cairoSemiBold.copyWith(fontSize: 10,color: Colors.red),).tr(),
                                         SizedBox(
                                           height: 20,
                                         ),
@@ -817,15 +871,18 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys.enter_user_name
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys.enter_user_name
+                                                //     .tr();
                                               } else if (!val.contains("@")) {
                                                 return LocaleKeys
                                                     .enter_user_name_correctly
                                                     .tr();
                                               }
                                             },
-                                            minHeight: 80.h,
+                                            isRequired: true,
+                                            padding: 10,
+                                            minHeight: 10.h,
                                             focusNode: _emailFocus,
                                             nextFocus: _passwordFocus,
                                             maxHeight: 80.h,
@@ -840,12 +897,17 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys.enter_password
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys.enter_password
+                                                //     .tr();
+                                              }else if(val.length<8){
+                                                return LocaleKeys.passwordLenght.tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            isRequired: true,
+                                            padding: 10,
+                                            minHeight: 10.h,
                                             focusNode: _passwordFocus,
                                             nextFocus: _confirmPasswordFocus,
                                             maxHeight: 80.h,
@@ -867,12 +929,17 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                         CustomTextField(
                                             validator: (String val) {
                                               if (val.isEmpty) {
-                                                return LocaleKeys.confirmPassword
-                                                    .tr();
+                                                return '';
+                                                // return LocaleKeys.confirmPassword
+                                                //     .tr();
+                                              }else if(val.length<8){
+                                                return LocaleKeys.passwordLenght.tr();
                                               }
                                               return null;
                                             },
-                                            minHeight: 80.h,
+                                            isRequired: true,
+                                            padding: 10,
+                                            minHeight: 10.h,
                                          //   focusNode: _confirmPasswordFocus,
                                             maxHeight: 80.h,
                                             secure: registerCubit.isVisable,
@@ -962,8 +1029,9 @@ class RegisterMoetamerScreen extends StatelessWidget {
                                                         confirmPassword:
                                                             confirmPasswordController
                                                                 .text,
-                                                        imageFile:
-                                                            registerCubit.file!);
+                                                        // imageFile:
+                                                        //     registerCubit.file!
+                                                    );
                                                     //  }
                                                   }
                                                 }),

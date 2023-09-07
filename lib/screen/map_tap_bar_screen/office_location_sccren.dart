@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,10 @@ import 'package:morshed/bloc/show_office_provider_info/state.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../component/animation_component.dart';
+import '../../component/navigation_functions.dart';
+import '../../tranlations/locale_keys.g.dart';
 
 class OfficesLocationScreen extends StatefulWidget {
   const OfficesLocationScreen({super.key});
@@ -57,7 +64,15 @@ class _OfficesLocationScreenState extends State<OfficesLocationScreen> {
                     valueColor: AlwaysStoppedAnimation<Color>(
                       darkMainColor, //<-- SEE HERE
                     ),
-                  ))
+                  )): showDataCubit.getAllOffices.offices!.isEmpty
+                      ? Center(
+                    child: Text(
+                        LocaleKeys.no_office_found.tr(),
+                        textAlign: TextAlign.center,
+                        style: cairoMedium.copyWith(
+                          fontSize: 20,
+                        )),
+                  )
                       : Stack(
                           children: [
                             GoogleMap(
@@ -141,7 +156,7 @@ class _OfficesLocationScreenState extends State<OfficesLocationScreen> {
                                                           .offices![showDataCubit
                                                                   .officeId ??
                                                               0]
-                                                          .name!,
+                                                          .name??'',
                                                       maxLines: 1,
                                                       style: cairoBold.copyWith(fontSize: 17),
                                                       //textAlign: TextAlign.center,
@@ -152,7 +167,7 @@ class _OfficesLocationScreenState extends State<OfficesLocationScreen> {
                                                           .offices![showDataCubit
                                                                   .officeId ??
                                                               0]
-                                                          .address!,
+                                                          .address??'',
                                                       style:cairoRegular.copyWith(fontSize: 12,color: greyColor),
                                                       maxLines: 1,
                                                     )
@@ -177,14 +192,40 @@ class _OfficesLocationScreenState extends State<OfficesLocationScreen> {
                                                 backgroundColor: whiteColor,
                                                 child: IconButton(
                                                     onPressed: () async {
-                                                      await launchUrl(Uri.parse(
-                                                          'google.navigation:q='
-                                                          '${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].latitude!}, '
-                                                          '${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].longitude!}'
-                                                          '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
+                                                      if (showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].latitude==null) {
+                                                        showToast(
+                                                            text: 'لا يوجد موقع لهذا المكتب',
+                                                            state: ToastState.ERROR);
+                                                      } else {
+                                                        if (Platform.isIOS) {
+                                                          await launchUrl(Uri.parse(
+                                                              "comgooglemaps://?q=${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].latitude},"
+                                                                  "${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].longitude}&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is"));
+                                                        } else {
+                                                          await launchUrl(Uri.parse(
+                                                              'google.navigation:q='
+                                                                  '${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].latitude}, '
+                                                                  '${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].longitude}'
+                                                                  '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
+                                                        }
+                                                      }
+                                                      // await launchUrl(Uri.parse(
+                                                      //     'google.navigation:q='
+                                                      //     '${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].latitude??'0'}, '
+                                                      //     '${showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].longitude??'0'}'
+                                                      //     '&key=AIzaSyBVgpiuFIJ2AMh5ZwbgkAu3E47jmyx7_is'));
                                                     },
                                                     icon: SvgPicture.asset(
-                                                        'assets/svg/Group 204376.svg')))
+                                                        'assets/svg/Group 204376.svg'))),
+                                            SizedBox(width: 10.w,),
+                                            CircleAvatar(
+                                                backgroundColor: whiteColor,
+                                                child: IconButton(
+                                                    onPressed: () async {
+                                                      launchCall(context: context, phoneNumber: showDataCubit.getAllOffices.offices![showDataCubit.officeId ?? 0].phoneNumber??'');
+                                                    },
+                                                    icon: SvgPicture.asset(
+                                                        'assets/svg/end call.svg')))
                                           ],
                                         )
                                       ],

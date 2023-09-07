@@ -90,7 +90,10 @@ class MoreScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                    // print('<<<<<<<<<<<<<<<<<<$myLocale>>>>>>>>>>>>>>>>>>');
                     return GestureDetector(
-                      onTap: () => moreList[index].onTap(),
+                      onTap: () {
+                       // index==0? ProfileCubit.get(context).getProfileDate():null;
+                        moreList[index].onTap();
+                      },
                       child: Card(
                         elevation: 2,
                         shape: RoundedRectangleBorder(

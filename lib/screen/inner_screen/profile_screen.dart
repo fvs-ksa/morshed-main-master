@@ -13,6 +13,7 @@ import 'package:morshed/component/custom_drop_down.dart';
 import 'package:morshed/constant/const_color.dart';
 import 'package:morshed/constant/text_theme.dart';
 import '../../component/cutom_text_filed.dart';
+import '../../component/gesut_widget.dart';
 import '../../component/info_profile_component.dart';
 import '../../tranlations/locale_keys.g.dart';
 
@@ -24,10 +25,12 @@ class ProfileScreen extends StatelessWidget {
     var profileCubit = ProfileCubit.get(context);
   //  var generalCubit = GeneralCubit.get(context);
 
-    return BlocConsumer<ProfileCubit, ProfileState>(
+    return   BlocConsumer<ProfileCubit, ProfileState>(
 
         listener: (context, state) {},
-     //   bloc: profileCubit.getProfileDate(),
+
+
+        bloc: profileCubit.getProfileDate(),
         builder: (context, state) {
 
           TextEditingController arNameController = TextEditingController(
@@ -82,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
                         profileCubit.isLoading&&profileCubit.isGetNationality ? profileCubit.profileModel.data!
                             .image!
                             : 'https://firebasestorage.googleapis.com/v0/b/murshid-5cf3e.appspot.com/o/profile.png?alt=media&token=9e46dec9-ea36-4118-b7d3-c7d298b302d7'),)),
-              body: profileCubit.isLoading&profileCubit.isGetNationality?  RefreshIndicator(
+              body:token==null?Center(child: GuestWidget()): profileCubit.isLoading&profileCubit.isGetNationality?  RefreshIndicator(
                 onRefresh: () {return profileCubit.getProfileDate(); },
                 child: SingleChildScrollView(
                   child: Padding(
@@ -224,8 +227,7 @@ class ProfileScreen extends StatelessWidget {
                               flex: 1,
                               child: GestureDetector(
                                 onTap: () async {
-                                  profileCubit.chooseDateTime(context: context,
-                                      initialDate:DateTime.parse(birthDateController.text) );
+                                  profileCubit.chooseDateTime(context: context, initialDate:DateTime.parse(birthDateController.text) );
                                 },
                                 child: CustomTextField(
                                   isEnabled: false,

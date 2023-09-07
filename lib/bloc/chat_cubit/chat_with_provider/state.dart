@@ -1,0 +1,5 @@
+abstract class ChatWithProvidersState{}
+class InitialChatWithProviderState extends ChatWithProvidersState{}
+class ArabicTextFieldAuthState extends ChatWithProvidersState{}
+class ChangeKeyBoardViewState extends ChatWithProvidersState{}
+class SendTextMessageState extends ChatWithProvidersState{}

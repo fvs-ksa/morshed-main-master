@@ -13,6 +13,7 @@ import 'package:morshed/screen/bottom_navigations_screens/widget/resisdance_Widg
 import 'package:url_launcher/url_launcher.dart';
 import '../../component/animation_component.dart';
 import '../../component/cutom_text_filed.dart';
+import '../../component/gesut_widget.dart';
 import '../../constant/const_color.dart';
 import '../../component/info_profile_component.dart';
 import '../../tranlations/locale_keys.g.dart';
@@ -23,30 +24,29 @@ class MyResidenceAndTravels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var generalCubit = GeneralCubit.get(context);
-    return BlocConsumer<GeneralCubit, GeneralState>(
+    return token==null?GuestWidget(): BlocConsumer<GeneralCubit, GeneralState>(
         listener: (context, state) {},
         builder: (context, state) {
           TextEditingController arrivalController = TextEditingController(
-              text: generalCubit.profileModel.data!.arrivalDate!);
+              text: generalCubit.profileModel.data!.arrivalDate??'');
           TextEditingController departureController = TextEditingController(
-              text: generalCubit.profileModel.data!.departureDate!);
+              text: generalCubit.profileModel.data!.departureDate??'');
           TextEditingController mozdalifaLocationController =
               TextEditingController(
-                  text:
-                      generalCubit.profileModel.data!.locationMozdalifa ?? '');
+                  text: generalCubit.profileModel.data!.locationMozdalifa ?? '');
           TextEditingController mennaLocationConroller = TextEditingController(
               text: generalCubit.profileModel.data!.locationMina ?? '');
           TextEditingController arafaLocationController = TextEditingController(
               text: generalCubit.profileModel.data!.locationArfat ?? '');
           TextEditingController visaNumberController = TextEditingController(
-              text: generalCubit.profileModel.data!.visaNumber!);
+              text: generalCubit.profileModel.data!.visaNumber??'');
           TextEditingController maccaHotelLocationController =
               TextEditingController(
-                  text: generalCubit.profileModel.data!.hotelMakkah);
+                  text: generalCubit.profileModel.data!.hotelMakkah??'');
           TextEditingController madinahHotelNumberController =
               TextEditingController(
-                  text: generalCubit.profileModel.data!.hotelMadinah);
-          return Column(
+                  text: generalCubit.profileModel.data!.hotelMadinah??'');
+          return  Column(
             children: [
               PreferredSize(
                   child: Stack(

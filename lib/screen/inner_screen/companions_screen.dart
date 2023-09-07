@@ -12,6 +12,7 @@ import 'package:morshed/component/navigation_functions.dart';
 import 'package:morshed/constant/text_theme.dart';
 import 'package:morshed/screen/inner_screen/add_companions_screen.dart';
 import '../../component/component.dart';
+import '../../component/gesut_widget.dart';
 import '../../component/info_profile_component.dart';
 import '../../constant/const_color.dart';
 import '../../tranlations/locale_keys.g.dart';
@@ -22,7 +23,7 @@ class EscortsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var addCompanions = AddCompanionsCubit.get(context);
-    return BlocConsumer<AddCompanionsCubit, AddCompanionsState>(
+    return  BlocConsumer<AddCompanionsCubit, AddCompanionsState>(
      // bloc: addCompanions.getMyCompanions(),
         listener: (context, state) {},
         builder: (context, state) {
@@ -55,6 +56,7 @@ class EscortsScreen extends StatelessWidget {
                           children: [
                             Expanded(
                                 child: CustomTextField(
+                                  padding: 15,
                                   controller: addCompanions.searchController,
                                     labelText: LocaleKeys.search_by_name.tr(),)),
                             SizedBox(
@@ -86,7 +88,7 @@ class EscortsScreen extends StatelessWidget {
                 //     title: LocaleKeys.Companions.tr(),
                 //     fct: () {}),
                 backgroundColor: whiteGreyColor,
-                body: GestureDetector(
+                body:token==null?GuestWidget(): GestureDetector(
                   onTap: () {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },

@@ -37,6 +37,8 @@ class AddCompanionsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomTextField(
+                        minHeight: 80.h,
+                        maxHeight: 80.h,
                           labelText:
                               LocaleKeys.passportIdResidencePermitNumber.tr(),
                           controller: passportNoController,
@@ -54,6 +56,8 @@ class AddCompanionsScreen extends StatelessWidget {
                             Expanded(
                               flex: 1,
                               child: CustomTextField(
+                                minHeight: 80.h,
+                                maxHeight: 80.h,
                                 isEnabled: false,
                                // context: context,
                                 controller: birthDateController,
